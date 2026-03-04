@@ -28,13 +28,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { lazy, Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-
-const MapDisplay = lazy(() => import("@/components/MapDisplay"));
-import QuoteRequestForm from "@/components/QuoteRequestForm";
-import ShareItineraryButton from "@/components/ShareItineraryButton";
-import GpxDownloadButton from "@/components/GpxDownloadButton";
 
 interface ItineraryDisplayProps {
   itinerary: DayPlan[];
@@ -59,20 +52,15 @@ const ItineraryDisplay = ({
   onRemoveDay,
   onAddWalkingDay
 }: ItineraryDisplayProps) => {
-  // Get nodes in the correct direction
   const directionalNodes = getDirectionalNodes(direction);
   
-  // Get valid end nodes based on start node
   const getValidEndNodes = (startNode: TrailNode): TrailNode[] => {
     const startIndex = directionalNodes.findIndex(n => n.id === startNode.id);
     return directionalNodes.slice(startIndex + 1).filter(n => n.hasAccommodation || n === directionalNodes[directionalNodes.length - 1]);
   };
   
-  // Get valid start nodes based on previous day's end
   const getValidStartNodes = (dayIndex: number): TrailNode[] => {
-    if (dayIndex === 0) return [directionalNodes[0]]; // First day must start at first node
-    
-    // Find previous non-rest day's end node
+    if (dayIndex === 0) return [directionalNodes[0]];
     for (let i = dayIndex - 1; i >= 0; i--) {
       if (!itinerary[i].isRestDay) {
         return [itinerary[i].endNode];
@@ -84,17 +72,14 @@ const ItineraryDisplay = ({
   const directionLabel = direction === "south-to-north" ? "South → North" : "North → South";
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">
-            Your Itinerary{" "}
-            <span className="text-sm font-normal text-muted-foreground">
-              ({directionLabel} • {speedProfile.name} pace • {hoursPerDay}h/day)
-            </span>
-          </h2>
-        </div>
-        {/* Hint text for editing */}
+        <h2 className="text-2xl font-bold">
+          Your Itinerary{" "}
+          <span className="text-sm font-normal text-muted-foreground">
+            ({directionLabel} • {speedProfile.name} pace • {hoursPerDay}h/day)
+          </span>
+        </h2>
         <div className="flex items-center gap-2 text-sm text-primary bg-primary/10 px-3 py-2 rounded-lg border border-primary/20">
           <Pencil className="h-4 w-4" />
           <span>
@@ -103,30 +88,20 @@ const ItineraryDisplay = ({
         </div>
       </div>
       
-      {/* Interactive Map */}
-      <Suspense fallback={<Skeleton className="h-[400px] w-full rounded-lg" />}>
-        <MapDisplay itinerary={itinerary} direction={direction} />
-      </Suspense>
       {/* Timeline */}
       <div className="relative space-y-0">
         {itinerary.map((day, index) => {
-          // Find the first walking day index
           const firstWalkingDayIndex = itinerary.findIndex(d => !d.isRestDay);
           const finalNode = directionalNodes[directionalNodes.length - 1];
           
-          // Detect trail completion using -end suffix or matching the final node
           const isAtTrailEnd = (node: TrailNode) => 
             node.id.includes('-end') || node.id === finalNode.id;
           
-          // Check if the trail was completed on a previous day
           const trailCompletedOnPreviousDay = itinerary.slice(0, index).some(
             d => !d.isRestDay && isAtTrailEnd(d.endNode)
           );
           
-          // Check if this day ends at the final destination
           const isTrailComplete = !day.isRestDay && isAtTrailEnd(day.endNode);
-          
-          // Can delete this day if trail was already completed before this day
           const canDelete = day.isRestDay || trailCompletedOnPreviousDay;
           
           return (
@@ -154,14 +129,6 @@ const ItineraryDisplay = ({
       
       {/* Summary */}
       <ItinerarySummary itinerary={itinerary} units={units} />
-      
-      {/* Share & Quote Actions */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-        <ShareItineraryButton itinerary={itinerary} speedProfile={speedProfile} units={units} />
-      </div>
-      
-      {/* Quote Request */}
-      <QuoteRequestForm itinerary={itinerary} />
     </div>
   );
 };
@@ -204,22 +171,15 @@ const DayCard = ({
   if (day.isRestDay) {
     return (
       <div className="relative pl-12 pb-6">
-        {/* Timeline connector */}
         {!isFirst && (
           <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-gradient-to-b from-border to-primary/30" />
         )}
-        
-        {/* Day marker */}
         <div className="absolute left-0 top-8 flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card">
           <Coffee className="h-5 w-5 text-primary" />
         </div>
-        
-        {/* Rest connector line */}
         {!isLast && (
           <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-gradient-to-b from-primary/30 to-border" />
         )}
-        
-        {/* Rest day card */}
         <div className="ml-4 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-4">
           <div className="flex items-center justify-between">
             <div>
@@ -254,33 +214,22 @@ const DayCard = ({
   
   return (
     <div className="relative pl-12 pb-6">
-      {/* Timeline connector - top */}
       {!isFirst && (
         <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-gradient-to-b from-border to-primary" />
       )}
-      
-      {/* Day marker */}
       <div className="absolute left-0 top-8 flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground font-bold">
         {day.day}
       </div>
-      
-      {/* Timeline connector - bottom */}
       {!isLast && (
         <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-gradient-to-b from-primary to-border" />
       )}
-      
-      {/* Day card */}
       <div className="ml-4 trail-card p-5">
-        {/* Date header */}
         {day.date && (
           <div className="text-sm text-muted-foreground mb-3">
             {format(day.date, "EEEE, MMMM d, yyyy")}
           </div>
         )}
-        
-        {/* Route */}
         <div className="flex flex-col gap-3 mb-4">
-          {/* Start location */}
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-6 w-6 rounded-full bg-highland-green/20 text-highland-green">
               <MapPin className="h-4 w-4" />
@@ -288,13 +237,9 @@ const DayCard = ({
             <span className="text-sm font-medium text-muted-foreground">From</span>
             <span className="text-lg font-semibold">{day.startNode.name}</span>
           </div>
-          
-          {/* Arrow connector */}
           <div className="flex items-center gap-2 pl-3">
             <div className="w-0.5 h-4 bg-gradient-to-b from-highland-green to-primary" />
           </div>
-          
-          {/* End location selector - clearer "To" destination */}
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-6 w-6 rounded-full bg-primary/20 text-primary">
               <Navigation className="h-4 w-4" />
@@ -361,15 +306,9 @@ const DayCard = ({
             label="Descent" 
           />
         </div>
-        
-        {/* GPX Download */}
-        <div className="mt-3">
-          <GpxDownloadButton day={day} direction={direction} />
-        </div>
 
         {/* Action buttons */}
         <div className="mt-2 flex justify-between items-center">
-          {/* Delete button - only show if trail was already completed */}
           {onRemove ? (
             <Button
               variant="ghost"
@@ -384,11 +323,6 @@ const DayCard = ({
             <div />
           )}
           
-          {/* Action button logic:
-              - If trail is complete on this day: show "Add rest day after"
-              - If trail incomplete and this is the last day: show "Add another day on the trail"
-              - Otherwise: show "Add rest day after"
-          */}
           {isTrailComplete ? (
             <Button
               variant="ghost"

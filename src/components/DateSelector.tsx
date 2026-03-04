@@ -14,9 +14,42 @@ interface DateSelectorProps {
   selectedDate: Date;
   onDateChange: (date: Date) => void;
   stepNumber?: number;
+  compact?: boolean;
 }
 
-const DateSelector = ({ selectedDate, onDateChange, stepNumber = 3 }: DateSelectorProps) => {
+const DateSelector = ({ selectedDate, onDateChange, stepNumber = 3, compact = false }: DateSelectorProps) => {
+  if (compact) {
+    return (
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Start Date</label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn(
+                "w-full justify-start text-left font-normal",
+                !selectedDate && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
+              {selectedDate ? format(selectedDate, "MMM d, yyyy") : <span>Pick a date</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0 z-50 bg-popover" align="start">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={(date) => date && onDateChange(date)}
+              initialFocus
+              disabled={(date) => date < new Date()}
+              className="pointer-events-auto"
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">

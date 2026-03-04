@@ -9,6 +9,7 @@ interface DaysCalculatorProps {
   onHoursPerDayChange: (hours: number) => void;
   calculatedDays: number;
   stepNumber?: number;
+  compact?: boolean;
 }
 
 const DaysCalculator = ({
@@ -17,17 +18,40 @@ const DaysCalculator = ({
   onHoursPerDayChange,
   calculatedDays,
   stepNumber = 4,
+  compact = false,
 }: DaysCalculatorProps) => {
+  if (compact) {
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-medium">Daily Hours</label>
+          <span className="text-sm font-bold text-primary">{hoursPerDay}h → {calculatedDays} days</span>
+        </div>
+        <Slider
+          value={[hoursPerDay]}
+          onValueChange={(value) => onHoursPerDayChange(value[0])}
+          min={4}
+          max={12}
+          step={0.5}
+          className="w-full"
+        />
+        <div className="flex justify-between text-xs text-muted-foreground">
+          <span>4h</span>
+          <span>8h</span>
+          <span>12h</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 rounded-xl border-2 border-border bg-card p-6 shadow-soft">
-      {/* Header */}
       <div className="flex items-center gap-3">
         <StepBadge number={stepNumber} />
         <Clock className="h-5 w-5 text-primary" />
         <h3 className="text-lg font-semibold">Choose your Daily Hours</h3>
       </div>
       
-      {/* Total hours display */}
       <div className="text-center">
         <div className="inline-flex items-center gap-2 text-muted-foreground mb-2">
           <Clock className="h-4 w-4" />
@@ -38,7 +62,6 @@ const DaysCalculator = ({
         </div>
       </div>
       
-      {/* Hours per day slider */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Hours Per Day</span>
@@ -61,7 +84,6 @@ const DaysCalculator = ({
         </div>
       </div>
       
-      {/* Calculated days */}
       <div className="rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 p-6 text-center">
         <div className="inline-flex items-center gap-2 text-muted-foreground mb-2">
           <Calendar className="h-4 w-4" />

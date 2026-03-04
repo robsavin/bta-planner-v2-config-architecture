@@ -1,6 +1,13 @@
 import { ArrowRight, ArrowLeft, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import StepBadge from "./StepBadge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export type TrailDirection = "south-to-north" | "north-to-south";
 
@@ -8,6 +15,7 @@ interface DirectionSelectorProps {
   selectedDirection: TrailDirection;
   onDirectionChange: (direction: TrailDirection) => void;
   stepNumber?: number;
+  compact?: boolean;
 }
 
 const directions = [
@@ -25,7 +33,25 @@ const directions = [
   },
 ];
 
-const DirectionSelector = ({ selectedDirection, onDirectionChange, stepNumber = 1 }: DirectionSelectorProps) => {
+const DirectionSelector = ({ selectedDirection, onDirectionChange, stepNumber = 1, compact = false }: DirectionSelectorProps) => {
+  if (compact) {
+    return (
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Direction</label>
+        <Select value={selectedDirection} onValueChange={(v) => onDirectionChange(v as TrailDirection)}>
+          <SelectTrigger className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="bg-popover z-50">
+            {directions.map((d) => (
+              <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
@@ -49,7 +75,6 @@ const DirectionSelector = ({ selectedDirection, onDirectionChange, stepNumber = 
                   : "border-border bg-card hover:border-primary/50 hover:shadow-soft"
               )}
             >
-              {/* Selection indicator */}
               <div
                 className={cn(
                   "absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all",
@@ -61,7 +86,6 @@ const DirectionSelector = ({ selectedDirection, onDirectionChange, stepNumber = 
                 {isSelected && <Check className="h-3 w-3" />}
               </div>
               
-              {/* Icon and name */}
               <div className="flex items-center gap-2 mb-1">
                 <div className={cn(
                   "flex h-8 w-8 items-center justify-center rounded-lg",
@@ -72,7 +96,6 @@ const DirectionSelector = ({ selectedDirection, onDirectionChange, stepNumber = 
                 <span className="font-semibold text-sm text-foreground">{direction.name}</span>
               </div>
               
-              {/* Description */}
               <p className="text-xs text-muted-foreground pr-4">
                 {direction.description}
               </p>
