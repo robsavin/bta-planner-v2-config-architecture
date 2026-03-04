@@ -1,0 +1,264 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+  West Highland Way Planner - Design System
+  Inspired by BigTrailAdventures.com
+  Colors: Teal/Orange adventure palette with Scottish highlands imagery
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Lora:wght@400;500;600&display=swap');
+
+@layer base {
+  :root {
+    /* Core brand colors - inspired by Scottish highlands */
+    --background: 0 0% 100%;
+    --foreground: 220 25% 15%;
+
+    /* Cards and surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 15%;
+
+    /* Primary - Adventure Orange (from BTA) */
+    --primary: 28 95% 50%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary - Deep Teal (Scottish lochs) */
+    --secondary: 185 45% 30%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Muted tones */
+    --muted: 210 20% 96%;
+    --muted-foreground: 220 15% 45%;
+
+    /* Accent - Heather Purple for highlights */
+    --accent: 185 40% 92%;
+    --accent-foreground: 185 45% 25%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 20% 88%;
+    --input: 210 20% 88%;
+    --ring: 28 95% 50%;
+
+    --radius: 0.5rem;
+
+    /* Highland greens */
+    --highland-green: 145 35% 35%;
+    --highland-green-light: 145 30% 92%;
+    
+    /* Mountain grays */
+    --mountain-gray: 220 15% 40%;
+    --mountain-mist: 210 15% 95%;
+    
+    /* Trail colors */
+    --trail-brown: 25 40% 35%;
+    --trail-path: 35 50% 70%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(185 45% 25%) 0%, hsl(200 40% 35%) 50%, hsl(28 80% 45%) 100%);
+    --gradient-mountain: linear-gradient(180deg, hsl(200 50% 85%) 0%, hsl(35 60% 85%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
+    
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(220 25% 15% / 0.1);
+    --shadow-card: 0 8px 30px -8px hsl(220 25% 15% / 0.12);
+    --shadow-elevated: 0 16px 48px -12px hsl(220 25% 15% / 0.18);
+
+    /* Sidebar */
+    --sidebar-background: 185 40% 12%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 28 95% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 185 35% 18%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 185 30% 20%;
+    --sidebar-ring: 28 95% 50%;
+  }
+
+  .dark {
+    --background: 220 25% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 220 25% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 220 25% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 28 95% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 185 40% 25%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 220 20% 18%;
+    --muted-foreground: 220 15% 60%;
+
+    --accent: 185 35% 20%;
+    --accent-foreground: 185 40% 80%;
+
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 20% 20%;
+    --input: 220 20% 20%;
+    --ring: 28 95% 55%;
+
+    --sidebar-background: 220 25% 6%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 28 95% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 20% 15%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 220 20% 18%;
+    --sidebar-ring: 28 95% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Barlow', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  
+  .font-display {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  
+  .font-body {
+    font-family: 'Lora', serif;
+  }
+}
+
+@layer components {
+  /* Hero section styling */
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+  
+  .mountain-gradient {
+    background: var(--gradient-mountain);
+  }
+  
+  .card-gradient {
+    background: var(--gradient-card);
+  }
+  
+  /* Trail segment card */
+  .trail-card {
+    @apply relative overflow-hidden rounded-xl border bg-card;
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .trail-card:hover {
+    box-shadow: var(--shadow-elevated);
+    transform: translateY(-2px);
+  }
+  
+  /* Day badge styling */
+  .day-badge {
+    @apply inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold;
+    min-width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  /* Stats display */
+  .stat-value {
+    @apply text-2xl font-bold text-foreground;
+  }
+  
+  .stat-label {
+    @apply text-sm text-muted-foreground uppercase tracking-wider;
+  }
+  
+  /* Node marker */
+  .node-marker {
+    @apply w-4 h-4 rounded-full border-2 border-primary bg-background;
+  }
+  
+  .node-marker-active {
+    @apply bg-primary;
+  }
+  
+  /* Trail line */
+  .trail-line {
+    @apply h-full w-0.5 bg-gradient-to-b from-primary to-secondary;
+  }
+
+  /* Scenic background pattern */
+  .scenic-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 80%, hsl(145 35% 35% / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(28 95% 50% / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, hsl(185 45% 30% / 0.03) 0%, transparent 70%);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.4s ease-out forwards;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

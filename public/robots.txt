@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://west-highland-way-planner.openair.tools/sitemap.xml
