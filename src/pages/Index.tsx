@@ -22,7 +22,6 @@ import {
 } from "@/lib/trailData";
 import type { UnitSystem } from "@/lib/formatUtils";
 import { CalendarCheck, FileText } from "lucide-react";
-import FeedbackForm from "@/components/FeedbackForm";
 import { trackEvent } from "@/lib/analytics";
 
 const Index = () => {
@@ -297,7 +296,7 @@ const Index = () => {
         </div>
       </main>
 
-      <FeedbackForm />
+      
 
       {/* Footer */}
       <footer className="border-t border-border bg-muted/30 py-6 mt-12">
