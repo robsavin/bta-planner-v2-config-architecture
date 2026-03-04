@@ -26,6 +26,7 @@ import {
 import type { UnitSystem } from "@/lib/formatUtils";
 import { CalendarCheck, FileText } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
+import QuoteRequestForm from "@/components/QuoteRequestForm";
 
 const Index = () => {
   // Planning state — defaults: Hiker, 8h/day, S→N, today
@@ -35,6 +36,7 @@ const Index = () => {
   const [hoursPerDay, setHoursPerDay] = useState<number>(8);
   const [units, setUnits] = useState<UnitSystem>("metric");
   const [partySize, setPartySize] = useState<number>(2);
+  const [quoteOpen, setQuoteOpen] = useState(false);
 
   // Derived
   const totalHours = useMemo(
@@ -304,11 +306,40 @@ const Index = () => {
             <CalendarCheck className="h-5 w-5" />
             Book This Trip
           </Button>
-          <Button size="lg" variant="outline" className="h-14 px-10 text-lg gap-3">
+          <Button size="lg" variant="outline" className="h-14 px-10 text-lg gap-3" onClick={() => setQuoteOpen(true)}>
             <FileText className="h-5 w-5" />
             Save My Quote
           </Button>
         </div>
+
+        {/* Quote modal */}
+        {(() => {
+          const trailConfig = getTrailConfig();
+          const activeDays = itinerary.filter(d => !d.isRestDay).length;
+          const nights = Math.max(0, activeDays - 1);
+          const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };
+          const multiplier = MULTIPLIER[partySize] ?? partySize;
+          const totalPrice = (49 * partySize) + (140 * nights * multiplier);
+          const pricePerPerson = Math.round(totalPrice / partySize);
+          const depPerPerson = trailConfig.depositPerPerson;
+          const deposit = depPerPerson * partySize;
+          return (
+            <QuoteRequestForm
+              open={quoteOpen}
+              onOpenChange={setQuoteOpen}
+              itinerary={itinerary}
+              speedProfile={selectedSpeed}
+              direction={selectedDirection}
+              hoursPerDay={hoursPerDay}
+              startDate={startDate}
+              partySize={partySize}
+              totalPrice={totalPrice}
+              pricePerPerson={pricePerPerson}
+              deposit={deposit}
+              depositPerPerson={depPerPerson}
+            />
+          );
+        })()}
       </main>
 
       
