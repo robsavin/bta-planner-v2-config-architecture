@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FileText } from "lucide-react";
 import { format } from "date-fns";
 import jsPDF from "jspdf";
 import {
@@ -56,6 +57,7 @@ const QuoteRequestForm = ({
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isDownloaded, setIsDownloaded] = useState(false);
 
   const config = getTrailConfig();
   const activeDays = itinerary.filter((d) => !d.isRestDay).length;
@@ -224,83 +226,88 @@ const QuoteRequestForm = ({
       doc.save(
         `${config.name.replace(/\s+/g, "-").toLowerCase()}-quote.pdf`
       );
-
-      // Build mailto
-      const dirLabel =
-        config.directions.labels[direction]?.name ?? direction;
-      const subject = encodeURIComponent(
-        `Quote Request — ${config.name}`
-      );
-      const body = encodeURIComponent(
-        `New quote request from the trip planner:\n\n` +
-          `Name: ${name}\nEmail: ${email}\nPhone: ${phone || "Not provided"}\n\n` +
-          `Trail: ${config.name}\nDirection: ${dirLabel}\n` +
-          `Pace: ${speedProfile.name}\nHours/day: ${hoursPerDay}\n` +
-          `Start date: ${format(startDate, "d MMMM yyyy")}\n` +
-          `Party size: ${partySize}\nDays: ${itinerary.length} (${activeDays} walking)\n\n` +
-          `Total price: ${formatGBP(totalPrice)}\nPer person: ${formatGBP(pricePerPerson)}\n` +
-          `Deposit: ${formatGBP(deposit)}\n`
-      );
-      window.open(
-        `mailto:hello@bigtrailadventures.com?subject=${subject}&body=${body}`,
-        "_blank"
-      );
-
-      onOpenChange(false);
-      setName("");
-      setEmail("");
-      setPhone("");
+      // TODO: Add server-side lead capture via Zapier
+      setIsDownloaded(true);
     } finally {
       setIsGenerating(false);
     }
   };
 
+  const handleClose = () => {
+    onOpenChange(false);
+    // Reset after close animation
+    setTimeout(() => {
+      setIsDownloaded(false);
+      setName("");
+      setEmail("");
+      setPhone("");
+    }, 200);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Save Your Quote</DialogTitle>
-          <DialogDescription>
-            We'll generate a PDF of your itinerary and send the details to
-            Big Trail Adventures.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="quote-name">Name *</Label>
-            <Input
-              id="quote-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              placeholder="Your name"
-            />
+        {!isDownloaded ? (
+          <>
+            <DialogHeader>
+              <DialogTitle>Save Your Quote</DialogTitle>
+              <DialogDescription>
+                We'll generate a PDF of your personalised itinerary and pricing.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="quote-name">Name *</Label>
+                <Input
+                  id="quote-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  placeholder="Your name"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="quote-email">Email *</Label>
+                <Input
+                  id="quote-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="you@example.com"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="quote-phone">Phone (optional)</Label>
+                <Input
+                  id="quote-phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+44 7..."
+                />
+              </div>
+              <Button type="submit" className="w-full" disabled={isGenerating}>
+                {isGenerating ? "Generating…" : "Download Quote PDF"}
+              </Button>
+            </form>
+          </>
+        ) : (
+          <div className="py-6 text-center space-y-4">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+              <FileText className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg">Your quote has been downloaded.</h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                Check your downloads folder for the PDF.
+              </p>
+            </div>
+            <Button variant="outline" onClick={handleClose}>
+              Close
+            </Button>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="quote-email">Email *</Label>
-            <Input
-              id="quote-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="you@example.com"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="quote-phone">Phone (optional)</Label>
-            <Input
-              id="quote-phone"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+44 7..."
-            />
-          </div>
-          <Button type="submit" className="w-full" disabled={isGenerating}>
-            {isGenerating ? "Generating…" : "Download Quote PDF"}
-          </Button>
-        </form>
+        )}
       </DialogContent>
     </Dialog>
   );
