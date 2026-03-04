@@ -1,23 +1,23 @@
 import { Clock, ArrowUp, ArrowDown, MapPin } from "lucide-react";
-import heroImage from "@/assets/hero-highlands.jpg";
 
 import { formatDistance, formatElevation, type UnitSystem } from "@/lib/formatUtils";
-import { speedProfiles, calculateTotalTime, calculateDays } from "@/lib/trailData";
+import { calculateTotalTime, calculateDays } from "@/lib/trailData";
+import { getTrailConfig } from "@/config";
 
 interface HeroSectionProps {
   units?: UnitSystem;
 }
 
 const HeroSection = ({ units = "metric" }: HeroSectionProps) => {
-  // Trail totals in metric
-  const totalDistanceKm = 153;
-  const totalAscentM = 3122;
-  const totalDescentM = 3168;
+  const config = getTrailConfig();
+  const totalDistanceKm = config.totalDistanceKm;
+  const totalAscentM = config.totalAscentM;
+  const totalDescentM = config.totalDescentM;
   
   // Calculate dynamic duration range at 8 hours/day
   const hoursPerDay = 8;
-  const trailRunner = speedProfiles.find(p => p.id === "trailrunner")!;
-  const explorer = speedProfiles.find(p => p.id === "explorer")!;
+  const trailRunner = config.speedProfiles.find(p => p.id === "trailrunner")!;
+  const explorer = config.speedProfiles.find(p => p.id === "explorer")!;
   
   const minDays = calculateDays(calculateTotalTime(trailRunner), hoursPerDay);
   const maxDays = calculateDays(calculateTotalTime(explorer), hoursPerDay);
@@ -36,7 +36,7 @@ const HeroSection = ({ units = "metric" }: HeroSectionProps) => {
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroImage})` }}
+        style={{ backgroundImage: `url(${config.hero.imagePath})` }}
         role="img"
         aria-label="Scenic view of the West Highland Way trail through the Scottish Highlands"
       >
@@ -53,11 +53,11 @@ const HeroSection = ({ units = "metric" }: HeroSectionProps) => {
         </div>
         
         <h1 className="font-display mb-4 text-4xl tracking-wide text-primary-foreground drop-shadow-lg sm:text-5xl md:text-6xl lg:text-7xl animate-slide-up">
-          West Highland Way
+          {config.name}
         </h1>
         
         <p className="font-body mb-8 max-w-2xl text-lg text-primary-foreground/90 drop-shadow md:text-xl animate-slide-up" style={{ animationDelay: "0.1s" }}>
-          {formatDistance(totalDistanceKm, units)} of Scotland's most spectacular scenery. Create your perfect itinerary from Milngavie to Fort William with downloadable GPX files for every stage.
+          {config.hero.description.replace("{distance}", formatDistance(totalDistanceKm, units))}
         </p>
         
         {/* Quick stats */}

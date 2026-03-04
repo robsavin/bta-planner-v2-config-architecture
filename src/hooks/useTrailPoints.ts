@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import JSZip from "jszip";
-import whwGpxZipUrl from "@/data/whwgpx.zip?url";
+import { getTrailConfig } from "@/config";
 import { parseGPX, type TrailPoint } from "@/lib/gpxParser";
 
 // Singleton cache so the GPX is only fetched once across all consumers
@@ -12,7 +12,8 @@ async function loadTrailPoints(): Promise<TrailPoint[]> {
   if (fetchPromise) return fetchPromise;
 
   fetchPromise = (async () => {
-    const response = await fetch(whwGpxZipUrl);
+    const gpxUrl = getTrailConfig().gpxAssetPath;
+    const response = await fetch(gpxUrl);
     if (!response.ok) throw new Error("GPX file not found");
 
     const zipData = await response.arrayBuffer();
