@@ -12,6 +12,7 @@ import PartySizeSelector from "@/components/PartySizeSelector";
 import PricingDisplay from "@/components/PricingDisplay";
 import MapDisplay from "@/components/MapDisplay";
 import { Button } from "@/components/ui/button";
+import { getTrailConfig } from "@/config";
 import {
   speedProfiles,
   calculateTotalTimeWithDirection,
@@ -294,6 +295,7 @@ const Index = () => {
         <PricingDisplay
           partySize={partySize}
           activeDays={itinerary.filter(d => !d.isRestDay).length}
+          depositPerPerson={getTrailConfig().depositPerPerson}
         />
 
         {/* CTA buttons */}

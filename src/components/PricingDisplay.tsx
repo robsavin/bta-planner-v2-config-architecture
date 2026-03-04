@@ -3,6 +3,12 @@ import { PoundSterling } from "lucide-react";
 interface PricingDisplayProps {
   partySize: number;
   activeDays: number;
+  /**
+   * Deposit per person in GBP. Sourced from trail config.
+   * When embedded in Shopify, this will be overridden by a
+   * data-deposit attribute passed in from the liquid template.
+   */
+  depositPerPerson: number;
 }
 
 const MULTIPLIER: Record<number, number> = {
@@ -12,12 +18,12 @@ const MULTIPLIER: Record<number, number> = {
 const formatGBP = (amount: number) =>
   new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
 
-const PricingDisplay = ({ partySize, activeDays }: PricingDisplayProps) => {
+const PricingDisplay = ({ partySize, activeDays, depositPerPerson }: PricingDisplayProps) => {
   const nights = Math.max(0, activeDays - 1);
   const multiplier = MULTIPLIER[partySize] ?? partySize;
   const totalPrice = (49 * partySize) + (140 * nights * multiplier);
   const pricePerPerson = Math.round(totalPrice / partySize);
-  const deposit = 150 * partySize;
+  const deposit = depositPerPerson * partySize;
 
   return (
     <div className="rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 p-6 mt-6">
@@ -40,7 +46,7 @@ const PricingDisplay = ({ partySize, activeDays }: PricingDisplayProps) => {
         <div className="text-center">
           <div className="text-3xl font-bold text-secondary">{formatGBP(deposit)}</div>
           <div className="text-sm text-muted-foreground">Deposit</div>
-          <div className="text-xs text-muted-foreground mt-0.5">£150 per person</div>
+          <div className="text-xs text-muted-foreground mt-0.5">{formatGBP(depositPerPerson)} per person</div>
         </div>
       </div>
     </div>
