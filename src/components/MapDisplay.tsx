@@ -3,7 +3,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useTrailPoints, findPointIndexAtDistance } from "@/hooks/useTrailPoints";
 import type { TrailPoint } from "@/lib/gpxParser";
-import { trailNodes, type DayPlan, type TrailDirection } from "@/lib/trailData";
+import { type DayPlan, type TrailDirection } from "@/lib/trailData";
+import { getTrailConfig } from "@/config";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Loader2 } from "lucide-react";
 import { formatTime } from "@/lib/formatUtils";
@@ -27,23 +28,12 @@ interface MapDisplayProps {
   className?: string;
 }
 
-// Approximate coordinates for trail nodes (for markers)
-const nodeCoordinates: Record<string, [number, number]> = {
-  "milngavie": [55.9419, -4.3139],
-  "drymen": [56.0522, -4.4372],
-  "balmaha": [56.0789, -4.5261],
-  "rowardennan": [56.1378, -4.6317],
-  "inversnaid": [56.2378, -4.6831],
-  "ardleish": [56.2744, -4.7178],
-  "inverarnan": [56.3136, -4.7172],
-  "crianlarich": [56.3908, -4.6192],
-  "tyndrum": [56.4344, -4.7108],
-  "bridge-of-orchy": [56.5156, -4.7633],
-  "inveroran": [56.5389, -4.8042],
-  "kingshouse": [56.6553, -4.8556],
-  "kinlochleven": [56.7086, -4.9606],
-  "fort-william": [56.8169, -5.1056],
-};
+// Build nodeCoordinates from trail config
+const trailConfig = getTrailConfig();
+const trailNodes = trailConfig.nodes;
+const nodeCoordinates: Record<string, [number, number]> = Object.fromEntries(
+  trailConfig.nodes.map((n) => [n.id, n.coordinates])
+);
 
 // Colour palette for day segments
 const dayColours = [

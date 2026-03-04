@@ -12,7 +12,8 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { type DayPlan, type TrailDirection, trailNodes } from "@/lib/trailData";
+import { type DayPlan, type TrailDirection } from "@/lib/trailData";
+import { getTrailConfig } from "@/config";
 import { type TrailPoint } from "@/lib/gpxParser";
 import {
   useTrailPoints,
@@ -74,8 +75,9 @@ const GpxDownloadButton = ({ day, direction }: GpxDownloadButtonProps) => {
   const extractSegmentPoints = useCallback((): TrailPoint[] => {
     if (trailPoints.length === 0 || cumulativeDistances.length === 0) return [];
 
+    const configNodes = getTrailConfig().nodes;
     const trailTotalDistance =
-      trailNodes[trailNodes.length - 1].distanceFromStart;
+      configNodes[configNodes.length - 1].distanceFromStart;
     const scaleFactor = totalGpxDistance / trailTotalDistance;
 
     let startDist = day.startNode.distanceFromStart;
