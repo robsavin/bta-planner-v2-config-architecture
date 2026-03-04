@@ -79,12 +79,17 @@ const QuoteRequestForm = ({
     const pageWidth = doc.internal.pageSize.getWidth();
     let y = 15;
 
-    // Logo
+    // Logo — constrain by width, scale height proportionally
     try {
       const img = new Image();
       img.src = btaLogoColor;
-      doc.addImage(img, "PNG", 14, y, 40, 15);
-      y += 22;
+      const desiredWidth = 50; // mm
+      const aspectRatio = img.naturalHeight && img.naturalWidth
+        ? img.naturalHeight / img.naturalWidth
+        : 0.35; // sensible fallback ratio
+      const proportionalHeight = desiredWidth * aspectRatio;
+      doc.addImage(img, "PNG", 14, y, desiredWidth, proportionalHeight);
+      y += proportionalHeight + 7;
     } catch {
       doc.setFontSize(16);
       doc.setFont("helvetica", "bold");
