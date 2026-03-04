@@ -87,6 +87,8 @@ const westHighlandWay: TrailConfig = {
     imagePath: heroImage,
   },
 
+  depositPerPerson: 150,
+
   branding: {
     organisationName: "Big Trail Adventures",
     websiteUrl: "https://bigtrailadventures.com",

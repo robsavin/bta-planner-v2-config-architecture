@@ -54,6 +54,13 @@ export interface TrailConfig {
   /** Path or URL to the GPX zip asset */
   gpxAssetPath: string;
 
+  /**
+   * Deposit amount per person in GBP.
+   * When embedded in Shopify, this value will be overridden by a
+   * data-deposit attribute passed in from the liquid template.
+   */
+  depositPerPerson: number;
+
   /** Hero section metadata */
   hero: {
     /** Subtitle / description shown in the hero */
