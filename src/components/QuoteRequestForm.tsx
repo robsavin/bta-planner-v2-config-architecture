@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getTrailConfig } from "@/config";
+import btaLogoColor from "@/assets/bta-logo-color.png";
 import type { DayPlan, SpeedProfile } from "@/lib/trailData";
 import type { TrailDirection } from "@/components/DirectionSelector";
 
@@ -58,6 +59,14 @@ const QuoteRequestForm = ({
   const [phone, setPhone] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
+  const [quoteRef, setQuoteRef] = useState("");
+
+  const generateQuoteRef = () => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let code = "";
+    for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    return `BTA-${code}`;
+  };
 
   const config = getTrailConfig();
   const activeDays = itinerary.filter((d) => !d.isRestDay).length;
@@ -65,25 +74,39 @@ const QuoteRequestForm = ({
   const totalDistance = itinerary.reduce((sum, d) => sum + d.distance, 0);
   const totalAscent = itinerary.reduce((sum, d) => sum + d.ascent, 0);
 
-  const generatePDF = () => {
+  const generatePDF = (ref: string) => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
-    let y = 20;
+    let y = 15;
 
-    // Logo — use text fallback (addImage with imported asset can fail in jsPDF)
-    doc.setFontSize(16);
-    doc.setFont("helvetica", "bold");
-    doc.text("Big Trail Adventures", 14, y);
-    y += 10;
+    // Logo
+    try {
+      const img = new Image();
+      img.src = btaLogoColor;
+      doc.addImage(img, "PNG", 14, y, 40, 15);
+      y += 22;
+    } catch {
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.text("Big Trail Adventures", 14, y);
+      y += 10;
+    }
 
     // Title
     doc.setFontSize(20);
+    doc.setFont("helvetica", "bold");
     doc.text(config.name, 14, y);
     y += 8;
     doc.setFontSize(11);
     doc.setFont("helvetica", "normal");
     doc.text(`Quote prepared for ${name}`, 14, y);
     y += 5;
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text(`Quote ref: ${ref}`, 14, y);
+    y += 5;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
     doc.text(`Generated ${format(new Date(), "d MMMM yyyy")}`, 14, y);
     y += 10;
 
@@ -222,11 +245,13 @@ const QuoteRequestForm = ({
     setIsGenerating(true);
 
     try {
-      const doc = generatePDF();
+      const ref = generateQuoteRef();
+      const doc = generatePDF(ref);
       doc.save(
-        `${config.name.replace(/\s+/g, "-").toLowerCase()}-quote.pdf`
+        `${config.name.replace(/\s+/g, "-").toLowerCase()}-quote-${ref}.pdf`
       );
       // TODO: Add server-side lead capture via Zapier
+      setQuoteRef(ref);
       setIsDownloaded(true);
     } finally {
       setIsGenerating(false);
@@ -298,7 +323,7 @@ const QuoteRequestForm = ({
               <FileText className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h3 className="font-semibold text-lg">Your quote has been downloaded.</h3>
+              <h3 className="font-semibold text-lg">Your quote <span className="font-mono">{quoteRef}</span> has been downloaded.</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Check your downloads folder for the PDF.
               </p>
