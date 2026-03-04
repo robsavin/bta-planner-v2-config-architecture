@@ -2,11 +2,19 @@ import { Check, User, Zap, Gauge, Footprints } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { speedProfiles, type SpeedProfile } from "@/lib/trailData";
 import StepBadge from "./StepBadge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface SpeedSelectorProps {
   selectedSpeed: SpeedProfile;
   onSpeedChange: (speed: SpeedProfile) => void;
   stepNumber?: number;
+  compact?: boolean;
 }
 
 const speedIcons = {
@@ -16,7 +24,28 @@ const speedIcons = {
   trailrunner: <Zap className="h-5 w-5" />,
 };
 
-const SpeedSelector = ({ selectedSpeed, onSpeedChange, stepNumber = 2 }: SpeedSelectorProps) => {
+const SpeedSelector = ({ selectedSpeed, onSpeedChange, stepNumber = 2, compact = false }: SpeedSelectorProps) => {
+  if (compact) {
+    return (
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Pace</label>
+        <Select value={selectedSpeed.id} onValueChange={(v) => {
+          const profile = speedProfiles.find(p => p.id === v);
+          if (profile) onSpeedChange(profile);
+        }}>
+          <SelectTrigger className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="bg-popover z-50">
+            {speedProfiles.map((p) => (
+              <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
@@ -40,7 +69,6 @@ const SpeedSelector = ({ selectedSpeed, onSpeedChange, stepNumber = 2 }: SpeedSe
                   : "border-border bg-card hover:border-primary/50 hover:shadow-soft"
               )}
             >
-              {/* Selection indicator */}
               <div
                 className={cn(
                   "absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all",
@@ -52,7 +80,6 @@ const SpeedSelector = ({ selectedSpeed, onSpeedChange, stepNumber = 2 }: SpeedSe
                 {isSelected && <Check className="h-3 w-3" />}
               </div>
               
-              {/* Icon and name */}
               <div className="flex items-center gap-2 mb-1">
                 <div className={cn(
                   "flex h-8 w-8 items-center justify-center rounded-lg",
@@ -63,7 +90,6 @@ const SpeedSelector = ({ selectedSpeed, onSpeedChange, stepNumber = 2 }: SpeedSe
                 <span className="font-semibold text-sm text-foreground">{profile.name}</span>
               </div>
               
-              {/* Description */}
               <p className="text-xs text-muted-foreground pr-4">
                 {profile.description}
               </p>
