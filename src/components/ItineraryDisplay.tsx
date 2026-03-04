@@ -307,6 +307,11 @@ const DayCard = ({
           />
         </div>
 
+        {/* Description */}
+        {day.endNode.description && (
+          <p className="mt-3 text-sm italic text-muted-foreground">{day.endNode.description}</p>
+        )}
+
         {/* Action buttons */}
         <div className="mt-2 flex justify-between items-center">
           {onRemove ? (
