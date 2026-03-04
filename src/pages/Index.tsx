@@ -8,6 +8,8 @@ import DateSelector from "@/components/DateSelector";
 import DaysCalculator from "@/components/DaysCalculator";
 import ItineraryDisplay from "@/components/ItineraryDisplay";
 import UnitToggle from "@/components/UnitToggle";
+import PartySizeSelector from "@/components/PartySizeSelector";
+import PricingDisplay from "@/components/PricingDisplay";
 import MapDisplay from "@/components/MapDisplay";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,6 +33,7 @@ const Index = () => {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [hoursPerDay, setHoursPerDay] = useState<number>(8);
   const [units, setUnits] = useState<UnitSystem>("metric");
+  const [partySize, setPartySize] = useState<number>(2);
 
   // Derived
   const totalHours = useMemo(
@@ -232,7 +235,7 @@ const Index = () => {
             <h2 className="text-lg font-semibold">Configure Your Trip</h2>
             <UnitToggle units={units} onUnitsChange={setUnits} />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <DirectionSelector
               selectedDirection={selectedDirection}
               onDirectionChange={setSelectedDirection}
@@ -254,6 +257,10 @@ const Index = () => {
               selectedDate={startDate}
               onDateChange={setStartDate}
               compact
+            />
+            <PartySizeSelector
+              partySize={partySize}
+              onPartySizeChange={setPartySize}
             />
           </div>
         </div>
@@ -282,6 +289,12 @@ const Index = () => {
             />
           </div>
         </div>
+
+        {/* Pricing */}
+        <PricingDisplay
+          partySize={partySize}
+          activeDays={itinerary.filter(d => !d.isRestDay).length}
+        />
 
         {/* CTA buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 pt-8 border-t border-border">
