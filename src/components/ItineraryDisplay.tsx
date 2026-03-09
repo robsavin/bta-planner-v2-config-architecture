@@ -172,14 +172,19 @@ const DayCard = ({
     return (
       <div className="relative pl-12 pb-6">
         {!isFirst && (
-          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-borderd">
+          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-border" />
+        )}
+        <div className="absolute left-0 top-8 flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card">
           <Coffee className="h-5 w-5 text-primary" />
         </div>
         {!isLast && (
-          <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-gradient-to-b from-primary/30 to-v className="ml-4 rounded-xl bord/30 bg-primary/5 p-4">
-           justify-between">
-            <d"flex items-center gap-2 mb-1">
- ont-semibold text-primary">Rest Day</span>
+          <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-border" />
+        )}
+        <div className="ml-4 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="font-semibold text-primary">Rest Day</span>
                 {day.date && (
                   <span className="text-sm text-muted-foreground">
                     • {format(day.date, "EEE, MMM d")}
@@ -210,30 +215,36 @@ const DayCard = ({
   return (
     <div className="relative pl-12 pb-6">
       {!isFirst && (
-        <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-gradient-to-b from-border to-primary" />
+        <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-primary" />
       )}
-      <div classlex h-10 w-10 items-center justify-center rounded-full border-2 boprimary-foreground font-bold">
+      <div className="absolute left-0 top-8 flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground font-bold">
         {day.day}
       </div>
-    className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-gborder" />
+      {!isLast && (
+        <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-primary" />
       )}
       <div className="ml-4 trail-card p-5">
- primary className="text-sm text-muted-foreground mb-3">
-            {format(day.date, "EEEE, MMprimary   )}
+        {day.date && (
+          <div className="text-sm text-muted-foreground mb-3">
+            {format(day.date, "EEEE, MMMM d, yyyy")}
+          </div>
+        )}
         <div className="flex flex-col gap-3 mb-4">
-          <div className="flex primaryv className="flex items-center justify-center h-6 w-6 rounded-full bg-highland-green/20 text-highland-green">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center h-6 w-6 rounded-full bg-highland-green/20 text-highland-green">
               <MapPin className="h-4 w-4" />
             </div>
             <span className="text-sm font-medium text-muted-foreground">From</span>
             <span className="text-lg font-semibold">{day.startNode.name}</span>
           </div>
           <div className="flex items-center gap-2 pl-3">
-            <div className="w-0.5 h-4 bg-gradient-to-b from-highland-green to-primary" />
+            <div className="w-0.5 h-4 bg-primary" />
           </div>
           <div className="flex items-center gap-2">
-      er justify-center h-6 w-6 rounded-full bg-primary/20 text-primary">
+            <div className="flex items-center justify-center h-6 w-6 rounded-full bg-primary/20 text-primary">
               <Navigation className="h-4 w-4" />
-       me="text-sm font-medium text-muted-foreground">To</span>
+            </div>
+            <span className="text-sm font-medium text-muted-foreground">To</span>
             <div className="flex-1">
               <Select
                 value={day.endNode.id}
