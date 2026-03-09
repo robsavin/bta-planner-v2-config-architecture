@@ -8,9 +8,9 @@ import DaysCalculator from "@/components/DaysCalculator";
 import ItineraryDisplay from "@/components/ItineraryDisplay";
 import UnitToggle from "@/components/UnitToggle";
 import PartySizeSelector from "@/components/PartySizeSelector";
-import PricingDisplay from "@/components/PricingDisplay";
+import PurchaseModule from "@/components/PurchaseModule";
+
 import MapDisplay from "@/components/MapDisplay";
-import { Button } from "@/components/ui/button";
 import { getTrailConfig } from "@/config";
 import {
   speedProfiles,
@@ -23,10 +23,7 @@ import {
   type DayPlan,
 } from "@/lib/trailData";
 import type { UnitSystem } from "@/lib/formatUtils";
-import { CalendarCheck, FileText } from "lucide-react";
-import { trackEvent } from "@/lib/analytics";
 import QuoteRequestForm from "@/components/QuoteRequestForm";
-import BookTripButton from "@/components/BookTripButton";
 
 const Index = () => {
   // Planning state — defaults: Hiker, 8h/day, S→N, today
@@ -290,21 +287,17 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Pricing */}
-        <PricingDisplay
+        {/* Purchase Module */}
+        <PurchaseModule
+          itinerary={itinerary}
+          direction={selectedDirection}
+          speedProfileName={selectedSpeed.name}
+          speedProfileId={selectedSpeed.id}
+          startDate={startDate}
           partySize={partySize}
-          activeDays={itinerary.filter(d => !d.isRestDay).length}
-          depositPerPerson={getTrailConfig().depositPerPerson}
+          units={units}
+          onSaveQuote={() => setQuoteOpen(true)}
         />
-
-        {/* CTA buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 pt-8 border-t border-border">
-          <BookTripButton speedProfileId={selectedSpeed.id} partySize={partySize} />
-          <Button size="lg" variant="outline" className="h-14 px-10 text-lg gap-3" onClick={() => setQuoteOpen(true)}>
-            <FileText className="h-5 w-5" />
-            Save My Quote
-          </Button>
-        </div>
 
         {/* Quote modal */}
         {(() => {

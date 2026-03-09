@@ -20,6 +20,8 @@ interface BookTripButtonProps {
   /** Current speed profile id, e.g. "explorer" */
   speedProfileId: string;
   partySize: number;
+  /** Optional deposit label to show in button text */
+  depositLabel?: string;
 }
 
 /** Map speed profile IDs to the data-attribute suffix and config key */
@@ -46,7 +48,7 @@ function getVariantId(speedProfileId: string): string | null {
   return config.shopifyVariants[entry.configKey] ?? null;
 }
 
-const BookTripButton = ({ speedProfileId, partySize }: BookTripButtonProps) => {
+const BookTripButton = ({ speedProfileId, partySize, depositLabel }: BookTripButtonProps) => {
   const [fallbackMsg, setFallbackMsg] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -85,12 +87,12 @@ const BookTripButton = ({ speedProfileId, partySize }: BookTripButtonProps) => {
     <div className="flex flex-col items-center">
       <Button
         size="lg"
-        className="h-14 px-10 text-lg gap-3"
+        className="w-full sm:w-auto h-14 px-10 text-lg gap-3"
         onClick={handleClick}
         disabled={submitting}
       >
         <CalendarCheck className="h-5 w-5" />
-        {submitting ? "Adding to cart…" : "Book This Trip"}
+        {submitting ? "Adding to cart…" : depositLabel ? `Book This Trip — Pay ${depositLabel} deposit` : "Book This Trip"}
       </Button>
       {fallbackMsg && (
         <p className="mt-3 text-sm text-muted-foreground text-center max-w-md">
