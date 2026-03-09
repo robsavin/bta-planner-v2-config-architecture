@@ -48,7 +48,7 @@ function getVariantId(speedProfileId: string): string | null {
   return config.shopifyVariants[entry.configKey] ?? null;
 }
 
-const BookTripButton = ({ speedProfileId, partySize }: BookTripButtonProps) => {
+const BookTripButton = ({ speedProfileId, partySize, depositLabel }: BookTripButtonProps) => {
   const [fallbackMsg, setFallbackMsg] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
