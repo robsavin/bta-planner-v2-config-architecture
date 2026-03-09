@@ -393,10 +393,10 @@ const ItinerarySummary = ({ itinerary, units }: { itinerary: DayPlan[]; units: U
   const totalWalkingTime = walkingDays.reduce((sum, d) => sum + d.walkingTime, 0);
   
   return (
-    <div className="rounded-xl bg-gradient-to-br from-secondary/10 to-primary/10 p-6 mt-8">
+    <div className="rounded-xl bg-muted p-6 mt-8">
       <h3 className="text-lg font-semibold mb-4 text-center">Journey Summary</h3>
       
-      <div clamuted>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         <div className="text-center">
           <div className="text-3xl font-bold text-primary">{walkingDays.length}</div>
           <div className="text-sm text-muted-foreground">Active Days</div>
