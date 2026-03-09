@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CalendarCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getTrailConfig } from "@/config";
 import { trackEvent } from "@/lib/analytics";
 
