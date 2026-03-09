@@ -20,6 +20,8 @@ interface BookTripButtonProps {
   /** Current speed profile id, e.g. "explorer" */
   speedProfileId: string;
   partySize: number;
+  /** Optional deposit label to show in button text */
+  depositLabel?: string;
 }
 
 /** Map speed profile IDs to the data-attribute suffix and config key */
