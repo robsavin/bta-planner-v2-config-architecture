@@ -33,20 +33,6 @@ const INCLUDED_ITEMS = [
   { name: "On-trail support", detail: "We're here if you need us" },
 ];
 
-const MountainSilhouette = () => (
-  <svg
-    viewBox="0 0 400 200"
-    className="absolute top-0 right-0 w-64 h-32 md:w-80 md:h-40 opacity-[0.12]"
-    preserveAspectRatio="xMaxYMin meet"
-    aria-hidden="true"
-  >
-    <path
-      d="M400 200 L400 80 L360 40 L330 70 L300 20 L270 60 L240 30 L210 70 L180 50 L150 90 L120 60 L90 100 L60 80 L30 120 L0 100 L0 200 Z"
-      fill="currentColor"
-      className="text-secondary-foreground"
-    />
-  </svg>
-);
 
 const PurchaseModule = ({
   itinerary,
@@ -78,13 +64,12 @@ const PurchaseModule = ({
   return (
     <div className="mt-12 rounded-xl overflow-hidden shadow-lg">
       {/* ─── ZONE 1 — Your Adventure ─── */}
-      <div className="relative bg-secondary text-secondary-foreground px-8 py-10 md:px-12 md:py-14 overflow-hidden">
-        <MountainSilhouette />
-        <div className="relative z-10">
-          <p className="text-xs uppercase tracking-[0.2em] text-secondary-foreground/50 mb-2">Your Adventure</p>
-          <h3 className="text-3xl md:text-4xl font-extrabold mb-8 tracking-tight">{trailConfig.name}</h3>
+      <div className="bg-secondary text-secondary-foreground px-6 py-5 md:px-8 md:py-6">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-secondary-foreground/50 mb-1">Your Adventure</p>
+          <h3 className="text-xl md:text-2xl font-extrabold mb-4 tracking-tight">{trailConfig.name}</h3>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3">
             <DetailItem label="Direction" value={directionLabel} />
             <DetailItem label="Pace" value={speedProfileName} />
             <DetailItem label="Start Date" value={format(startDate, "d MMM yyyy")} />
@@ -178,8 +163,8 @@ const PurchaseModule = ({
 
 const DetailItem = ({ label, value }: { label: string; value: string }) => (
   <div>
-    <div className="text-[11px] uppercase tracking-[0.15em] text-secondary-foreground/40 mb-1">{label}</div>
-    <div className="font-bold text-lg">{value}</div>
+    <div className="text-[10px] uppercase tracking-[0.15em] text-secondary-foreground/40 mb-0.5">{label}</div>
+    <div className="font-bold text-sm">{value}</div>
   </div>
 );
 
