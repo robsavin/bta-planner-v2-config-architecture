@@ -10,6 +10,7 @@ import UnitToggle from "@/components/UnitToggle";
 import PartySizeSelector from "@/components/PartySizeSelector";
 import PurchaseModule from "@/components/PurchaseModule";
 import { Button } from "@/components/ui/button";
+import MapDisplay from "@/components/MapDisplay";
 import { getTrailConfig } from "@/config";
 import {
   speedProfiles,
