@@ -172,13 +172,13 @@ const DayCard = ({
     return (
       <div className="relative pl-12 pb-6">
         {!isFirst && (
-          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-gradient-to-b from-border to-primary/30" />
+          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-border" />
         )}
         <div className="absolute left-0 top-8 flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card">
           <Coffee className="h-5 w-5 text-primary" />
         </div>
         {!isLast && (
-          <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-gradient-to-b from-primary/30 to-border" />
+          <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-border" />
         )}
         <div className="ml-4 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-4">
           <div className="flex items-center justify-between">
@@ -215,13 +215,13 @@ const DayCard = ({
   return (
     <div className="relative pl-12 pb-6">
       {!isFirst && (
-        <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-gradient-to-b from-border to-primary" />
+        <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-primary" />
       )}
       <div className="absolute left-0 top-8 flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground font-bold">
         {day.day}
       </div>
       {!isLast && (
-        <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-gradient-to-b from-primary to-border" />
+        <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-primary" />
       )}
       <div className="ml-4 trail-card p-5">
         {day.date && (
@@ -238,7 +238,7 @@ const DayCard = ({
             <span className="text-lg font-semibold">{day.startNode.name}</span>
           </div>
           <div className="flex items-center gap-2 pl-3">
-            <div className="w-0.5 h-4 bg-gradient-to-b from-highland-green to-primary" />
+            <div className="w-0.5 h-4 bg-primary" />
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-6 w-6 rounded-full bg-primary/20 text-primary">
@@ -393,7 +393,7 @@ const ItinerarySummary = ({ itinerary, units }: { itinerary: DayPlan[]; units: U
   const totalWalkingTime = walkingDays.reduce((sum, d) => sum + d.walkingTime, 0);
   
   return (
-    <div className="rounded-xl bg-gradient-to-br from-secondary/10 to-primary/10 p-6 mt-8">
+    <div className="rounded-xl bg-muted p-6 mt-8">
       <h3 className="text-lg font-semibold mb-4 text-center">Journey Summary</h3>
       
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
