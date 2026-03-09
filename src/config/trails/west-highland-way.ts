@@ -81,6 +81,13 @@ const westHighlandWay: TrailConfig = {
 
   gpxAssetPath: whwGpxZipUrl,
 
+  shopifyVariants: {
+    explorer: null,
+    hiker: null,
+    fastpacker: null,
+    trailRunner: null,
+  },
+
   hero: {
     description:
       "{distance} of Scotland's most spectacular scenery. Create your perfect itinerary from Milngavie to Fort William with downloadable GPX files for every stage.",

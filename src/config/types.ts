@@ -69,6 +69,17 @@ export interface TrailConfig {
     imagePath: string;
   };
 
+  /**
+   * Shopify variant IDs keyed by pace profile.
+   * Set to null when unknown — runtime data-attributes override these.
+   */
+  shopifyVariants: {
+    explorer: string | null;
+    hiker: string | null;
+    fastpacker: string | null;
+    trailRunner: string | null;
+  };
+
   /** Branding */
   branding: {
     /** Organisation name for footer / PDF */
