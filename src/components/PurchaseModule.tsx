@@ -160,12 +160,6 @@ const PurchaseModule = ({
 
 /* ── Sub-components ── */
 
-const DetailItem = ({ label, value }: { label: string; value: string }) => (
-  <div>
-    <div className="text-[0.65rem] uppercase tracking-widest text-secondary-foreground/40 mb-0.5">{label}</div>
-    <div className="font-bold text-[0.95rem]">{value}</div>
-  </div>
-);
 
 const PriceCell = ({
   label,
