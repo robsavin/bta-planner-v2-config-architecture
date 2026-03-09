@@ -12,39 +12,42 @@
 
 @layer base {
   :root {
-    /* Core brand colors - inspired by Scottish highlands */
+    /* Core brand colors */
+    /* #FFFFFF */
     --background: 0 0% 100%;
-    --foreground: 220 25% 15%;
+    /* #121212 */
+    --foreground: 0 0% 7%;
 
-    /* Cards and surfaces */
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 15%;
+    /* Cards and surfaces - #FAF9F6 */
+    --card: 40 33% 97%;
+    --card-foreground: 0 0% 7%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 15%;
+    --popover-foreground: 0 0% 7%;
 
-    /* Primary - Adventure Orange (from BTA) */
-    --primary: 28 95% 50%;
+    /* Primary - Adventure Orange #FF961B */
+    --primary: 34 100% 55%;
     --primary-foreground: 0 0% 100%;
     
-    /* Secondary - Deep Teal (Scottish lochs) */
-    --secondary: 185 45% 30%;
+    /* Secondary - Deep Teal #385769 */
+    --secondary: 202 30% 31%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Muted tones */
-    --muted: 210 20% 96%;
-    --muted-foreground: 220 15% 45%;
+    /* Muted tones - #FAF9F6 */
+    --muted: 40 33% 97%;
+    --muted-foreground: 202 30% 31%;
 
-    /* Accent - Heather Purple for highlights */
-    --accent: 185 40% 92%;
-    --accent-foreground: 185 45% 25%;
+    /* Accent - Warm accent #F5EDE2 */
+    --accent: 30 43% 93%;
+    --accent-foreground: 0 0% 7%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 20% 88%;
-    --input: 210 20% 88%;
-    --ring: 28 95% 50%;
+    /* Borders use teal */
+    --border: 202 20% 82%;
+    --input: 202 20% 82%;
+    --ring: 34 100% 55%;
 
     --radius: 0.5rem;
 
@@ -53,32 +56,27 @@
     --highland-green-light: 145 30% 92%;
     
     /* Mountain grays */
-    --mountain-gray: 220 15% 40%;
-    --mountain-mist: 210 15% 95%;
+    --mountain-gray: 202 30% 31%;
+    --mountain-mist: 40 33% 97%;
     
     /* Trail colors */
     --trail-brown: 25 40% 35%;
     --trail-path: 35 50% 70%;
 
-    /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(185 45% 25%) 0%, hsl(200 40% 35%) 50%, hsl(28 80% 45%) 100%);
-    --gradient-mountain: linear-gradient(180deg, hsl(200 50% 85%) 0%, hsl(35 60% 85%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
-    
     /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(220 25% 15% / 0.1);
-    --shadow-card: 0 8px 30px -8px hsl(220 25% 15% / 0.12);
-    --shadow-elevated: 0 16px 48px -12px hsl(220 25% 15% / 0.18);
+    --shadow-soft: 0 4px 20px -4px hsl(0 0% 7% / 0.08);
+    --shadow-card: 0 8px 30px -8px hsl(0 0% 7% / 0.1);
+    --shadow-elevated: 0 16px 48px -12px hsl(0 0% 7% / 0.15);
 
     /* Sidebar */
-    --sidebar-background: 185 40% 12%;
+    --sidebar-background: 202 30% 15%;
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 28 95% 50%;
+    --sidebar-primary: 34 100% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 185 35% 18%;
+    --sidebar-accent: 202 25% 22%;
     --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 185 30% 20%;
-    --sidebar-ring: 28 95% 50%;
+    --sidebar-border: 202 25% 25%;
+    --sidebar-ring: 34 100% 55%;
   }
 
   .dark {
