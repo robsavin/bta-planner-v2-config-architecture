@@ -172,12 +172,12 @@ const DayCard = ({
     return (
       <div className="relative pl-12 pb-6">
         {!isFirst && (
-          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-border h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card">
+          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-borderenter rounded-full border-2 border-dashed border-primary/50 bg-card">
           <Coffee className="h-5 w-5 text-primary" />
         </div>
         {!isLast && (
           <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-gradient-to-b from-primary/30 to-v className="ml-4 rounded-xl bord/30 bg-primary/5 p-4">
-          <div className="flex items-center justify-between">
+           justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="font-semibold text-primary">Rest Day</span>
@@ -213,15 +213,14 @@ const DayCard = ({
       {!isFirst && (
         <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-gradient-to-b from-border to-primary" />
       )}
-      <div classlex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground font-bold">
+      <div classlex h-10 w-10 items-center justify-center rounded-full border-2 boprimary-foreground font-bold">
         {day.day}
       </div>
       {!isLast && (
         <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-gradient-to-b from-primary to-border" />
       )}
       <div className="ml-4 trail-card p-5">
-        {day.date && (
-          <div className="text-sm text-muted-foreground mb-3">
+ primary className="text-sm text-muted-foreground mb-3">
             {format(day.date, "EEEE, MMMM d, yyyy")}
           </div>
         )}
