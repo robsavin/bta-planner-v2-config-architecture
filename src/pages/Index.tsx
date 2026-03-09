@@ -23,10 +23,7 @@ import {
   type DayPlan,
 } from "@/lib/trailData";
 import type { UnitSystem } from "@/lib/formatUtils";
-import { CalendarCheck, FileText } from "lucide-react";
-import { trackEvent } from "@/lib/analytics";
 import QuoteRequestForm from "@/components/QuoteRequestForm";
-import BookTripButton from "@/components/BookTripButton";
 
 const Index = () => {
   // Planning state — defaults: Hiker, 8h/day, S→N, today
