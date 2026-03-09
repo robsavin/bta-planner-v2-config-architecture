@@ -8,8 +8,7 @@ import DaysCalculator from "@/components/DaysCalculator";
 import ItineraryDisplay from "@/components/ItineraryDisplay";
 import UnitToggle from "@/components/UnitToggle";
 import PartySizeSelector from "@/components/PartySizeSelector";
-import PricingDisplay from "@/components/PricingDisplay";
-import MapDisplay from "@/components/MapDisplay";
+import PurchaseModule from "@/components/PurchaseModule";
 import { Button } from "@/components/ui/button";
 import { getTrailConfig } from "@/config";
 import {
