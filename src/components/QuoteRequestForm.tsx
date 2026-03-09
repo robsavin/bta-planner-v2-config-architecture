@@ -249,13 +249,13 @@ const QuoteRequestForm = ({
     return doc;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsGenerating(true);
 
     try {
       const ref = generateQuoteRef();
-      const doc = generatePDF(ref);
+      const doc = await generatePDF(ref);
       doc.save(
         `${config.name.replace(/\s+/g, "-").toLowerCase()}-quote-${ref}.pdf`
       );
