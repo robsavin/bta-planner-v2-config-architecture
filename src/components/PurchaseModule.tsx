@@ -66,14 +66,15 @@ const PurchaseModule = ({
       <div className="bg-secondary text-secondary-foreground px-5 py-4 md:px-6 md:py-4">
         <h3 className="text-[1.4rem] font-bold mb-3 tracking-tight">Your {trailConfig.name} Adventure</h3>
 
-        <div className="space-y-2">
+        <div>
           <p className="text-[1.05rem] font-bold text-secondary-foreground leading-relaxed">
             {totalDays} days / {nights} nights · {directionLabel} · {formatDistance(totalDistance, units)} · {formatElevation(totalAscent, units)} ascent
           </p>
-          <p className="text-[0.95rem] text-secondary-foreground/75 leading-relaxed">
+          <hr className="border-secondary-foreground/15 my-[10px]" />
+          <p className="text-[0.9rem] text-secondary-foreground/75 leading-relaxed">
             {speedProfileName} pace · {formatTime(totalWalkingTime)} walking time
           </p>
-          <p className="text-[0.95rem] text-secondary-foreground/75 leading-relaxed">
+          <p className="text-[0.9rem] text-secondary-foreground/75 leading-relaxed mt-1">
             Starting {format(startDate, "d MMM yyyy")} · {partySize} {partySize === 1 ? "person" : "people"}
           </p>
         </div>
