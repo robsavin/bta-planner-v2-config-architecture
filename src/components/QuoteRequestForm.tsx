@@ -74,17 +74,24 @@ const QuoteRequestForm = ({
   const totalDistance = itinerary.reduce((sum, d) => sum + d.distance, 0);
   const totalAscent = itinerary.reduce((sum, d) => sum + d.ascent, 0);
 
-  const generatePDF = (ref: string) => {
+  const generatePDF = async (ref: string) => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     let y = 15;
 
-    // Logo — constrain by width, scale height proportionally
+    // Logo — load first, then preserve native aspect ratio
     try {
       const img = new Image();
       img.src = btaLogoColor;
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = () => reject(new Error("Logo failed to load"));
+      });
+
       const desiredWidth = 25; // mm
-      const proportionalHeight = 25; // logo is square
+      const aspectRatio = img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
+      const proportionalHeight = desiredWidth * aspectRatio;
+
       doc.addImage(img, "PNG", 14, y, desiredWidth, proportionalHeight);
       y += proportionalHeight + 7;
     } catch {
