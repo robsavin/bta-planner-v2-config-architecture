@@ -172,7 +172,7 @@ const DayCard = ({
     return (
       <div className="relative pl-12 pb-6">
         {!isFirst && (
-          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-gradient-to-b from-border to-primary/30" />
+          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-border" />
         )}
         <div className="absolute left-0 top-8 flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card">
           <Coffee className="h-5 w-5 text-primary" />
