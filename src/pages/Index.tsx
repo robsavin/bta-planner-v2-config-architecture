@@ -303,10 +303,7 @@ const Index = () => {
 
         {/* CTA buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 pt-8 border-t border-border">
-          <Button size="lg" className="h-14 px-10 text-lg gap-3">
-            <CalendarCheck className="h-5 w-5" />
-            Book This Trip
-          </Button>
+          <BookTripButton speedProfileId={selectedSpeed.id} partySize={partySize} />
           <Button size="lg" variant="outline" className="h-14 px-10 text-lg gap-3" onClick={() => setQuoteOpen(true)}>
             <FileText className="h-5 w-5" />
             Save My Quote
