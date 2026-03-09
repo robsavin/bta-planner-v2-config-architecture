@@ -87,12 +87,12 @@ const BookTripButton = ({ speedProfileId, partySize, depositLabel }: BookTripBut
     <div className="flex flex-col items-center">
       <Button
         size="lg"
-        className="h-14 px-10 text-lg gap-3"
+        className="w-full sm:w-auto h-14 px-10 text-lg gap-3"
         onClick={handleClick}
         disabled={submitting}
       >
         <CalendarCheck className="h-5 w-5" />
-        {submitting ? "Adding to cart…" : "Book This Trip"}
+        {submitting ? "Adding to cart…" : depositLabel ? `Book This Trip — Pay ${depositLabel} deposit` : "Book This Trip"}
       </Button>
       {fallbackMsg && (
         <p className="mt-3 text-sm text-muted-foreground text-center max-w-md">
