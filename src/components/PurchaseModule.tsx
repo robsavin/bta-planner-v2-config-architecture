@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Phone, Check, ArrowRight, FileText, Hotel, Route, Smartphone, BookOpen, Headphones } from "lucide-react";
+import { Phone, Check, ArrowRight, FileText, Hotel, Route, Smartphone, BookOpen, Headphones, Calendar, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type DayPlan } from "@/lib/trailData";
 import { type TrailDirection } from "@/components/DirectionSelector";
@@ -74,8 +74,10 @@ const PurchaseModule = ({
           <p className="text-[0.9rem] text-secondary-foreground/75 leading-relaxed">
             {speedProfileName} pace · <span className="font-bold">{formatTime(totalWalkingTime)}</span> walking time
           </p>
-          <p className="text-[0.9rem] text-secondary-foreground/75 leading-relaxed mt-1">
-            Starting <span className="font-bold">{format(startDate, "d MMM yyyy")}</span> · <span className="font-bold">{partySize}</span> {partySize === 1 ? "person" : "people"}
+          <p className="text-[0.9rem] text-secondary-foreground/75 leading-relaxed mt-1 inline-flex items-center flex-wrap">
+            <span className="inline-flex items-center gap-1">Starting <Calendar className="inline h-3.5 w-3.5 text-secondary-foreground" /><span className="font-bold">{format(startDate, "d MMM yyyy")}</span></span>
+            <span className="mx-1.5">·</span>
+            <span className="inline-flex items-center gap-1"><Users className="inline h-3.5 w-3.5 text-secondary-foreground" /><span className="font-bold">{partySize}</span> {partySize === 1 ? "person" : "people"}</span>
           </p>
         </div>
       </div>
