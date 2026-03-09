@@ -66,28 +66,16 @@ const PurchaseModule = ({
       <div className="bg-secondary text-secondary-foreground px-5 py-4 md:px-6 md:py-4">
         <h3 className="text-[1.4rem] font-bold mb-3 tracking-tight">Your {trailConfig.name} Adventure</h3>
 
-        {/* Row 1: Trip shape */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-2">
-          <DetailItem label="Duration" value={`${totalDays} days / ${nights} nights`} />
-          <DetailItem label="Direction" value={directionLabel} />
-          <DetailItem label="Total Distance" value={formatDistance(totalDistance, units)} />
-          <DetailItem label="Total Ascent" value={formatElevation(totalAscent, units)} />
-        </div>
-
-        <hr className="border-secondary-foreground/15 my-3" />
-
-        {/* Row 2: Pace */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-2">
-          <DetailItem label="Pace" value={speedProfileName} />
-          <DetailItem label="Walking Time" value={formatTime(totalWalkingTime)} />
-        </div>
-
-        <hr className="border-secondary-foreground/15 my-3" />
-
-        {/* Row 3: Logistics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-2">
-          <DetailItem label="Start Date" value={format(startDate, "d MMM yyyy")} />
-          <DetailItem label="Party Size" value={`${partySize} ${partySize === 1 ? "person" : "people"}`} />
+        <div className="space-y-2">
+          <p className="text-[1.05rem] font-bold text-secondary-foreground leading-relaxed">
+            {totalDays} days / {nights} nights · {directionLabel} · {formatDistance(totalDistance, units)} · {formatElevation(totalAscent, units)} ascent
+          </p>
+          <p className="text-[0.95rem] text-secondary-foreground/75 leading-relaxed">
+            {speedProfileName} pace · {formatTime(totalWalkingTime)} walking time
+          </p>
+          <p className="text-[0.95rem] text-secondary-foreground/75 leading-relaxed">
+            Starting {format(startDate, "d MMM yyyy")} · {partySize} {partySize === 1 ? "person" : "people"}
+          </p>
         </div>
       </div>
 
@@ -172,12 +160,6 @@ const PurchaseModule = ({
 
 /* ── Sub-components ── */
 
-const DetailItem = ({ label, value }: { label: string; value: string }) => (
-  <div>
-    <div className="text-[0.65rem] uppercase tracking-widest text-secondary-foreground/40 mb-0.5">{label}</div>
-    <div className="font-bold text-[0.95rem]">{value}</div>
-  </div>
-);
 
 const PriceCell = ({
   label,
