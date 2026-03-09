@@ -235,8 +235,7 @@ const Index = () => {
       {/* Compact config panel */}
       <section className="border-b border-border bg-card shadow-sm" aria-label="Trip settings">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Configure Your Trip</h2>
+          <div className="flex items-center justify-end mb-4">
             <UnitToggle units={units} onUnitsChange={setUnits} />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
