@@ -64,13 +64,12 @@ const PurchaseModule = ({
   return (
     <div className="mt-12 rounded-xl overflow-hidden shadow-lg">
       {/* ─── ZONE 1 — Your Adventure ─── */}
-      <div className="relative bg-secondary text-secondary-foreground px-8 py-10 md:px-12 md:py-14 overflow-hidden">
-        <MountainSilhouette />
-        <div className="relative z-10">
-          <p className="text-xs uppercase tracking-[0.2em] text-secondary-foreground/50 mb-2">Your Adventure</p>
-          <h3 className="text-3xl md:text-4xl font-extrabold mb-8 tracking-tight">{trailConfig.name}</h3>
+      <div className="bg-secondary text-secondary-foreground px-6 py-5 md:px-8 md:py-6">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-secondary-foreground/50 mb-1">Your Adventure</p>
+          <h3 className="text-xl md:text-2xl font-extrabold mb-4 tracking-tight">{trailConfig.name}</h3>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3">
             <DetailItem label="Direction" value={directionLabel} />
             <DetailItem label="Pace" value={speedProfileName} />
             <DetailItem label="Start Date" value={format(startDate, "d MMM yyyy")} />
