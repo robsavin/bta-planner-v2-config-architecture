@@ -163,8 +163,8 @@ const PurchaseModule = ({
 
 const DetailItem = ({ label, value }: { label: string; value: string }) => (
   <div>
-    <div className="text-[11px] uppercase tracking-[0.15em] text-secondary-foreground/40 mb-1">{label}</div>
-    <div className="font-bold text-lg">{value}</div>
+    <div className="text-[10px] uppercase tracking-[0.15em] text-secondary-foreground/40 mb-0.5">{label}</div>
+    <div className="font-bold text-sm">{value}</div>
   </div>
 );
 
