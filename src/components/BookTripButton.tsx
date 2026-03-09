@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CalendarCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getTrailConfig } from "@/config";
 import { trackEvent } from "@/lib/analytics";
 
@@ -87,12 +87,12 @@ const BookTripButton = ({ speedProfileId, partySize, depositLabel }: BookTripBut
     <div className="flex flex-col items-center">
       <Button
         size="lg"
-        className="w-full sm:w-auto h-14 px-10 text-lg gap-3"
+        className="w-full h-16 text-lg font-bold gap-3 rounded-lg"
         onClick={handleClick}
         disabled={submitting}
       >
-        <CalendarCheck className="h-5 w-5" />
-        {submitting ? "Adding to cart…" : depositLabel ? `Book This Trip — Pay ${depositLabel} deposit` : "Book This Trip"}
+        {submitting ? "Adding to cart…" : depositLabel ? `Book This Trip — Pay ${depositLabel} deposit today` : "Book This Trip"}
+        {!submitting && <ArrowRight className="h-5 w-5" />}
       </Button>
       {fallbackMsg && (
         <p className="mt-3 text-sm text-muted-foreground text-center max-w-md">

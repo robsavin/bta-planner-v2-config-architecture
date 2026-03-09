@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Phone, Check } from "lucide-react";
+import { Phone, Check, ArrowRight, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type DayPlan } from "@/lib/trailData";
 import { type TrailDirection } from "@/components/DirectionSelector";
@@ -26,12 +26,27 @@ interface PurchaseModuleProps {
 }
 
 const INCLUDED_ITEMS = [
-  "Hotels with breakfast at each overnight stop",
-  "Custom door-to-door route",
-  "Big Trail Adventures App",
-  "Your own personalised Trail Book",
-  "On-trail support",
+  { name: "Hotels with breakfast", detail: "Handpicked accommodation at every stop" },
+  { name: "Custom route", detail: "Door-to-door, built around your pace" },
+  { name: "BTA App", detail: "Navigate your route offline" },
+  { name: "Trail Book", detail: "Your personal guide to every stage" },
+  { name: "On-trail support", detail: "We're here if you need us" },
 ];
+
+const MountainSilhouette = () => (
+  <svg
+    viewBox="0 0 400 200"
+    className="absolute top-0 right-0 w-64 h-32 md:w-80 md:h-40 opacity-[0.12]"
+    preserveAspectRatio="xMaxYMin meet"
+    aria-hidden="true"
+  >
+    <path
+      d="M400 200 L400 80 L360 40 L330 70 L300 20 L270 60 L240 30 L210 70 L180 50 L150 90 L120 60 L90 100 L60 80 L30 120 L0 100 L0 200 Z"
+      fill="currentColor"
+      className="text-secondary-foreground"
+    />
+  </svg>
+);
 
 const PurchaseModule = ({
   itinerary,
@@ -56,101 +71,139 @@ const PurchaseModule = ({
 
   const totalDistance = walkingDays.reduce((sum, d) => sum + d.distance, 0);
   const totalAscent = walkingDays.reduce((sum, d) => sum + d.ascent, 0);
-  const totalDescent = walkingDays.reduce((sum, d) => sum + d.descent, 0);
   const totalWalkingTime = walkingDays.reduce((sum, d) => sum + d.walkingTime, 0);
-  const avgDistance = activeDays > 0 ? totalDistance / activeDays : 0;
 
   const directionLabel = direction === "south-to-north" ? "South → North" : "North → South";
 
   return (
-    <div className="mt-12 space-y-0">
-      {/* 1. Your Adventure summary */}
-      <div className="rounded-t-xl bg-secondary text-secondary-foreground p-6 md:p-8">
-        <h3 className="text-xl font-bold mb-4">Your Adventure</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-3 text-sm">
-          <SummaryItem label="Trail" value={trailConfig.name} />
-          <SummaryItem label="Direction" value={directionLabel} />
-          <SummaryItem label="Pace" value={speedProfileName} />
-          <SummaryItem label="Start Date" value={format(startDate, "d MMM yyyy")} />
-          <SummaryItem label="Duration" value={`${totalDays} days / ${nights} nights`} />
-          <SummaryItem label="Party Size" value={`${partySize} ${partySize === 1 ? "person" : "people"}`} />
-          <SummaryItem label="Total Distance" value={formatDistance(totalDistance, units)} />
-          <SummaryItem label="Daily Average" value={formatDistance(avgDistance, units)} />
-          <SummaryItem label="Walking Time" value={formatTime(totalWalkingTime)} />
-          <SummaryItem label="Total Ascent" value={formatElevation(totalAscent, units)} />
-          <SummaryItem label="Total Descent" value={formatElevation(totalDescent, units)} />
+    <div className="mt-12 rounded-xl overflow-hidden shadow-lg">
+      {/* ─── ZONE 1 — Your Adventure ─── */}
+      <div className="relative bg-secondary text-secondary-foreground px-8 py-10 md:px-12 md:py-14 overflow-hidden">
+        <MountainSilhouette />
+        <div className="relative z-10">
+          <p className="text-xs uppercase tracking-[0.2em] text-secondary-foreground/50 mb-2">Your Adventure</p>
+          <h3 className="text-3xl md:text-4xl font-extrabold mb-8 tracking-tight">{trailConfig.name}</h3>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6">
+            <DetailItem label="Direction" value={directionLabel} />
+            <DetailItem label="Pace" value={speedProfileName} />
+            <DetailItem label="Start Date" value={format(startDate, "d MMM yyyy")} />
+            <DetailItem label="Duration" value={`${totalDays} days / ${nights} nights`} />
+            <DetailItem label="Party Size" value={`${partySize} ${partySize === 1 ? "person" : "people"}`} />
+            <DetailItem label="Total Distance" value={formatDistance(totalDistance, units)} />
+            <DetailItem label="Total Ascent" value={formatElevation(totalAscent, units)} />
+            <DetailItem label="Walking Time" value={formatTime(totalWalkingTime)} />
+          </div>
         </div>
       </div>
 
-      {/* 2. What's Included */}
-      <div className="bg-muted px-6 md:px-8 py-6">
-        <h3 className="text-lg font-semibold text-foreground mb-3">What's Included</h3>
-        <ul className="space-y-2">
+      {/* ─── ZONE 2 — What's Included ─── */}
+      <div className="bg-background px-8 py-10 md:px-12 md:py-12">
+        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">What's Included</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5">
           {INCLUDED_ITEMS.map(item => (
-            <li key={item} className="flex items-center gap-2 text-sm text-foreground">
-              <Check className="h-4 w-4 text-primary flex-shrink-0" />
-              {item}
-            </li>
+            <div key={item.name} className="flex items-start gap-3">
+              <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <div className="font-semibold text-foreground">{item.name}</div>
+                <div className="text-sm text-muted-foreground">{item.detail}</div>
+              </div>
+            </div>
           ))}
-        </ul>
-      </div>
-
-      {/* 3. Pricing row */}
-      <div className="bg-background border-x border-border px-6 md:px-8 py-6">
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div>
-            <div className="text-sm text-muted-foreground mb-1">Per Person</div>
-            <div className="text-2xl font-bold text-foreground">{formatGBP(pricePerPerson)}</div>
-          </div>
-          <div>
-            <div className="text-sm text-muted-foreground mb-1">Trip Total</div>
-            <div className="text-2xl font-bold text-foreground">{formatGBP(totalPrice)}</div>
-          </div>
-          <div>
-            <div className="text-sm text-muted-foreground mb-1">Deposit Today</div>
-            <div className="text-3xl font-extrabold text-primary">{formatGBP(deposit)}</div>
-          </div>
         </div>
       </div>
 
-      {/* 4. CTAs */}
-      <div className="rounded-b-xl bg-background border-x border-b border-border px-6 md:px-8 pt-2 pb-6">
-        <div className="flex flex-col items-center gap-3">
+      {/* ─── ZONE 3 — Purchase Action ─── */}
+      <div className="bg-muted px-8 py-10 md:px-12 md:py-12">
+        {/* Pricing cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+          <PriceCard label="Per Person" value={formatGBP(pricePerPerson)} />
+          <PriceCard label="Trip Total" value={formatGBP(totalPrice)} />
+          <PriceCard
+            label="Deposit Today"
+            value={formatGBP(deposit)}
+            subtitle="— to secure your adventure"
+            highlight
+          />
+        </div>
+
+        {/* CTAs */}
+        <div className="flex flex-col items-center gap-4 max-w-lg mx-auto">
           <BookTripButton
             speedProfileId={speedProfileId}
             partySize={partySize}
             depositLabel={formatGBP(deposit)}
           />
+
           <Button
             size="lg"
             variant="outline"
-            className="w-full sm:w-auto h-12 px-8 text-base border-secondary text-secondary hover:bg-secondary/5"
+            className="w-full h-12 text-base gap-2 border-secondary text-secondary hover:bg-secondary/5"
             onClick={onSaveQuote}
           >
-            Save My Quote
+            <FileText className="h-4 w-4" />
+            Save My Quote — get a PDF sent to you
           </Button>
+
+          {/* Divider with 'or' */}
+          <div className="flex items-center gap-4 w-full my-1">
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-xs text-muted-foreground">or</span>
+            <div className="flex-1 h-px bg-border" />
+          </div>
+
+          {/* Phone row */}
           <a
             href="tel:01315602740"
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mt-1"
+            className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
           >
-            <Phone className="h-4 w-4" />
-            📞 0131 560 2740 · 8am–6pm, every day
+            <Phone className="h-5 w-5" />
+            <div>
+              <div className="font-semibold">0131 560 2740</div>
+              <div className="text-xs text-muted-foreground">8am–6pm, every day — we love talking trails</div>
+            </div>
           </a>
-        </div>
 
-        {/* 5. Reassurance */}
-        <p className="text-center text-xs text-muted-foreground mt-4">
-          We'll start planning right away. Not happy? We'll adjust or refund you — hassle-free.
-        </p>
+          {/* Reassurance */}
+          <p className="text-center text-sm text-muted-foreground italic mt-4">
+            We'll start planning your trip right away. Not happy with anything? We'll adjust it or refund you — no questions asked.
+          </p>
+        </div>
       </div>
     </div>
   );
 };
 
-const SummaryItem = ({ label, value }: { label: string; value: string }) => (
+/* ── Sub-components ── */
+
+const DetailItem = ({ label, value }: { label: string; value: string }) => (
   <div>
-    <div className="text-secondary-foreground/60 text-xs uppercase tracking-wide">{label}</div>
-    <div className="font-semibold">{value}</div>
+    <div className="text-[11px] uppercase tracking-[0.15em] text-secondary-foreground/40 mb-1">{label}</div>
+    <div className="font-bold text-lg">{value}</div>
+  </div>
+);
+
+const PriceCard = ({
+  label,
+  value,
+  subtitle,
+  highlight,
+}: {
+  label: string;
+  value: string;
+  subtitle?: string;
+  highlight?: boolean;
+}) => (
+  <div className="bg-background rounded-lg p-6 text-center">
+    <div className={`text-sm mb-2 ${highlight ? "text-primary font-semibold" : "text-muted-foreground"}`}>
+      {label}
+    </div>
+    <div className={`font-extrabold ${highlight ? "text-4xl text-primary" : "text-3xl text-foreground"}`}>
+      {value}
+    </div>
+    {subtitle && (
+      <div className="text-xs text-muted-foreground mt-1">{subtitle}</div>
+    )}
   </div>
 );
 
