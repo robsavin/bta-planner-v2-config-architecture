@@ -229,9 +229,7 @@ const Index = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background">
-      <HeroSection units={units} />
-
+    <div className="min-h-screen bg-background pt-6">
       {/* Compact config panel */}
       <section className="border-b border-border bg-card shadow-sm" aria-label="Trip settings">
         <div className="container mx-auto px-4 py-6">
