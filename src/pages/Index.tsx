@@ -1,6 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { addDays } from "date-fns";
-
 import btaLogo from "@/assets/bta-logo.gif";
 import SpeedSelector from "@/components/SpeedSelector";
 import DirectionSelector, { type TrailDirection } from "@/components/DirectionSelector";
