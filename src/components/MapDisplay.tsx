@@ -64,7 +64,38 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className }: MapD
       mapInstanceRef.current.remove();
     }
 
-    const map = L.map(mapRef.current).setView([56.4, -4.7], 9);
+    const map = L.map(mapRef.current, {
+      scrollWheelZoom: false,
+      dragging: !L.Browser.mobile,
+      touchZoom: 'center',
+    }).setView([56.4, -4.7], 9);
+
+    // Touch gesture overlay for mobile
+    if (L.Browser.mobile) {
+      const gestureOverlay = document.createElement('div');
+      gestureOverlay.className = 'leaflet-gesture-overlay';
+      gestureOverlay.innerHTML = '<p>Use two fingers to move the map</p>';
+      Object.assign(gestureOverlay.style, {
+        position: 'absolute', top: '0', left: '0', width: '100%', height: '100%',
+        display: 'none', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(0,0,0,0.5)', color: 'white', fontSize: '1rem',
+        fontWeight: '600', zIndex: '1000', pointerEvents: 'none',
+        textAlign: 'center', padding: '2rem',
+      });
+      map.getContainer().style.position = 'relative';
+      map.getContainer().appendChild(gestureOverlay);
+
+      let gestureTimeout: ReturnType<typeof setTimeout>;
+      map.getContainer().addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          gestureOverlay.style.display = 'flex';
+          clearTimeout(gestureTimeout);
+          gestureTimeout = setTimeout(() => { gestureOverlay.style.display = 'none'; }, 1500);
+        } else {
+          gestureOverlay.style.display = 'none';
+        }
+      }, { passive: true });
+    }
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 18,
