@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Phone, Check, ArrowRight, FileText } from "lucide-react";
+import { Phone, Check, ArrowRight, FileText, Hotel, Route, Smartphone, BookOpen, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type DayPlan } from "@/lib/trailData";
 import { type TrailDirection } from "@/components/DirectionSelector";
@@ -26,13 +26,12 @@ interface PurchaseModuleProps {
 }
 
 const INCLUDED_ITEMS = [
-  { name: "Hotels with breakfast", detail: "Handpicked accommodation at every stop" },
-  { name: "Custom route", detail: "Door-to-door, built around your pace" },
-  { name: "BTA App", detail: "Navigate your route offline" },
-  { name: "Trail Book", detail: "Your personal guide to every stage" },
-  { name: "On-trail support", detail: "We're here if you need us" },
+  { name: "Hotels with breakfast", detail: "Handpicked accommodation at every stop", icon: Hotel },
+  { name: "Custom route", detail: "Door-to-door, built around your pace", icon: Route },
+  { name: "BTA App", detail: "Navigate your route offline", icon: Smartphone },
+  { name: "Trail Book", detail: "Your personal guide to every stage", icon: BookOpen },
+  { name: "On-trail support", detail: "We're here if you need us", icon: Headphones },
 ];
-
 
 const PurchaseModule = ({
   itinerary,
@@ -62,58 +61,54 @@ const PurchaseModule = ({
   const directionLabel = direction === "south-to-north" ? "South → North" : "North → South";
 
   return (
-    <div className="mt-12 rounded-xl overflow-hidden shadow-lg">
+    <div className="mt-8 rounded-xl overflow-hidden shadow-lg border-t-[3px] border-t-primary">
       {/* ─── ZONE 1 — Your Adventure ─── */}
-      <div className="bg-secondary text-secondary-foreground px-6 py-5 md:px-8 md:py-6">
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-secondary-foreground/50 mb-1">Your Adventure</p>
-          <h3 className="text-xl md:text-2xl font-extrabold mb-4 tracking-tight">{trailConfig.name}</h3>
+      <div className="bg-secondary text-secondary-foreground px-5 py-4 md:px-6 md:py-4">
+        <p className="text-[0.65rem] uppercase tracking-widest text-secondary-foreground/40 mb-0.5">Your Adventure</p>
+        <h3 className="text-[1.4rem] font-bold mb-3 tracking-tight">{trailConfig.name}</h3>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3">
-            <DetailItem label="Direction" value={directionLabel} />
-            <DetailItem label="Pace" value={speedProfileName} />
-            <DetailItem label="Start Date" value={format(startDate, "d MMM yyyy")} />
-            <DetailItem label="Duration" value={`${totalDays} days / ${nights} nights`} />
-            <DetailItem label="Party Size" value={`${partySize} ${partySize === 1 ? "person" : "people"}`} />
-            <DetailItem label="Total Distance" value={formatDistance(totalDistance, units)} />
-            <DetailItem label="Total Ascent" value={formatElevation(totalAscent, units)} />
-            <DetailItem label="Walking Time" value={formatTime(totalWalkingTime)} />
-          </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-2">
+          <DetailItem label="Direction" value={directionLabel} />
+          <DetailItem label="Pace" value={speedProfileName} />
+          <DetailItem label="Start Date" value={format(startDate, "d MMM yyyy")} />
+          <DetailItem label="Duration" value={`${totalDays} days / ${nights} nights`} />
+          <DetailItem label="Party Size" value={`${partySize} ${partySize === 1 ? "person" : "people"}`} />
+          <DetailItem label="Total Distance" value={formatDistance(totalDistance, units)} />
+          <DetailItem label="Total Ascent" value={formatElevation(totalAscent, units)} />
+          <DetailItem label="Walking Time" value={formatTime(totalWalkingTime)} />
         </div>
       </div>
 
       {/* ─── ZONE 2 — What's Included ─── */}
-      <div className="bg-background px-8 py-10 md:px-12 md:py-12">
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">What's Included</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5">
-          {INCLUDED_ITEMS.map(item => (
-            <div key={item.name} className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-              <div>
-                <div className="font-semibold text-foreground">{item.name}</div>
-                <div className="text-sm text-muted-foreground">{item.detail}</div>
+      <div className="bg-background px-5 py-6 md:px-6 md:py-7">
+        <p className="text-[0.65rem] uppercase tracking-widest text-muted-foreground mb-4">What's Included</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {INCLUDED_ITEMS.map(item => {
+            const Icon = item.icon;
+            return (
+              <div key={item.name} className="border border-border rounded-lg p-4 flex items-start gap-3">
+                <Icon className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-semibold text-sm text-foreground">{item.name}</div>
+                  <div className="text-xs text-muted-foreground">{item.detail}</div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
       {/* ─── ZONE 3 — Purchase Action ─── */}
-      <div className="bg-muted px-8 py-10 md:px-12 md:py-12">
-        {/* Pricing cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-          <PriceCard label="Per Person" value={formatGBP(pricePerPerson)} />
-          <PriceCard label="Trip Total" value={formatGBP(totalPrice)} />
-          <PriceCard
-            label="Deposit Today"
-            value={formatGBP(deposit)}
-            subtitle="— to secure your adventure"
-            highlight
-          />
+      <div className="bg-muted px-5 py-6 md:px-6 md:py-7">
+        {/* Pricing bar */}
+        <div className="border border-border rounded-lg bg-background flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-border mb-6">
+          <PriceCell label="Per Person" value={formatGBP(pricePerPerson)} />
+          <PriceCell label="Trip Total" value={formatGBP(totalPrice)} />
+          <PriceCell label="Deposit Today" value={formatGBP(deposit)} subtitle="— to secure your adventure" highlight />
         </div>
 
         {/* CTAs */}
-        <div className="flex flex-col items-center gap-4 max-w-lg mx-auto">
+        <div className="flex flex-col items-center gap-3">
           <BookTripButton
             speedProfileId={speedProfileId}
             partySize={partySize}
@@ -123,7 +118,7 @@ const PurchaseModule = ({
           <Button
             size="lg"
             variant="outline"
-            className="w-full h-12 text-base gap-2 border-secondary text-secondary hover:bg-secondary/5"
+            className="w-4/5 h-11 text-sm gap-2 border-secondary text-secondary hover:bg-secondary/5"
             onClick={onSaveQuote}
           >
             <FileText className="h-4 w-4" />
@@ -131,7 +126,7 @@ const PurchaseModule = ({
           </Button>
 
           {/* Divider with 'or' */}
-          <div className="flex items-center gap-4 w-full my-1">
+          <div className="flex items-center gap-4 w-full my-0.5">
             <div className="flex-1 h-px bg-border" />
             <span className="text-xs text-muted-foreground">or</span>
             <div className="flex-1 h-px bg-border" />
@@ -150,7 +145,7 @@ const PurchaseModule = ({
           </a>
 
           {/* Reassurance */}
-          <p className="text-center text-sm text-muted-foreground italic mt-4">
+          <p className="text-center text-xs text-muted-foreground italic mt-2">
             We'll start planning your trip right away. Not happy with anything? We'll adjust it or refund you — no questions asked.
           </p>
         </div>
@@ -163,12 +158,12 @@ const PurchaseModule = ({
 
 const DetailItem = ({ label, value }: { label: string; value: string }) => (
   <div>
-    <div className="text-[10px] uppercase tracking-[0.15em] text-secondary-foreground/40 mb-0.5">{label}</div>
-    <div className="font-bold text-sm">{value}</div>
+    <div className="text-[0.65rem] uppercase tracking-widest text-secondary-foreground/40 mb-0.5">{label}</div>
+    <div className="font-bold text-[0.95rem]">{value}</div>
   </div>
 );
 
-const PriceCard = ({
+const PriceCell = ({
   label,
   value,
   subtitle,
@@ -179,15 +174,15 @@ const PriceCard = ({
   subtitle?: string;
   highlight?: boolean;
 }) => (
-  <div className="bg-background rounded-lg p-6 text-center">
-    <div className={`text-sm mb-2 ${highlight ? "text-primary font-semibold" : "text-muted-foreground"}`}>
+  <div className="flex-1 px-5 py-4 text-center">
+    <div className={`text-xs mb-1 ${highlight ? "text-primary font-semibold" : "text-muted-foreground"}`}>
       {label}
     </div>
-    <div className={`font-extrabold ${highlight ? "text-4xl text-primary" : "text-3xl text-foreground"}`}>
+    <div className={`${highlight ? "text-2xl font-bold text-primary" : "text-xl text-foreground"}`}>
       {value}
     </div>
     {subtitle && (
-      <div className="text-xs text-muted-foreground mt-1">{subtitle}</div>
+      <div className="text-[0.65rem] text-muted-foreground mt-0.5">{subtitle}</div>
     )}
   </div>
 );

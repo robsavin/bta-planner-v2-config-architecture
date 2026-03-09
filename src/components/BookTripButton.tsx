@@ -87,7 +87,7 @@ const BookTripButton = ({ speedProfileId, partySize, depositLabel }: BookTripBut
     <div className="flex flex-col items-center">
       <Button
         size="lg"
-        className="w-full h-16 text-lg font-bold gap-3 rounded-lg"
+        className="w-full h-14 text-[1.1rem] font-bold gap-3 rounded-lg"
         onClick={handleClick}
         disabled={submitting}
       >
