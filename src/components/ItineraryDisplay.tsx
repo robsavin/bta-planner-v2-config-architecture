@@ -127,8 +127,6 @@ const ItineraryDisplay = ({
         })}
       </div>
       
-      {/* Summary */}
-      <ItinerarySummary itinerary={itinerary} units={units} />
     </div>
   );
 };
