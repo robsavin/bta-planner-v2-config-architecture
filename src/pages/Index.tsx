@@ -336,35 +336,10 @@ const Index = () => {
         })()}
       </main>
 
-      
-
-      {/* Footer */}
-      <footer className="border-t border-border bg-muted/30 py-6 mt-12">
-        <div className="container mx-auto px-4 flex flex-col items-center gap-4">
-          <nav aria-label="External links" className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="https://bigtrailadventures.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity"
-            >
-              <img src={btaLogo} alt="Big Trail Adventures - guided walking holidays" className="h-14 w-auto" loading="lazy" />
-            </a>
-            <p className="text-sm text-muted-foreground">
-              Book this adventure at{" "}
-              <a
-                href="https://bigtrailadventures.com/products/west-highland-way-adventure"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline font-medium"
-              >
-                bigtrailadventures.com
-              </a>
-            </p>
-          </nav>
-          <p className="text-xs text-muted-foreground">© 2026 Big Trail Adventures. All rights reserved</p>
-        </div>
-      </footer>
+      </main>
+    </div>
+  );
+};
     </div>
   );
 };

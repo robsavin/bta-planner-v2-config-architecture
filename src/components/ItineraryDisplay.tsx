@@ -172,14 +172,14 @@ const DayCard = ({
     return (
       <div className="relative pl-12 pb-6">
         {!isFirst && (
-          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-borderr-dashed border-primary/50 bg-card">
+          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-borderd">
           <Coffee className="h-5 w-5 text-primary" />
         </div>
         {!isLast && (
           <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-gradient-to-b from-primary/30 to-v className="ml-4 rounded-xl bord/30 bg-primary/5 p-4">
            justify-between">
             <d"flex items-center gap-2 mb-1">
-                <span className="font-semibold text-primary">Rest Day</span>
+ ont-semibold text-primary">Rest Day</span>
                 {day.date && (
                   <span className="text-sm text-muted-foreground">
                     • {format(day.date, "EEE, MMM d")}
@@ -215,14 +215,13 @@ const DayCard = ({
       <div classlex h-10 w-10 items-center justify-center rounded-full border-2 boprimary-foreground font-bold">
         {day.day}
       </div>
-    className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-gradient-to-b from-primary to-border" />
+    className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-gborder" />
       )}
       <div className="ml-4 trail-card p-5">
  primary className="text-sm text-muted-foreground mb-3">
             {format(day.date, "EEEE, MMprimary   )}
         <div className="flex flex-col gap-3 mb-4">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center h-6 w-6 rounded-full bg-highland-green/20 text-highland-green">
+          <div className="flex primaryv className="flex items-center justify-center h-6 w-6 rounded-full bg-highland-green/20 text-highland-green">
               <MapPin className="h-4 w-4" />
             </div>
             <span className="text-sm font-medium text-muted-foreground">From</span>
@@ -234,8 +233,7 @@ const DayCard = ({
           <div className="flex items-center gap-2">
       er justify-center h-6 w-6 rounded-full bg-primary/20 text-primary">
               <Navigation className="h-4 w-4" />
-            </div>
-            <span className="text-sm font-medium text-muted-foreground">To</span>
+       me="text-sm font-medium text-muted-foreground">To</span>
             <div className="flex-1">
               <Select
                 value={day.endNode.id}
@@ -387,7 +385,7 @@ const ItinerarySummary = ({ itinerary, units }: { itinerary: DayPlan[]; units: U
     <div className="rounded-xl bg-gradient-to-br from-secondary/10 to-primary/10 p-6 mt-8">
       <h3 className="text-lg font-semibold mb-4 text-center">Journey Summary</h3>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div clamuted>
         <div className="text-center">
           <div className="text-3xl font-bold text-primary">{walkingDays.length}</div>
           <div className="text-sm text-muted-foreground">Active Days</div>

@@ -26,7 +26,7 @@ const PricingDisplay = ({ partySize, activeDays, depositPerPerson }: PricingDisp
   const deposit = depositPerPerson * partySize;
 
   return (
-    <div className="rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 p-6 mt-6">
+    <div className="rounded-xl bg-muted border border-border p-6 mt-6">
       <h3 className="text-lg font-semibold mb-4 text-center flex items-center justify-center gap-2">
         <PoundSterling className="h-5 w-5 text-primary" />
         Trip Pricing

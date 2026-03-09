@@ -84,7 +84,7 @@ const DaysCalculator = ({
         </div>
       </div>
       
-      <div className="rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 p-6 text-center">
+      <div className="rounded-lg bg-muted p-6 text-center">
         <div className="inline-flex items-center gap-2 text-muted-foreground mb-2">
           <Calendar className="h-4 w-4" />
           <span className="text-sm uppercase tracking-wider">Your Journey</span>

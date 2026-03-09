@@ -200,15 +200,12 @@
   
   /* Trail line */
   .trail-line {
-    @apply h-full w-0.5 bg-gradient-to-b from-primary to-secondary;
+    @apply h-full w-0.5 bg-primary;
   }
 
   /* Scenic background pattern */
   .scenic-pattern {
-    background-image: 
-      radial-gradient(circle at 20% 80%, hsl(145 35% 35% / 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, hsl(28 95% 50% / 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 50% 50%, hsl(185 45% 30% / 0.03) 0%, transparent 70%);
+    background: hsl(var(--accent));
   }
 }
 
