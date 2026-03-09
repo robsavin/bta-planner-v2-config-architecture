@@ -72,10 +72,10 @@ const PurchaseModule = ({
           </p>
           <hr className="border-secondary-foreground/15 my-[10px]" />
           <p className="text-[0.9rem] text-secondary-foreground/75 leading-relaxed">
-            {speedProfileName} pace · {formatTime(totalWalkingTime)} walking time
+            {speedProfileName} pace · <span className="font-bold">{formatTime(totalWalkingTime)}</span> walking time
           </p>
           <p className="text-[0.9rem] text-secondary-foreground/75 leading-relaxed mt-1">
-            Starting {format(startDate, "d MMM yyyy")} · {partySize} {partySize === 1 ? "person" : "people"}
+            Starting <span className="font-bold">{format(startDate, "d MMM yyyy")}</span> · <span className="font-bold">{partySize}</span> {partySize === 1 ? "person" : "people"}
           </p>
         </div>
       </div>
