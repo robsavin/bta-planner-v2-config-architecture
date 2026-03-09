@@ -150,15 +150,15 @@
 @layer components {
   /* Hero section styling */
   .hero-gradient {
-    background: var(--gradient-hero);
+    background: hsl(var(--secondary));
   }
   
   .mountain-gradient {
-    background: var(--gradient-mountain);
+    background: hsl(var(--muted));
   }
   
   .card-gradient {
-    background: var(--gradient-card);
+    background: hsl(var(--card));
   }
   
   /* Trail segment card */
