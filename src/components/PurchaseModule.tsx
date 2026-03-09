@@ -33,20 +33,6 @@ const INCLUDED_ITEMS = [
   { name: "On-trail support", detail: "We're here if you need us" },
 ];
 
-const MountainSilhouette = () => (
-  <svg
-    viewBox="0 0 400 200"
-    className="absolute top-0 right-0 w-64 h-32 md:w-80 md:h-40 opacity-[0.12]"
-    preserveAspectRatio="xMaxYMin meet"
-    aria-hidden="true"
-  >
-    <path
-      d="M400 200 L400 80 L360 40 L330 70 L300 20 L270 60 L240 30 L210 70 L180 50 L150 90 L120 60 L90 100 L60 80 L30 120 L0 100 L0 200 Z"
-      fill="currentColor"
-      className="text-secondary-foreground"
-    />
-  </svg>
-);
 
 const PurchaseModule = ({
   itinerary,
