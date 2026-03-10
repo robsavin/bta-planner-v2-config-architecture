@@ -48,15 +48,17 @@ export async function saveQuote(
 ): Promise<SavedQuote> {
   const reference = generateQuoteRef();
 
+  const row = {
+    reference,
+    trail_id: trailId,
+    configuration: configuration as unknown as Record<string, unknown>,
+    pricing: pricing as unknown as Record<string, unknown>,
+    customer: customer as unknown as Record<string, unknown>,
+  };
+
   const { data, error } = await supabase
     .from("quotes")
-    .insert({
-      reference,
-      trail_id: trailId,
-      configuration: configuration as unknown as Record<string, unknown>,
-      pricing: pricing as unknown as Record<string, unknown>,
-      customer: customer as unknown as Record<string, unknown>,
-    })
+    .insert([row])
     .select()
     .single();
 
