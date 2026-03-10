@@ -210,7 +210,46 @@ const QuoteRequestForm = ({
     doc.text(`Total price: ${formatGBP(totalPrice)}`, 14, y); y += 5;
     doc.text(`Price per person: ${formatGBP(pricePerPerson)}`, 14, y); y += 5;
     doc.text(`Deposit: ${formatGBP(deposit)} (${formatGBP(depositPerPerson)} per person)`, 14, y);
-    y += 15;
+    y += 10;
+
+    // Customer notes
+    if (notes.trim()) {
+      if (y > 250) { doc.addPage(); y = 20; }
+      doc.setFontSize(13);
+      doc.setFont("helvetica", "bold");
+      doc.text("Customer Notes", 14, y);
+      y += 7;
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const noteLines = doc.splitTextToSize(notes.trim(), pageWidth - 28);
+      noteLines.forEach((line: string) => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.text(line, 14, y);
+        y += 5;
+      });
+      y += 5;
+    }
+
+    // Why Big Trail Adventures
+    if (y > 240) { doc.addPage(); y = 20; }
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text("Why Big Trail Adventures", 14, y);
+    y += 7;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    const whyPoints = [
+      "Every trip is built personally for you — no off-the-shelf packages",
+      "Flexible dates, flexible pace — your adventure on your terms",
+      "Local experts handle accommodation and logistics at every stop",
+      "On-trail support throughout your journey",
+    ];
+    whyPoints.forEach((point) => {
+      if (y > 270) { doc.addPage(); y = 20; }
+      doc.text(`•  ${point}`, 14, y);
+      y += 5;
+    });
+    y += 10;
 
     // Footer
     doc.setDrawColor(200);
