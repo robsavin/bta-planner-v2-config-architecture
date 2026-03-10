@@ -23,6 +23,12 @@ interface PurchaseModuleProps {
   partySize: number;
   units: UnitSystem;
   onSaveQuote: () => void;
+  overridePricing?: {
+    totalPrice: number;
+    pricePerPerson: number;
+    deposit: number;
+    depositPerPerson: number;
+  };
 }
 
 const INCLUDED_ITEMS = [
