@@ -353,6 +353,19 @@ const QuoteRequestForm = ({
                 <Label htmlFor="quote-phone">Phone (optional)</Label>
                 <Input id="quote-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+44 7..." />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="quote-notes">Anything we should know? (optional)</Label>
+                <Textarea
+                  id="quote-notes"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value.slice(0, 500))}
+                  placeholder="Special requirements, questions about the route, fitness concerns..."
+                  maxLength={500}
+                  className="resize-none"
+                  rows={3}
+                />
+                <p className="text-xs text-muted-foreground text-right">{notes.length}/500</p>
+              </div>
               <Button type="submit" className="w-full" disabled={isGenerating}>
                 {isGenerating ? "Generating…" : "Download Quote PDF"}
               </Button>
