@@ -74,7 +74,7 @@ const PurchaseModule = ({
     <div className="mt-8 rounded-xl overflow-hidden shadow-lg">
       {/* ─── ZONE 1 — Your Adventure ─── */}
       <div className="bg-secondary text-secondary-foreground px-5 py-4 md:px-6 md:py-4">
-        <div className="text-[1.4rem] font-bold mb-3 tracking-tight">Your {trailConfig.name} Adventure</div>
+        <div className="font-bold mb-3 tracking-tight" style={{fontSize: '22px'}}>Your {trailConfig.name} Adventure</div>
 
         <div>
           <p className="text-[1.05rem] font-bold text-secondary-foreground leading-relaxed">
