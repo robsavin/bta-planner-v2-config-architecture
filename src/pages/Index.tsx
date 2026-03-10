@@ -292,7 +292,7 @@ const Index = () => {
       <section className="border-b border-border bg-card shadow-sm" aria-label="Trip settings">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between mb-4">
-            {isAdminView && (
+            {urlParams.admin && (
               <ShareTripButton
                 trail={trailConfig.id}
                 pace={selectedSpeed.id}
