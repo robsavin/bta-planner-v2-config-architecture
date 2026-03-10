@@ -127,10 +127,14 @@ const PurchaseModule = ({
         {/* CTAs */}
         <div className="flex flex-col items-center gap-3">
           <BookTripButton
-            speedProfileId={speedProfileId}
-            partySize={partySize}
-            depositLabel={formatGBP(deposit)}
-          />
+  speedProfileId={speedProfileId}
+  partySize={partySize}
+  depositLabel={formatGBP(deposit)}
+  days={activeDays}
+  nights={nights}
+  totalPrice={totalPrice}
+  startDate={startDate}
+/>
 
           <Button
             size="lg"
