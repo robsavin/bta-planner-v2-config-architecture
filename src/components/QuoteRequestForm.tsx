@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { getTrailConfig } from "@/config";
 import btaLogoColor from "@/assets/bta-logo-color.png";
 import { saveQuote } from "@/lib/quoteStorage";
@@ -59,6 +60,7 @@ const QuoteRequestForm = ({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [notes, setNotes] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
   const [quoteRef, setQuoteRef] = useState("");
@@ -209,7 +211,46 @@ const QuoteRequestForm = ({
     doc.text(`Total price: ${formatGBP(totalPrice)}`, 14, y); y += 5;
     doc.text(`Price per person: ${formatGBP(pricePerPerson)}`, 14, y); y += 5;
     doc.text(`Deposit: ${formatGBP(deposit)} (${formatGBP(depositPerPerson)} per person)`, 14, y);
-    y += 15;
+    y += 10;
+
+    // Customer notes
+    if (notes.trim()) {
+      if (y > 250) { doc.addPage(); y = 20; }
+      doc.setFontSize(13);
+      doc.setFont("helvetica", "bold");
+      doc.text("Customer Notes", 14, y);
+      y += 7;
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const noteLines = doc.splitTextToSize(notes.trim(), pageWidth - 28);
+      noteLines.forEach((line: string) => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.text(line, 14, y);
+        y += 5;
+      });
+      y += 5;
+    }
+
+    // Why Big Trail Adventures
+    if (y > 240) { doc.addPage(); y = 20; }
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text("Why Big Trail Adventures", 14, y);
+    y += 7;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    const whyPoints = [
+      "Every trip is built personally for you — no off-the-shelf packages",
+      "Flexible dates, flexible pace — your adventure on your terms",
+      "Local experts handle accommodation and logistics at every stop",
+      "On-trail support throughout your journey",
+    ];
+    whyPoints.forEach((point) => {
+      if (y > 270) { doc.addPage(); y = 20; }
+      doc.text(`•  ${point}`, 14, y);
+      y += 5;
+    });
+    y += 10;
 
     // Footer
     doc.setDrawColor(200);
@@ -256,7 +297,7 @@ const QuoteRequestForm = ({
           deposit,
           deposit_per_person: depositPerPerson,
         },
-        { name, email, phone },
+        { name, email, phone, ...(notes.trim() ? { notes: notes.trim() } : {}) },
       );
 
       const ref = savedQuote.reference;
@@ -284,6 +325,7 @@ const QuoteRequestForm = ({
       setName("");
       setEmail("");
       setPhone("");
+      setNotes("");
     }, 200);
   };
 
@@ -310,6 +352,19 @@ const QuoteRequestForm = ({
               <div className="space-y-2">
                 <Label htmlFor="quote-phone">Phone (optional)</Label>
                 <Input id="quote-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+44 7..." />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="quote-notes">Anything we should know? (optional)</Label>
+                <Textarea
+                  id="quote-notes"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value.slice(0, 500))}
+                  placeholder="Special requirements, questions about the route, fitness concerns..."
+                  maxLength={500}
+                  className="resize-none"
+                  rows={3}
+                />
+                <p className="text-xs text-muted-foreground text-right">{notes.length}/500</p>
               </div>
               <Button type="submit" className="w-full" disabled={isGenerating}>
                 {isGenerating ? "Generating…" : "Download Quote PDF"}
