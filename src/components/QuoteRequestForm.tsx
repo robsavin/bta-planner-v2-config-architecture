@@ -59,6 +59,7 @@ const QuoteRequestForm = ({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [notes, setNotes] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
   const [quoteRef, setQuoteRef] = useState("");
