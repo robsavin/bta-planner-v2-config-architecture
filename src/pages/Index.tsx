@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { addDays } from "date-fns";
+import { addDays, format } from "date-fns";
 
 import SpeedSelector from "@/components/SpeedSelector";
 import DirectionSelector, { type TrailDirection } from "@/components/DirectionSelector";
@@ -9,6 +9,9 @@ import ItineraryDisplay from "@/components/ItineraryDisplay";
 import UnitToggle from "@/components/UnitToggle";
 import PartySizeSelector from "@/components/PartySizeSelector";
 import PurchaseModule from "@/components/PurchaseModule";
+import ShareTripButton from "@/components/ShareTripButton";
+import AdminQuoteView from "@/components/AdminQuoteView";
+import SavedQuoteNotice from "@/components/SavedQuoteNotice";
 
 import MapDisplay from "@/components/MapDisplay";
 import { getTrailConfig } from "@/config";
@@ -24,16 +27,43 @@ import {
 } from "@/lib/trailData";
 import type { UnitSystem } from "@/lib/formatUtils";
 import QuoteRequestForm from "@/components/QuoteRequestForm";
+import { useTripUrlParams, resolveSpeedFromUrl } from "@/hooks/useUrlParams";
+import { loadQuote, type SavedQuote } from "@/lib/quoteStorage";
 
 const Index = () => {
-  // Planning state — defaults: Hiker, 8h/day, S→N, today
-  const [selectedSpeed, setSelectedSpeed] = useState<SpeedProfile>(speedProfiles[1]);
-  const [selectedDirection, setSelectedDirection] = useState<TrailDirection>("south-to-north");
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [hoursPerDay, setHoursPerDay] = useState<number>(8);
+  const urlParams = useTripUrlParams();
+
+  // Resolve initial state from URL params
+  const initialSpeed = resolveSpeedFromUrl(urlParams.pace) ?? speedProfiles[1];
+  const initialDirection = urlParams.direction ?? "south-to-north";
+  const initialDate = urlParams.startDate ?? new Date();
+  const initialHours = urlParams.dailyHours ?? 8;
+  const initialParty = urlParams.partySize ?? 2;
+
+  const [selectedSpeed, setSelectedSpeed] = useState<SpeedProfile>(initialSpeed);
+  const [selectedDirection, setSelectedDirection] = useState<TrailDirection>(initialDirection);
+  const [startDate, setStartDate] = useState<Date>(initialDate);
+  const [hoursPerDay, setHoursPerDay] = useState<number>(initialHours);
   const [units, setUnits] = useState<UnitSystem>("metric");
-  const [partySize, setPartySize] = useState<number>(2);
+  const [partySize, setPartySize] = useState<number>(initialParty);
   const [quoteOpen, setQuoteOpen] = useState(false);
+
+  // Saved quote state (for price locking & admin view)
+  const [savedQuote, setSavedQuote] = useState<SavedQuote | null>(null);
+  const [isAdminView, setIsAdminView] = useState(false);
+
+  // Load saved quote from URL if present
+  useEffect(() => {
+    const quoteRef = urlParams.quote;
+    if (!quoteRef) return;
+
+    loadQuote(quoteRef).then((quote) => {
+      if (quote) {
+        setSavedQuote(quote);
+        if (urlParams.admin) setIsAdminView(true);
+      }
+    });
+  }, [urlParams.quote, urlParams.admin]);
 
   // Derived
   const totalHours = useMemo(
@@ -224,12 +254,53 @@ const Index = () => {
     [startDate, directionalNodes, selectedSpeed],
   );
 
+  // Pricing — use saved quote prices if available (price locking)
+  const trailConfig = getTrailConfig();
+  const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };
+
+  const livePricing = useMemo(() => {
+    const activeDays = itinerary.filter(d => !d.isRestDay).length;
+    const nights = Math.max(0, activeDays - 1);
+    const multiplier = MULTIPLIER[partySize] ?? partySize;
+    const totalPrice = (49 * partySize) + (140 * nights * multiplier);
+    const pricePerPerson = Math.round(totalPrice / partySize);
+    const depPerPerson = trailConfig.depositPerPerson;
+    const deposit = depPerPerson * partySize;
+    return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson };
+  }, [itinerary, partySize, trailConfig.depositPerPerson]);
+
+  // Use saved quote prices if a quote is loaded (price locking)
+  const pricing = savedQuote
+    ? {
+        totalPrice: savedQuote.pricing.total_price,
+        pricePerPerson: savedQuote.pricing.per_person,
+        deposit: savedQuote.pricing.deposit,
+        depositPerPerson: savedQuote.pricing.deposit_per_person,
+      }
+    : livePricing;
+
   return (
     <div className="min-h-screen bg-background pt-6">
+      {/* Admin quote view */}
+      {isAdminView && savedQuote && (
+        <section className="container mx-auto px-4 pt-4">
+          <AdminQuoteView quote={savedQuote} />
+        </section>
+      )}
+
       {/* Compact config panel */}
       <section className="border-b border-border bg-card shadow-sm" aria-label="Trip settings">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-end mb-4">
+          <div className="flex items-center justify-between mb-4">
+            <ShareTripButton
+              trail={trailConfig.id}
+              pace={selectedSpeed.id}
+              direction={selectedDirection}
+              days={itinerary.length}
+              partySize={partySize}
+              startDate={startDate}
+              dailyHours={hoursPerDay}
+            />
             <UnitToggle units={units} onUnitsChange={setUnits} />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -287,6 +358,13 @@ const Index = () => {
           </div>
         </div>
 
+        {/* Saved quote notice */}
+        {savedQuote && !isAdminView && (
+          <div className="mt-6">
+            <SavedQuoteNotice quote={savedQuote} />
+          </div>
+        )}
+
         {/* Purchase Module */}
         <PurchaseModule
           itinerary={itinerary}
@@ -297,36 +375,24 @@ const Index = () => {
           partySize={partySize}
           units={units}
           onSaveQuote={() => setQuoteOpen(true)}
+          overridePricing={savedQuote ? pricing : undefined}
         />
 
         {/* Quote modal */}
-        {(() => {
-          const trailConfig = getTrailConfig();
-          const activeDays = itinerary.filter(d => !d.isRestDay).length;
-          const nights = Math.max(0, activeDays - 1);
-          const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };
-          const multiplier = MULTIPLIER[partySize] ?? partySize;
-          const totalPrice = (49 * partySize) + (140 * nights * multiplier);
-          const pricePerPerson = Math.round(totalPrice / partySize);
-          const depPerPerson = trailConfig.depositPerPerson;
-          const deposit = depPerPerson * partySize;
-          return (
-            <QuoteRequestForm
-              open={quoteOpen}
-              onOpenChange={setQuoteOpen}
-              itinerary={itinerary}
-              speedProfile={selectedSpeed}
-              direction={selectedDirection}
-              hoursPerDay={hoursPerDay}
-              startDate={startDate}
-              partySize={partySize}
-              totalPrice={totalPrice}
-              pricePerPerson={pricePerPerson}
-              deposit={deposit}
-              depositPerPerson={depPerPerson}
-            />
-          );
-        })()}
+        <QuoteRequestForm
+          open={quoteOpen}
+          onOpenChange={setQuoteOpen}
+          itinerary={itinerary}
+          speedProfile={selectedSpeed}
+          direction={selectedDirection}
+          hoursPerDay={hoursPerDay}
+          startDate={startDate}
+          partySize={partySize}
+          totalPrice={pricing.totalPrice}
+          pricePerPerson={pricing.pricePerPerson}
+          deposit={pricing.deposit}
+          depositPerPerson={pricing.depositPerPerson}
+        />
       </main>
     </div>
   );

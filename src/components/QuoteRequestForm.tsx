@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getTrailConfig } from "@/config";
 import btaLogoColor from "@/assets/bta-logo-color.png";
+import { saveQuote } from "@/lib/quoteStorage";
+import { buildShareUrl } from "@/hooks/useUrlParams";
 import type { DayPlan, SpeedProfile } from "@/lib/trailData";
 import type { TrailDirection } from "@/components/DirectionSelector";
 
@@ -61,25 +63,28 @@ const QuoteRequestForm = ({
   const [isDownloaded, setIsDownloaded] = useState(false);
   const [quoteRef, setQuoteRef] = useState("");
 
-  const generateQuoteRef = () => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let code = "";
-    for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
-    return `BTA-${code}`;
-  };
-
   const config = getTrailConfig();
   const activeDays = itinerary.filter((d) => !d.isRestDay).length;
   const nights = Math.max(0, activeDays - 1);
   const totalDistance = itinerary.reduce((sum, d) => sum + d.distance, 0);
   const totalAscent = itinerary.reduce((sum, d) => sum + d.ascent, 0);
 
+  const shareUrl = buildShareUrl({
+    trail: config.id,
+    pace: speedProfile.id,
+    direction,
+    days: itinerary.length,
+    partySize,
+    startDate,
+    dailyHours: hoursPerDay,
+  });
+
   const generatePDF = async (ref: string) => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     let y = 15;
 
-    // Logo — load first, then preserve native aspect ratio
+    // Logo
     try {
       const img = new Image();
       img.src = btaLogoColor;
@@ -87,11 +92,9 @@ const QuoteRequestForm = ({
         img.onload = () => resolve();
         img.onerror = () => reject(new Error("Logo failed to load"));
       });
-
-      const desiredWidth = 25; // mm
+      const desiredWidth = 25;
       const aspectRatio = img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
       const proportionalHeight = desiredWidth * aspectRatio;
-
       doc.addImage(img, "PNG", 14, y, desiredWidth, proportionalHeight);
       y += proportionalHeight + 7;
     } catch {
@@ -127,8 +130,7 @@ const QuoteRequestForm = ({
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
 
-    const dirLabel =
-      config.directions.labels[direction]?.name ?? direction;
+    const dirLabel = config.directions.labels[direction]?.name ?? direction;
     const configLines = [
       `Direction: ${dirLabel}`,
       `Pace: ${speedProfile.name} (${speedProfile.flatSpeed} km/h flat)`,
@@ -149,7 +151,6 @@ const QuoteRequestForm = ({
     doc.text("Day-by-Day Itinerary", 14, y);
     y += 7;
 
-    // Table header
     doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
     const cols = [14, 28, 62, 100, 130, 152, 172];
@@ -166,7 +167,6 @@ const QuoteRequestForm = ({
         doc.addPage();
         y = 20;
       }
-
       if (day.isRestDay) {
         doc.text(`${day.day}`, cols[0], y);
         doc.text("Rest Day", cols[1], y);
@@ -187,24 +187,17 @@ const QuoteRequestForm = ({
     y += 5;
 
     // Journey summary
-    if (y > 240) {
-      doc.addPage();
-      y = 20;
-    }
+    if (y > 240) { doc.addPage(); y = 20; }
     doc.setFontSize(13);
     doc.setFont("helvetica", "bold");
     doc.text("Journey Summary", 14, y);
     y += 7;
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text(`Total distance: ${totalDistance.toFixed(1)} km`, 14, y);
-    y += 5;
-    doc.text(`Total ascent: ${totalAscent.toLocaleString()} m`, 14, y);
-    y += 5;
-    doc.text(`Walking days: ${activeDays}`, 14, y);
-    y += 5;
-    doc.text(`Total days: ${itinerary.length}`, 14, y);
-    y += 10;
+    doc.text(`Total distance: ${totalDistance.toFixed(1)} km`, 14, y); y += 5;
+    doc.text(`Total ascent: ${totalAscent.toLocaleString()} m`, 14, y); y += 5;
+    doc.text(`Walking days: ${activeDays}`, 14, y); y += 5;
+    doc.text(`Total days: ${itinerary.length}`, 14, y); y += 10;
 
     // Pricing
     doc.setFontSize(13);
@@ -213,15 +206,9 @@ const QuoteRequestForm = ({
     y += 7;
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text(`Total price: ${formatGBP(totalPrice)}`, 14, y);
-    y += 5;
-    doc.text(`Price per person: ${formatGBP(pricePerPerson)}`, 14, y);
-    y += 5;
-    doc.text(
-      `Deposit: ${formatGBP(deposit)} (${formatGBP(depositPerPerson)} per person)`,
-      14,
-      y
-    );
+    doc.text(`Total price: ${formatGBP(totalPrice)}`, 14, y); y += 5;
+    doc.text(`Price per person: ${formatGBP(pricePerPerson)}`, 14, y); y += 5;
+    doc.text(`Deposit: ${formatGBP(deposit)} (${formatGBP(depositPerPerson)} per person)`, 14, y);
     y += 15;
 
     // Footer
@@ -230,21 +217,19 @@ const QuoteRequestForm = ({
     y += 7;
     doc.setFontSize(9);
     doc.setFont("helvetica", "italic");
-    const validUntil = format(
-      new Date(Date.now() + 21 * 86400000),
-      "d MMMM yyyy"
-    );
+    const validUntil = format(new Date(Date.now() + 21 * 86400000), "d MMMM yyyy");
     doc.text(
       `This quote is valid for 21 days from ${format(new Date(), "d MMMM yyyy")} (until ${validUntil})`,
-      14,
-      y
+      14, y
     );
     y += 5;
     doc.text(
       "To book contact hello@bigtrailadventures.com or visit bigtrailadventures.com",
-      14,
-      y
+      14, y
     );
+    y += 7;
+    doc.setFont("helvetica", "normal");
+    doc.text(`View and book your trip online: ${shareUrl}`, 14, y);
 
     return doc;
   };
@@ -254,13 +239,38 @@ const QuoteRequestForm = ({
     setIsGenerating(true);
 
     try {
-      const ref = generateQuoteRef();
-      const doc = await generatePDF(ref);
-      doc.save(
-        `${config.name.replace(/\s+/g, "-").toLowerCase()}-quote-${ref}.pdf`
+      // Save to Supabase first
+      const savedQuote = await saveQuote(
+        config.id,
+        {
+          pace: speedProfile.id,
+          direction,
+          days: itinerary.length,
+          party_size: partySize,
+          start_date: startDate.toISOString().split("T")[0],
+          daily_hours: hoursPerDay,
+        },
+        {
+          total_price: totalPrice,
+          per_person: pricePerPerson,
+          deposit,
+          deposit_per_person: depositPerPerson,
+        },
+        { name, email, phone },
       );
-      // TODO: Add server-side lead capture via Zapier
+
+      const ref = savedQuote.reference;
+      const doc = await generatePDF(ref);
+      doc.save(`${config.name.replace(/\s+/g, "-").toLowerCase()}-quote-${ref}.pdf`);
       setQuoteRef(ref);
+      setIsDownloaded(true);
+    } catch (err) {
+      console.error("Quote save failed:", err);
+      // Fallback: generate PDF anyway without Supabase
+      const fallbackRef = `BTA-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+      const doc = await generatePDF(fallbackRef);
+      doc.save(`${config.name.replace(/\s+/g, "-").toLowerCase()}-quote-${fallbackRef}.pdf`);
+      setQuoteRef(fallbackRef);
       setIsDownloaded(true);
     } finally {
       setIsGenerating(false);
@@ -269,7 +279,6 @@ const QuoteRequestForm = ({
 
   const handleClose = () => {
     onOpenChange(false);
-    // Reset after close animation
     setTimeout(() => {
       setIsDownloaded(false);
       setName("");
@@ -292,34 +301,15 @@ const QuoteRequestForm = ({
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="quote-name">Name *</Label>
-                <Input
-                  id="quote-name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  placeholder="Your name"
-                />
+                <Input id="quote-name" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Your name" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="quote-email">Email *</Label>
-                <Input
-                  id="quote-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="you@example.com"
-                />
+                <Input id="quote-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="quote-phone">Phone (optional)</Label>
-                <Input
-                  id="quote-phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+44 7..."
-                />
+                <Input id="quote-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+44 7..." />
               </div>
               <Button type="submit" className="w-full" disabled={isGenerating}>
                 {isGenerating ? "Generating…" : "Download Quote PDF"}
@@ -333,13 +323,9 @@ const QuoteRequestForm = ({
             </div>
             <div>
               <h3 className="font-semibold text-lg">Your quote <span className="font-mono">{quoteRef}</span> has been downloaded.</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Check your downloads folder for the PDF.
-              </p>
+              <p className="text-sm text-muted-foreground mt-1">Check your downloads folder for the PDF.</p>
             </div>
-            <Button variant="outline" onClick={handleClose}>
-              Close
-            </Button>
+            <Button variant="outline" onClick={handleClose}>Close</Button>
           </div>
         )}
       </DialogContent>
