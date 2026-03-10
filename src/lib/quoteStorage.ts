@@ -52,9 +52,9 @@ export async function saveQuote(
   const row = {
     reference,
     trail_id: trailId,
-    configuration: configuration as unknown as Record<string, unknown>,
-    pricing: pricing as unknown as Record<string, unknown>,
-    customer: customer as unknown as Record<string, unknown>,
+    configuration: configuration as unknown as Json,
+    pricing: pricing as unknown as Json,
+    customer: customer as unknown as Json,
   };
 
   const { data, error } = await supabase
