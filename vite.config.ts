@@ -18,15 +18,16 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    rollupOptions: {
-      output: {
-        entryFileNames: "assets/bta-planner.js",
-        chunkFileNames: "assets/bta-planner-[name].js",
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name?.endsWith(".css")) return "assets/bta-planner.css";
-          return "assets/[name][extname]";
-        },
+  rollupOptions: {
+    output: {
+      entryFileNames: "assets/bta-planner.js",
+      chunkFileNames: "assets/bta-planner-[name].js",
+      assetFileNames: (assetInfo) => {
+        if (assetInfo.name?.endsWith(".css")) return "assets/bta-planner.css";
+        return "assets/[name][extname]";
       },
     },
   },
+},
+base: "https://curious-kangaroo-7b6f90.netlify.app/",
 }));
