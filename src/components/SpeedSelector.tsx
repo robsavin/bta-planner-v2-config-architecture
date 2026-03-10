@@ -63,10 +63,10 @@ const SpeedSelector = ({ selectedSpeed, onSpeedChange, stepNumber = 2, compact =
               key={profile.id}
               onClick={() => onSpeedChange(profile)}
               className={cn(
-                "relative flex flex-col items-start rounded-xl border-2 p-4 text-left transition-all duration-200",
+                "relative flex flex-col items-start rounded-[40px] border border-border/55 p-4 text-left transition-all duration-200 shadow-none",
                 isSelected
-                  ? "border-primary bg-primary/5 shadow-soft"
-                  : "border-border bg-card hover:border-primary/50 hover:shadow-soft"
+                  ? "border-primary bg-primary/5"
+                  : "border-border/55 bg-card hover:border-primary/50"
               )}
             >
               <div
