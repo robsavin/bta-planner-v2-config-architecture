@@ -296,7 +296,7 @@ const QuoteRequestForm = ({
           deposit,
           deposit_per_person: depositPerPerson,
         },
-        { name, email, phone },
+        { name, email, phone, ...(notes.trim() ? { notes: notes.trim() } : {}) },
       );
 
       const ref = savedQuote.reference;
