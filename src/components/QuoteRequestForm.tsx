@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { getTrailConfig } from "@/config";
 import btaLogoColor from "@/assets/bta-logo-color.png";
 import { saveQuote } from "@/lib/quoteStorage";
