@@ -48,17 +48,21 @@ const PurchaseModule = ({
   partySize,
   units,
   onSaveQuote,
+  overridePricing,
 }: PurchaseModuleProps) => {
   const trailConfig = getTrailConfig();
   const walkingDays = itinerary.filter(d => !d.isRestDay);
   const activeDays = walkingDays.length;
   const nights = Math.max(0, activeDays - 1);
   const totalDays = itinerary.length;
+
+  // Use override pricing if provided (price locking from saved quote)
   const multiplier = MULTIPLIER[partySize] ?? partySize;
-  const totalPrice = (49 * partySize) + (140 * nights * multiplier);
-  const pricePerPerson = Math.round(totalPrice / partySize);
-  const depositPerPerson = trailConfig.depositPerPerson;
-  const deposit = depositPerPerson * partySize;
+  const liveTotalPrice = (49 * partySize) + (140 * nights * multiplier);
+  const totalPrice = overridePricing?.totalPrice ?? liveTotalPrice;
+  const pricePerPerson = overridePricing?.pricePerPerson ?? Math.round(liveTotalPrice / partySize);
+  const depositPerPerson = overridePricing?.depositPerPerson ?? trailConfig.depositPerPerson;
+  const deposit = overridePricing?.deposit ?? (depositPerPerson * partySize);
 
   const totalDistance = walkingDays.reduce((sum, d) => sum + d.distance, 0);
   const totalAscent = walkingDays.reduce((sum, d) => sum + d.ascent, 0);
