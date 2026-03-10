@@ -325,6 +325,7 @@ const QuoteRequestForm = ({
       setName("");
       setEmail("");
       setPhone("");
+      setNotes("");
     }, 200);
   };
 
