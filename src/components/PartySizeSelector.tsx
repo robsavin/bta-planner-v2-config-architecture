@@ -28,12 +28,16 @@ const PartySizeSelector = ({ partySize, onPartySizeChange }: PartySizeSelectorPr
         ))}
       </div>
       <p className="text-xs text-bta-forest/60">
-        For groups of more than 4,{" "}
+        For groups of more than 8,{" "}
         <a
-          href="mailto:hello@bigtrailadventures.com?subject=Group%20booking%20enquiry"
+          href="#contact"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+          }}
           className="text-bta-amber underline hover:text-bta-amber/80"
         >
-          email us to discuss options
+          get in touch to discuss options
         </a>
         .
       </p>
