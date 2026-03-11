@@ -1,75 +1,90 @@
-import { User, Zap, Gauge, Footprints } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { speedProfiles, type SpeedProfile } from "@/lib/trailData";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { speedProfiles, calculateTotalTimeWithDirection, calculateDays, type SpeedProfile } from "@/lib/trailData";
+import type { TrailDirection } from "@/components/DirectionSelector";
+import { Badge } from "@/components/ui/badge";
 
 interface SpeedSelectorProps {
   selectedSpeed: SpeedProfile;
   onSpeedChange: (speed: SpeedProfile) => void;
   stepNumber?: number;
   compact?: boolean;
+  direction?: TrailDirection;
+  hoursPerDay?: number;
 }
 
-const speedIcons: Record<string, React.ReactNode> = {
-  explorer: <User className="h-4 w-4" />,
-  hiker: <Footprints className="h-4 w-4" />,
-  fastpacker: <Gauge className="h-4 w-4" />,
-  trailrunner: <Zap className="h-4 w-4" />,
-};
-
-const SpeedSelector = ({ selectedSpeed, onSpeedChange, compact = false }: SpeedSelectorProps) => {
+const SpeedSelector = ({
+  selectedSpeed,
+  onSpeedChange,
+  compact = false,
+  direction = "south-to-north",
+  hoursPerDay = 8,
+}: SpeedSelectorProps) => {
   if (compact) {
     return (
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Pace</label>
-        <Select value={selectedSpeed.id} onValueChange={(v) => {
-          const profile = speedProfiles.find(p => p.id === v);
-          if (profile) onSpeedChange(profile);
-        }}>
-          <SelectTrigger className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-popover z-50">
-            {speedProfiles.map((p) => (
-              <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-1.5">
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {speedProfiles.map((profile) => {
           const isSelected = selectedSpeed.id === profile.id;
+          const isPopular = profile.id === "hiker";
+          const totalHours = calculateTotalTimeWithDirection(profile, direction);
+          const days = calculateDays(totalHours, hoursPerDay);
+
           return (
             <button
               key={profile.id}
               onClick={() => onSpeedChange(profile)}
               className={cn(
-                "inline-flex items-center gap-1.5 rounded-[40px] border px-4 py-2 text-sm font-medium transition-all duration-200",
+                "relative flex flex-col items-center rounded-lg border-2 px-3 py-4 text-center transition-all duration-200",
                 isSelected
-                  ? "border-bta-amber bg-bta-amber text-white"
-                  : "border-border/55 text-bta-dark-teal hover:border-bta-amber/50"
+                  ? "border-bta-amber bg-bta-amber/5"
+                  : "border-border hover:border-bta-amber/40"
               )}
             >
-              {speedIcons[profile.id]}
-              {profile.name}
+              {isPopular && (
+                <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-bta-amber text-primary-foreground text-[10px] px-2 py-0.5 whitespace-nowrap">
+                  MOST POPULAR
+                </Badge>
+              )}
+              <span className="font-display font-bold text-sm text-bta-dark-teal">{profile.name}</span>
+              <span className="font-display font-bold text-2xl text-bta-amber mt-1">{days} days</span>
+              <span className="text-xs text-bta-forest/70 mt-1 leading-tight">{profile.description}</span>
             </button>
           );
         })}
       </div>
-      <p className="text-sm italic text-bta-forest/70 min-h-[1.25rem]">
-        {selectedSpeed.description}
-      </p>
+    );
+  }
+
+  // Full (non-compact) version — same card layout
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {speedProfiles.map((profile) => {
+        const isSelected = selectedSpeed.id === profile.id;
+        const isPopular = profile.id === "hiker";
+        const totalHours = calculateTotalTimeWithDirection(profile, direction);
+        const days = calculateDays(totalHours, hoursPerDay);
+
+        return (
+          <button
+            key={profile.id}
+            onClick={() => onSpeedChange(profile)}
+            className={cn(
+              "relative flex flex-col items-center rounded-lg border-2 px-3 py-4 text-center transition-all duration-200",
+              isSelected
+                ? "border-bta-amber bg-bta-amber/5"
+                : "border-border hover:border-bta-amber/40"
+            )}
+          >
+            {isPopular && (
+              <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-bta-amber text-primary-foreground text-[10px] px-2 py-0.5 whitespace-nowrap">
+                MOST POPULAR
+              </Badge>
+            )}
+            <span className="font-display font-bold text-sm text-bta-dark-teal">{profile.name}</span>
+            <span className="font-display font-bold text-2xl text-bta-amber mt-1">{days} days</span>
+            <span className="text-xs text-bta-forest/70 mt-1 leading-tight">{profile.description}</span>
+          </button>
+        );
+      })}
     </div>
   );
 };
