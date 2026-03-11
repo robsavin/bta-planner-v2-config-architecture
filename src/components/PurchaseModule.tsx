@@ -50,6 +50,7 @@ const PurchaseModule = ({
   onSaveQuote,
   onOpenEnquiry,
   overridePricing,
+  pricePulse = false,
 }: PurchaseModuleProps) => {
   const trailConfig = getTrailConfig();
   const { formatPrice } = useCurrency();
