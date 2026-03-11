@@ -275,7 +275,7 @@ const Index = () => {
               {/* Pace */}
               <div className="space-y-1">
                 <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">Pace</label>
-                <SpeedSelector selectedSpeed={selectedSpeed} onSpeedChange={handleSpeedChange} />
+                <SpeedSelector selectedSpeed={selectedSpeed} onSpeedChange={handleSpeedChange} direction={selectedDirection} hoursPerDay={hoursPerDay} />
               </div>
 
               {/* Daily Hours */}
