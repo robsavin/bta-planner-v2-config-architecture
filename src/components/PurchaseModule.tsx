@@ -84,7 +84,7 @@ const PurchaseModule = ({
           </p>
           <hr className="border-secondary-foreground/15 my-[10px]" />
           <p className="text-[0.9rem] text-secondary-foreground/75 leading-relaxed">
-            {speedProfileName} pace · <span className="font-bold">{formatTime(totalWalkingTime)}</span> walking time
+            {speedProfileName} pace · <span className="font-bold">{formatTime(totalWalkingTime)}</span> {speedProfileId === "trailrunner" ? "running" : "walking"} time
           </p>
           <p className="text-[0.9rem] text-secondary-foreground/75 leading-relaxed mt-1 inline-flex items-center flex-wrap">
             <span className="inline-flex items-center gap-1">Starting <Calendar className="inline h-3.5 w-3.5 text-secondary-foreground" /><span className="font-bold">{format(startDate, "d MMM yyyy")}</span></span>

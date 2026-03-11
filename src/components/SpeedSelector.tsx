@@ -46,7 +46,7 @@ const SpeedSelector = ({ selectedSpeed, onSpeedChange, compact = false }: SpeedS
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-1.5">
       <div className="flex flex-wrap gap-2">
         {speedProfiles.map((profile) => {
           const isSelected = selectedSpeed.id === profile.id;
