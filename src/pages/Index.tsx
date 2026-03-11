@@ -241,7 +241,7 @@ const Index = () => {
   const nights = livePricing.nights;
 
   return (
-    <div className="min-h-screen bg-background pt-6">
+    <div className="min-h-screen bg-background pt-6" id="bta-planner">
       {/* Admin quote view */}
       {isAdminView && savedQuote && (
         <section className="container mx-auto px-4 pt-4">
