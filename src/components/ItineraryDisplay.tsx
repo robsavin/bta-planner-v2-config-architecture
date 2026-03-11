@@ -248,7 +248,7 @@ const DayCard = ({
     return (
       <div className={cn("flex", !isLast && "pb-4 md:pb-6")}>
         {renderTimeline(
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card shrink-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card shrink-0 ring-4 ring-background">
             <Coffee className="h-5 w-5 text-primary" />
           </div>
         )}
