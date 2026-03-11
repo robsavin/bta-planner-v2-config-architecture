@@ -281,17 +281,17 @@ const Index = () => {
 
           {/* ── Your Trip ── */}
           <div>
-            <p className="font-display text-xs uppercase tracking-widest text-bta-dark-teal mb-2">Your Trip</p>
+            <p className="font-display font-medium text-xs uppercase tracking-widest text-bta-dark-teal mb-2">Your Trip</p>
             <div className="space-y-4">
               {/* Pace */}
               <div className="space-y-1">
-                <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Pace</label>
+                <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">Pace</label>
                 <SpeedSelector selectedSpeed={selectedSpeed} onSpeedChange={handleSpeedChange} />
               </div>
 
               {/* Daily Hours */}
-              <div className="space-y-1">
-                <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Daily Hours</label>
+              <div className="space-y-1.5">
+                <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">Daily Hours</label>
                 <DaysCalculator
                   totalHours={totalHours} hoursPerDay={hoursPerDay}
                   onHoursPerDayChange={handleHoursChange} calculatedDays={calculatedDays}
