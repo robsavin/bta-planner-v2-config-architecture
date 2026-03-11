@@ -223,23 +223,107 @@ const DayCard = ({
 }: DayCardProps) => {
   const lineColor = day.isRestDay ? "hsl(var(--border))" : "hsl(var(--primary))";
 
+  // Timeline column shared across all card types
+  const renderTimeline = (circle: React.ReactNode) => (
+    <div className="flex flex-col items-center shrink-0" style={{ width: 40 }}>
+      {!isFirst && (
+        <div style={{ width: 2, height: 32, backgroundColor: lineColor, flexShrink: 0 }} />
+      )}
+      {circle}
+      {!isLast && (
+        <div style={{ width: 2, flex: 1, backgroundColor: lineColor, minHeight: 8 }} />
+      )}
+    </div>
+  );
+
   if (day.isRestDay) {
     return (
-      <div className="flex gap-0 pb-4 md:pb-6">
-        {/* Timeline column */}
-        <div className="flex flex-col items-center shrink-0" style={{ width: 40 }}>
-          {!isFirst && (
-            <div style={{ width: 2, height: 32, backgroundColor: lineColor, flexShrink: 0 }} />
-          )}
+      <div className="flex pb-4 md:pb-6">
+        {renderTimeline(
           <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card shrink-0">
             <Coffee className="h-5 w-5 text-primary" />
           </div>
-          {!isLast && (
-            <div style={{ width: 2, flex: 1, backgroundColor: lineColor, minHeight: 8 }} />
-          )}
-        </div>
-        {/* Content */}
+        )}
         <div className="ml-4 flex-1 min-w-0 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-3 md:p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="font-semibold text-primary">Rest Day</span>
+                {day.date && (
+                  <span className="text-sm text-muted-foreground">
+                    • {format(day.date, "EEE, MMM d")}
+                  </span>
+                )}
+              </div>
+              <p className="text-sm text-muted-foreground flex items-center gap-2">
+                <Bed className="h-4 w-4" />
+                Staying at {day.startNode.name}
+              </p>
+            </div>
+            {onRemove && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onRemove}
+                className="text-destructive hover:text-destructive hover:bg-destructive/10"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const dayCircle = (
+    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground font-bold shrink-0">
+      {day.day}
+    </div>
+  );
+
+  // Collapsed view
+  if (!isExpanded) {
+    return (
+      <div className="flex pb-4 md:pb-6">
+        {renderTimeline(dayCircle)}
+        <button
+          onClick={onToggle}
+          className="ml-4 flex-1 min-w-0 text-left trail-card p-3 md:p-4 hover:ring-2 hover:ring-primary/30 transition-all cursor-pointer"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              {day.date && (
+                <div className="text-xs text-muted-foreground mb-1">
+                  {format(day.date, "EEE, MMM d")}
+                </div>
+              )}
+              <div className="font-semibold text-sm md:text-base truncate">
+                {day.startNode.name} → {day.endNode.name}
+              </div>
+              <div className="flex items-center gap-3 mt-1 text-xs md:text-sm text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <Mountain className="h-3.5 w-3.5" />
+                  {formatDistance(day.distance, units)}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5" />
+                  {formatTime(day.walkingTime)}
+                </span>
+              </div>
+            </div>
+            <ChevronDown className="h-5 w-5 text-muted-foreground shrink-0" />
+          </div>
+        </button>
+      </div>
+    );
+  }
+
+  // Expanded view
+  return (
+    <div className="flex pb-4 md:pb-6">
+      {renderTimeline(dayCircle)}
+      <div className="ml-4 flex-1 min-w-0 trail-card p-4 md:p-5">
         {/* Collapse toggle */}
         <button
           onClick={onToggle}
