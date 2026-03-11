@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { getTrailConfig } from "@/config";
 import { trackEvent } from "@/lib/analytics";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface BookTripButtonProps {
   speedProfileId: string;
@@ -11,6 +12,7 @@ interface BookTripButtonProps {
   days: number;
   nights: number;
   totalPrice: number;
+  deposit: number;
   startDate: Date;
 }
 
@@ -33,9 +35,10 @@ function getVariantId(speedProfileId: string): string | null {
   return config.shopifyVariants[entry.configKey] ?? null;
 }
 
-const BookTripButton = ({ speedProfileId, partySize, depositLabel, days, nights, totalPrice, startDate }: BookTripButtonProps) => {
+const BookTripButton = ({ speedProfileId, partySize, depositLabel, days, nights, totalPrice, deposit, startDate }: BookTripButtonProps) => {
   const [fallbackMsg, setFallbackMsg] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const { currency, convertAmount } = useCurrency();
 
   const handleClick = async () => {
     trackEvent("book_trip_click", { pace: speedProfileId, partySize });
@@ -58,6 +61,9 @@ const BookTripButton = ({ speedProfileId, partySize, depositLabel, days, nights,
             "Trip nights": nights,
             "Number of travellers": partySize,
             "Full Trip Total": Math.round(totalPrice),
+            "Display Currency": currency,
+            "Display Trip Total": convertAmount(totalPrice),
+            "Display Deposit": convertAmount(deposit),
             "Start date": startDate.toLocaleDateString("en-GB"),
             "_deposit_per_person": "true",
           },
