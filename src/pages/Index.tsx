@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { addDays, format } from "date-fns";
 
 import SpeedSelector from "@/components/SpeedSelector";
@@ -35,7 +35,6 @@ import { useCurrency } from "@/hooks/useCurrency";
 const Index = () => {
   const urlParams = useTripUrlParams();
 
-  // Resolve initial state from URL params
   const initialSpeed = resolveSpeedFromUrl(urlParams.pace) ?? speedProfiles[1];
   const initialDirection = urlParams.direction ?? "south-to-north";
   const initialDate = urlParams.startDate ?? new Date();
@@ -51,15 +50,27 @@ const Index = () => {
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
 
-  // Saved quote state (for price locking & admin view)
+  // Price pulse state
+  const [pricePulse, setPricePulse] = useState(false);
+  const pulseTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const triggerPricePulse = useCallback(() => {
+    setPricePulse(true);
+    clearTimeout(pulseTimeout.current);
+    pulseTimeout.current = setTimeout(() => setPricePulse(false), 300);
+  }, []);
+
+  // Wrap setters to trigger pulse
+  const handleSpeedChange = useCallback((s: SpeedProfile) => { setSelectedSpeed(s); triggerPricePulse(); }, [triggerPricePulse]);
+  const handleHoursChange = useCallback((h: number) => { setHoursPerDay(h); triggerPricePulse(); }, [triggerPricePulse]);
+  const handlePartySizeChange = useCallback((p: number) => { setPartySize(p); triggerPricePulse(); }, [triggerPricePulse]);
+
+  // Saved quote state
   const [savedQuote, setSavedQuote] = useState<SavedQuote | null>(null);
   const [isAdminView, setIsAdminView] = useState(false);
 
-  // Load saved quote from URL if present
   useEffect(() => {
     const quoteRef = urlParams.quote;
     if (!quoteRef) return;
-
     loadQuote(quoteRef).then((quote) => {
       if (quote) {
         setSavedQuote(quote);
@@ -76,7 +87,6 @@ const Index = () => {
   const calculatedDays = useMemo(() => calculateDays(totalHours, hoursPerDay), [totalHours, hoursPerDay]);
   const directionalNodes = useMemo(() => getDirectionalNodes(selectedDirection), [selectedDirection]);
 
-  // Auto-generate itinerary whenever inputs change
   const [itinerary, setItinerary] = useState<DayPlan[]>([]);
 
   useEffect(() => {
@@ -94,170 +104,115 @@ const Index = () => {
         if (updates.endNode && !currentDay.isRestDay) {
           const startNode = currentDay.startNode;
           const endNode = updates.endNode;
-
           const distance = endNode.distanceFromStart - startNode.distanceFromStart;
           const ascent = endNode.cumulativeAscent - startNode.cumulativeAscent;
           const descent = endNode.cumulativeDescent - startNode.cumulativeDescent;
           const walkingTime = calculateSegmentTime(distance, ascent, descent, selectedSpeed);
 
           newItinerary[dayIndex] = {
-            ...currentDay,
-            ...updates,
-            distance: Number(distance.toFixed(1)),
-            ascent: Math.round(ascent),
-            descent: Math.round(descent),
-            walkingTime: Number(walkingTime.toFixed(1)),
+            ...currentDay, ...updates,
+            distance: Number(distance.toFixed(1)), ascent: Math.round(ascent),
+            descent: Math.round(descent), walkingTime: Number(walkingTime.toFixed(1)),
           };
 
           for (let i = dayIndex + 1; i < newItinerary.length; i++) {
             if (!newItinerary[i].isRestDay) {
               let prevEndNode = endNode;
               for (let j = i - 1; j >= 0; j--) {
-                if (!newItinerary[j].isRestDay) {
-                  prevEndNode = newItinerary[j].endNode;
-                  break;
-                }
+                if (!newItinerary[j].isRestDay) { prevEndNode = newItinerary[j].endNode; break; }
               }
-
               const nextDay = newItinerary[i];
               const newStartNode = prevEndNode;
               const newDistance = nextDay.endNode.distanceFromStart - newStartNode.distanceFromStart;
               const newAscent = nextDay.endNode.cumulativeAscent - newStartNode.cumulativeAscent;
               const newDescent = nextDay.endNode.cumulativeDescent - newStartNode.cumulativeDescent;
               const newWalkingTime = calculateSegmentTime(newDistance, newAscent, newDescent, selectedSpeed);
-
               newItinerary[i] = {
-                ...nextDay,
-                startNode: newStartNode,
-                distance: Number(newDistance.toFixed(1)),
-                ascent: Math.round(newAscent),
-                descent: Math.round(newDescent),
-                walkingTime: Number(newWalkingTime.toFixed(1)),
+                ...nextDay, startNode: newStartNode,
+                distance: Number(newDistance.toFixed(1)), ascent: Math.round(newAscent),
+                descent: Math.round(newDescent), walkingTime: Number(newWalkingTime.toFixed(1)),
               };
             } else {
-              newItinerary[i] = {
-                ...newItinerary[i],
-                startNode: endNode,
-                endNode: endNode,
-              };
+              newItinerary[i] = { ...newItinerary[i], startNode: endNode, endNode: endNode };
             }
           }
         } else {
           newItinerary[dayIndex] = { ...currentDay, ...updates };
         }
-
         return newItinerary;
       });
     },
     [selectedSpeed],
   );
 
-  // Add rest day after a given day
   const handleAddRestDay = useCallback(
     (afterDayIndex: number) => {
       setItinerary((prev) => {
         const newItinerary = [...prev];
         const afterDay = newItinerary[afterDayIndex];
-
         const restDay: DayPlan = {
-          day: afterDay.day + 1,
-          startNode: afterDay.endNode,
-          endNode: afterDay.endNode,
-          distance: 0,
-          ascent: 0,
-          descent: 0,
-          walkingTime: 0,
-          isRestDay: true,
+          day: afterDay.day + 1, startNode: afterDay.endNode, endNode: afterDay.endNode,
+          distance: 0, ascent: 0, descent: 0, walkingTime: 0, isRestDay: true,
           date: afterDay.date ? addDays(afterDay.date, 1) : undefined,
         };
-
         newItinerary.splice(afterDayIndex + 1, 0, restDay);
-
         let dayNumber = 1;
         for (let i = 0; i < newItinerary.length; i++) {
-          newItinerary[i] = {
-            ...newItinerary[i],
-            day: dayNumber,
-            date: addDays(startDate, i),
-          };
+          newItinerary[i] = { ...newItinerary[i], day: dayNumber, date: addDays(startDate, i) };
           dayNumber++;
         }
-
         return newItinerary;
       });
     },
     [startDate],
   );
 
-  // Remove a day
   const handleRemoveDay = useCallback(
     (dayIndex: number) => {
       setItinerary((prev) => {
         const newItinerary = prev.filter((_, i) => i !== dayIndex);
-
         let dayNumber = 1;
         for (let i = 0; i < newItinerary.length; i++) {
-          newItinerary[i] = {
-            ...newItinerary[i],
-            day: dayNumber,
-            date: addDays(startDate, i),
-          };
+          newItinerary[i] = { ...newItinerary[i], day: dayNumber, date: addDays(startDate, i) };
           dayNumber++;
         }
-
         return newItinerary;
       });
     },
     [startDate],
   );
 
-  // Add a walking day
   const handleAddWalkingDay = useCallback(
     (afterDayIndex: number) => {
       setItinerary((prev) => {
         const newItinerary = [...prev];
         const afterDay = newItinerary[afterDayIndex];
         const finalNode = directionalNodes[directionalNodes.length - 1];
-
         const startNode = afterDay.endNode;
         const endNode = finalNode;
-
         const distance = endNode.distanceFromStart - startNode.distanceFromStart;
         const ascent = endNode.cumulativeAscent - startNode.cumulativeAscent;
         const descent = endNode.cumulativeDescent - startNode.cumulativeDescent;
         const walkingTime = calculateSegmentTime(distance, ascent, descent, selectedSpeed);
-
         const newWalkingDay: DayPlan = {
-          day: afterDay.day + 1,
-          startNode: startNode,
-          endNode: endNode,
-          distance: Number(distance.toFixed(1)),
-          ascent: Math.round(ascent),
-          descent: Math.round(descent),
-          walkingTime: Number(walkingTime.toFixed(1)),
-          isRestDay: false,
-          date: afterDay.date ? addDays(afterDay.date, 1) : undefined,
+          day: afterDay.day + 1, startNode, endNode,
+          distance: Number(distance.toFixed(1)), ascent: Math.round(ascent),
+          descent: Math.round(descent), walkingTime: Number(walkingTime.toFixed(1)),
+          isRestDay: false, date: afterDay.date ? addDays(afterDay.date, 1) : undefined,
         };
-
         newItinerary.splice(afterDayIndex + 1, 0, newWalkingDay);
-
         let dayNumber = 1;
         for (let i = 0; i < newItinerary.length; i++) {
-          newItinerary[i] = {
-            ...newItinerary[i],
-            day: dayNumber,
-            date: addDays(startDate, i),
-          };
+          newItinerary[i] = { ...newItinerary[i], day: dayNumber, date: addDays(startDate, i) };
           dayNumber++;
         }
-
         return newItinerary;
       });
     },
     [startDate, directionalNodes, selectedSpeed],
   );
 
-  // Pricing — use saved quote prices if available (price locking)
+  // Pricing
   const trailConfig = getTrailConfig();
   const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };
   const { formatPrice, convertAmount, currency } = useCurrency();
@@ -273,17 +228,10 @@ const Index = () => {
     return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson };
   }, [itinerary, partySize, trailConfig.depositPerPerson]);
 
-  // Use saved quote prices if a quote is loaded (price locking)
   const pricing = savedQuote
-    ? {
-        totalPrice: savedQuote.pricing.total_price,
-        pricePerPerson: savedQuote.pricing.per_person,
-        deposit: savedQuote.pricing.deposit,
-        depositPerPerson: savedQuote.pricing.deposit_per_person,
-      }
+    ? { totalPrice: savedQuote.pricing.total_price, pricePerPerson: savedQuote.pricing.per_person, deposit: savedQuote.pricing.deposit, depositPerPerson: savedQuote.pricing.deposit_per_person }
     : livePricing;
 
-  // Enquiry form props
   const activeDays = itinerary.filter(d => !d.isRestDay).length;
   const nights = Math.max(0, activeDays - 1);
 
@@ -296,50 +244,64 @@ const Index = () => {
         </section>
       )}
 
-      {/* Compact config panel */}
-      <section className="border-b border-border bg-card shadow-sm" aria-label="Trip settings">
+      {/* ─── Config Panel ─── */}
+      <section className="border-b border-border bg-card" aria-label="Trip settings">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between mb-4">
+          {/* Top row: admin share + units */}
+          <div className="flex items-center justify-between mb-6">
             {urlParams.admin && (
               <ShareTripButton
-                trail={trailConfig.id}
-                pace={selectedSpeed.id}
-                direction={selectedDirection}
-                days={itinerary.length}
-                partySize={partySize}
-                startDate={startDate}
-                dailyHours={hoursPerDay}
+                trail={trailConfig.id} pace={selectedSpeed.id} direction={selectedDirection}
+                days={itinerary.length} partySize={partySize} startDate={startDate} dailyHours={hoursPerDay}
               />
             )}
             <UnitToggle units={units} onUnitsChange={setUnits} />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            <DirectionSelector
-              selectedDirection={selectedDirection}
-              onDirectionChange={setSelectedDirection}
-              compact
-            />
-            <SpeedSelector
-              selectedSpeed={selectedSpeed}
-              onSpeedChange={setSelectedSpeed}
-              compact
-            />
-            <DaysCalculator
-              totalHours={totalHours}
-              hoursPerDay={hoursPerDay}
-              onHoursPerDayChange={setHoursPerDay}
-              calculatedDays={calculatedDays}
-              compact
-            />
-            <DateSelector
-              selectedDate={startDate}
-              onDateChange={setStartDate}
-              compact
-            />
-            <PartySizeSelector
-              partySize={partySize}
-              onPartySizeChange={setPartySize}
-            />
+
+          {/* ── Your Route ── */}
+          <div className="mb-6">
+            <p className="font-display text-xs uppercase tracking-widest text-bta-forest mb-3">Your Route</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <DirectionSelector selectedDirection={selectedDirection} onDirectionChange={setSelectedDirection} compact />
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-border/60 mb-6" />
+
+          {/* ── Your Trip ── */}
+          <div>
+            <p className="font-display text-xs uppercase tracking-widest text-bta-dark-teal mb-4">Your Trip</p>
+            <div className="space-y-6 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-1 sm:gap-x-8 sm:gap-y-6">
+              {/* Pace */}
+              <div className="space-y-1.5">
+                <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Pace</label>
+                <SpeedSelector selectedSpeed={selectedSpeed} onSpeedChange={handleSpeedChange} />
+              </div>
+
+              {/* Daily Hours — hero */}
+              <div className="space-y-1.5">
+                <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Daily Hours</label>
+                <DaysCalculator
+                  totalHours={totalHours} hoursPerDay={hoursPerDay}
+                  onHoursPerDayChange={handleHoursChange} calculatedDays={calculatedDays}
+                />
+              </div>
+
+              {/* Start Date + Party Size — side by side on larger screens */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:col-span-2 lg:col-span-1">
+                <div className="space-y-1.5">
+                  <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">
+                    When do you want to start?
+                  </label>
+                  <DateSelector selectedDate={startDate} onDateChange={setStartDate} compact />
+                </div>
+                <div className="space-y-1.5 sm:flex sm:flex-col sm:items-center">
+                  <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Party Size</label>
+                  <PartySizeSelector partySize={partySize} onPartySizeChange={handlePartySizeChange} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -347,76 +309,40 @@ const Index = () => {
       {/* Two-column layout: map + day cards */}
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Map — sticky on desktop, shorter on mobile */}
           <div className="lg:w-1/2 lg:sticky lg:top-4 lg:self-start">
             <MapDisplay itinerary={itinerary} direction={selectedDirection} className="h-[300px] lg:h-[calc(100vh-8rem)]" />
           </div>
-
-          {/* Day cards — scrolling */}
           <div className="lg:w-1/2">
             <ItineraryDisplay
-              itinerary={itinerary}
-              speedProfile={selectedSpeed}
-              direction={selectedDirection}
-              units={units}
-              hoursPerDay={hoursPerDay}
-              onUpdateDay={handleUpdateDay}
-              onAddRestDay={handleAddRestDay}
-              onRemoveDay={handleRemoveDay}
-              onAddWalkingDay={handleAddWalkingDay}
+              itinerary={itinerary} speedProfile={selectedSpeed} direction={selectedDirection}
+              units={units} hoursPerDay={hoursPerDay} onUpdateDay={handleUpdateDay}
+              onAddRestDay={handleAddRestDay} onRemoveDay={handleRemoveDay} onAddWalkingDay={handleAddWalkingDay}
             />
           </div>
         </div>
 
-        {/* Saved quote notice */}
         {savedQuote && !isAdminView && (
-          <div className="mt-6">
-            <SavedQuoteNotice quote={savedQuote} />
-          </div>
+          <div className="mt-6"><SavedQuoteNotice quote={savedQuote} /></div>
         )}
 
-        {/* Purchase Module */}
         <PurchaseModule
-          itinerary={itinerary}
-          direction={selectedDirection}
-          speedProfileName={selectedSpeed.name}
-          speedProfileId={selectedSpeed.id}
-          startDate={startDate}
-          partySize={partySize}
-          units={units}
-          onSaveQuote={() => setQuoteOpen(true)}
-          onOpenEnquiry={() => setEnquiryOpen(true)}
-          overridePricing={savedQuote ? pricing : undefined}
+          itinerary={itinerary} direction={selectedDirection} speedProfileName={selectedSpeed.name}
+          speedProfileId={selectedSpeed.id} startDate={startDate} partySize={partySize} units={units}
+          onSaveQuote={() => setQuoteOpen(true)} onOpenEnquiry={() => setEnquiryOpen(true)}
+          overridePricing={savedQuote ? pricing : undefined} pricePulse={pricePulse}
         />
 
-        {/* Quote modal */}
         <QuoteRequestForm
-          open={quoteOpen}
-          onOpenChange={setQuoteOpen}
-          itinerary={itinerary}
-          speedProfile={selectedSpeed}
-          direction={selectedDirection}
-          hoursPerDay={hoursPerDay}
-          startDate={startDate}
-          partySize={partySize}
-          totalPrice={pricing.totalPrice}
-          pricePerPerson={pricing.pricePerPerson}
-          deposit={pricing.deposit}
-          depositPerPerson={pricing.depositPerPerson}
+          open={quoteOpen} onOpenChange={setQuoteOpen} itinerary={itinerary}
+          speedProfile={selectedSpeed} direction={selectedDirection} hoursPerDay={hoursPerDay}
+          startDate={startDate} partySize={partySize} totalPrice={pricing.totalPrice}
+          pricePerPerson={pricing.pricePerPerson} deposit={pricing.deposit} depositPerPerson={pricing.depositPerPerson}
         />
 
-        {/* Enquiry modal */}
         <EnquiryForm
-          open={enquiryOpen}
-          onOpenChange={setEnquiryOpen}
-          trailName={trailConfig.name}
-          days={activeDays}
-          nights={nights}
-          partySize={partySize}
-          travelerType={selectedSpeed.name}
-          estimatedTotalGBP={pricing.totalPrice}
-          displayCurrency={currency}
-          displayTotal={convertAmount(pricing.totalPrice)}
+          open={enquiryOpen} onOpenChange={setEnquiryOpen} trailName={trailConfig.name}
+          days={activeDays} nights={nights} partySize={partySize} travelerType={selectedSpeed.name}
+          estimatedTotalGBP={pricing.totalPrice} displayCurrency={currency} displayTotal={convertAmount(pricing.totalPrice)}
         />
       </main>
     </div>

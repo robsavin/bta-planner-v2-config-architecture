@@ -73,6 +73,12 @@ export default {
           brown: "hsl(var(--trail-brown))",
           path: "hsl(var(--trail-path))",
         },
+        bta: {
+          "dark-teal": "hsl(var(--bta-dark-teal))",
+          forest: "hsl(var(--bta-forest))",
+          amber: "hsl(var(--bta-amber))",
+          offwhite: "hsl(var(--bta-offwhite))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
