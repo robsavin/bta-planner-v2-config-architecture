@@ -324,9 +324,6 @@ const Index = () => {
                     for {partySize} {partySize === 1 ? "person" : "people"} · {nights} {nights === 1 ? "night" : "nights"}
                   </span>
                 </div>
-                <p className="italic text-bta-forest/60 mt-0.5" style={{ fontSize: "11px" }}>
-                  This is your price. No hidden costs, no surprises.
-                </p>
               </div>
             </div>
           </div>
