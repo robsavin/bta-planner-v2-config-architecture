@@ -1,5 +1,4 @@
-import { Minus, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface PartySizeSelectorProps {
   partySize: number;
@@ -8,27 +7,36 @@ interface PartySizeSelectorProps {
 }
 
 const PartySizeSelector = ({ partySize, onPartySizeChange }: PartySizeSelectorProps) => {
+  const sizes = [1, 2, 3, 4, 5, 6, 7, 8];
+
   return (
-    <div className="flex items-center gap-3">
-      <Button
-        variant="outline"
-        size="icon"
-        className="h-9 w-9"
-        onClick={() => onPartySizeChange(Math.max(1, partySize - 1))}
-        disabled={partySize <= 1}
-      >
-        <Minus className="h-4 w-4" />
-      </Button>
-      <span className="w-8 text-center text-xl font-bold text-bta-dark-teal">{partySize}</span>
-      <Button
-        variant="outline"
-        size="icon"
-        className="h-9 w-9"
-        onClick={() => onPartySizeChange(Math.min(8, partySize + 1))}
-        disabled={partySize >= 8}
-      >
-        <Plus className="h-4 w-4" />
-      </Button>
+    <div className="space-y-2">
+      <div className="flex gap-2">
+        {sizes.map((size) => (
+          <button
+            key={size}
+            onClick={() => onPartySizeChange(size)}
+            className={cn(
+              "flex items-center justify-center w-9 h-9 rounded-lg border text-sm font-bold transition-all duration-200",
+              partySize === size
+                ? "bg-bta-amber border-bta-amber text-primary-foreground"
+                : "border-border text-bta-dark-teal hover:border-bta-amber/50"
+            )}
+          >
+            {size}
+          </button>
+        ))}
+      </div>
+      <p className="text-xs text-bta-forest/60">
+        For groups of more than 4,{" "}
+        <a
+          href="mailto:hello@bigtrailadventures.com?subject=Group%20booking%20enquiry"
+          className="text-bta-amber underline hover:text-bta-amber/80"
+        >
+          email us to discuss options
+        </a>
+        .
+      </p>
     </div>
   );
 };
