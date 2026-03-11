@@ -56,8 +56,8 @@ const PurchaseModule = ({
   const { formatPrice } = useCurrency();
   const walkingDays = itinerary.filter(d => !d.isRestDay);
   const activeDays = walkingDays.length;
-  const nights = Math.max(0, activeDays - 1);
   const totalDays = itinerary.length;
+  const nights = Math.max(0, totalDays - 1);
 
   const multiplier = MULTIPLIER[partySize] ?? partySize;
   const liveTotalPrice = (49 * partySize) + (140 * nights * multiplier);
