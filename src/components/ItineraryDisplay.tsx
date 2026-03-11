@@ -329,7 +329,7 @@ const DayCard = ({
 
   // Expanded view
   return (
-    <div className="flex pb-4 md:pb-6">
+    <div className={cn("flex", !isLast && "pb-4 md:pb-6")}>
       {renderTimeline(dayCircle)}
       <div className="ml-4 flex-1 min-w-0 trail-card p-4 md:p-5">
         {/* Collapse toggle */}
