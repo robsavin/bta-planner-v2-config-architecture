@@ -314,7 +314,7 @@ const Index = () => {
               </div>
 
               {/* Live price line */}
-              <div className="pt-1">
+              <div className="pt-3">
                 <div className={`flex items-baseline gap-1.5 flex-wrap transition-opacity duration-300 ${pricePulse ? "opacity-60" : "opacity-100"}`}>
                   <span className="font-display font-bold text-bta-dark-teal" style={{ fontSize: "22px" }}>
                     {formatPrice(pricing.totalPrice)}
@@ -323,7 +323,7 @@ const Index = () => {
                     for {partySize} {partySize === 1 ? "person" : "people"} · {nights} {nights === 1 ? "night" : "nights"}
                   </span>
                 </div>
-                <p className="text-xs italic text-bta-forest mt-0.5">
+                <p className="italic text-bta-forest/60 mt-0.5" style={{ fontSize: "11px" }}>
                   This is your price. No hidden costs, no surprises.
                 </p>
               </div>
