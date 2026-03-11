@@ -270,7 +270,7 @@ const Index = () => {
 
           {/* ── Your Route ── */}
           <div className="mb-3">
-            <p className="font-display text-xs uppercase tracking-widest text-bta-forest mb-2">Your Route</p>
+            <p className="font-display font-medium text-xs uppercase tracking-widest text-bta-forest mb-2">Your Route</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <DirectionSelector selectedDirection={selectedDirection} onDirectionChange={setSelectedDirection} compact />
             </div>
