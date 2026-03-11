@@ -7,11 +7,13 @@ const trailConfigs: Record<string, TrailConfig> = {
 
 /**
  * Get the trail configuration for a given trail ID.
- * For now, defaults to "west-highland-way" for any input.
+ * Reads from window.__BTA_TRAIL_ID__ (set in main.tsx from data-trail attribute)
+ * or falls back to "west-highland-way".
  */
 export function getTrailConfig(trailId?: string): TrailConfig {
-  if (trailId && trailConfigs[trailId]) {
-    return trailConfigs[trailId];
+  const id = trailId ?? (window as any).__BTA_TRAIL_ID__;
+  if (id && trailConfigs[id]) {
+    return trailConfigs[id];
   }
   return westHighlandWay;
 }
