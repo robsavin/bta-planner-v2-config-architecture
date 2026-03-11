@@ -259,44 +259,45 @@ const Index = () => {
           </div>
 
           {/* ── Your Route ── */}
-          <div className="mb-6">
-            <p className="font-display text-xs uppercase tracking-widest text-bta-forest mb-3">Your Route</p>
+          <div className="mb-3">
+            <p className="font-display text-xs uppercase tracking-widest text-bta-forest mb-2">Your Route</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <DirectionSelector selectedDirection={selectedDirection} onDirectionChange={setSelectedDirection} compact />
             </div>
           </div>
 
           {/* Divider */}
-          <div className="h-px bg-border/60 mb-6" />
+          <div className="h-px bg-border/60 mb-3" />
 
           {/* ── Your Trip ── */}
           <div>
-            <p className="font-display text-xs uppercase tracking-widest text-bta-dark-teal mb-4">Your Trip</p>
-            <div className="space-y-6 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-1 sm:gap-x-8 sm:gap-y-6">
+            <p className="font-display text-xs uppercase tracking-widest text-bta-dark-teal mb-2">Your Trip</p>
+            <div className="space-y-4">
               {/* Pace */}
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Pace</label>
                 <SpeedSelector selectedSpeed={selectedSpeed} onSpeedChange={handleSpeedChange} />
               </div>
 
               {/* Daily Hours — hero */}
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Daily Hours</label>
                 <DaysCalculator
                   totalHours={totalHours} hoursPerDay={hoursPerDay}
                   onHoursPerDayChange={handleHoursChange} calculatedDays={calculatedDays}
+                  isTrailRunner={selectedSpeed.id === "trailrunner"}
                 />
               </div>
 
-              {/* Start Date + Party Size — side by side on larger screens */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:col-span-2 lg:col-span-1">
-                <div className="space-y-1.5">
+              {/* Start Date + Party Size — side by side on desktop, stacked on mobile */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
                   <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">
                     When do you want to start?
                   </label>
                   <DateSelector selectedDate={startDate} onDateChange={setStartDate} compact />
                 </div>
-                <div className="space-y-1.5 sm:flex sm:flex-col sm:items-center">
+                <div className="space-y-1">
                   <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Party Size</label>
                   <PartySizeSelector partySize={partySize} onPartySizeChange={handlePartySizeChange} />
                 </div>
