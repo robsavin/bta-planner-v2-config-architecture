@@ -253,8 +253,8 @@ const Index = () => {
       <section className="border-b border-border bg-card" aria-label="Trip settings">
         <div className="container mx-auto px-4 py-4">
           {/* Headline */}
-          <h1 className="font-display font-bold uppercase text-bta-dark-teal text-2xl md:text-[32px] leading-tight mb-4">
-            Build Your {trailConfig.name}
+          <h1 className="font-display font-bold text-bta-dark-teal text-2xl md:text-[32px] leading-tight mb-4">
+            Build your {trailConfig.name}
           </h1>
 
           {/* Top row: admin share + units */}
