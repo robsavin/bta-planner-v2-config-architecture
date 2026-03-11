@@ -211,10 +211,10 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className }: MapD
     <div className={cn("flex flex-col", className)}>
       <div ref={mapRef} className="flex-1 rounded-lg overflow-hidden border border-border" style={{ minHeight: 400 }} />
       {walkingDays.length > 0 && (
-        <div className="mt-3 mb-2 flex flex-wrap gap-x-3 gap-y-1.5">
+        <div className="mt-3 mb-4 flex flex-wrap gap-x-4 gap-y-2 bg-background/80 rounded-md px-2 py-2">
           {walkingDays.map((day, index) => (
             <div key={day.day} className="flex items-center gap-1.5 text-sm">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: dayColours[index % dayColours.length] }} />
+              <div className="w-4 h-4 rounded-full shrink-0" style={{ backgroundColor: dayColours[index % dayColours.length] }} />
               <span>Day {day.day}</span>
             </div>
           ))}
