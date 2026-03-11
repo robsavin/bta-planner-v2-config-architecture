@@ -210,8 +210,8 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className }: MapD
   const walkingDays = itinerary?.filter((d) => !d.isRestDay) || [];
 
   return (
-    <div className={cn("flex flex-col", className)}>
-      <div ref={mapRef} className="flex-1 rounded-lg overflow-hidden border border-border" style={{ minHeight: 400 }} />
+    <div className="flex flex-col">
+      <div ref={mapRef} className={cn("rounded-lg overflow-hidden border border-border", className)} style={{ minHeight: 400 }} />
       {walkingDays.length > 0 && (
         <div className="mt-3 mb-4 flex flex-wrap gap-x-4 gap-y-2 bg-background/80 rounded-md px-2 py-2">
           {walkingDays.map((day, index) => (
