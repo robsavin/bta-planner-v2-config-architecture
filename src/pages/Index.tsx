@@ -253,31 +253,20 @@ const Index = () => {
       <section className="border-b border-border bg-card" aria-label="Trip settings">
         <div className="container mx-auto px-4 py-4">
           {/* Headline */}
-          <h1 className="font-display font-bold text-bta-dark-teal text-2xl md:text-[32px] leading-tight mb-4">
+          <h1 className="font-display font-bold text-bta-dark-teal text-2xl md:text-[32px] leading-tight mb-1 text-center">
             Build your {trailConfig.name}
           </h1>
+          <p className="text-sm text-bta-forest/70 text-center mb-4">Customise your pace, dates and party size</p>
 
-          {/* Top row: admin share + units */}
-          <div className="flex items-center justify-between mb-3">
-            {urlParams.admin && (
+          {/* Admin share */}
+          {urlParams.admin && (
+            <div className="flex justify-center mb-3">
               <ShareTripButton
                 trail={trailConfig.id} pace={selectedSpeed.id} direction={selectedDirection}
                 days={itinerary.length} partySize={partySize} startDate={startDate} dailyHours={hoursPerDay}
               />
-            )}
-            <UnitToggle units={units} onUnitsChange={setUnits} />
-          </div>
-
-          {/* ── Your Route ── */}
-          <div className="mb-3">
-            <p className="font-display font-medium text-xs uppercase tracking-widest text-bta-forest mb-2">Your Route</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <DirectionSelector selectedDirection={selectedDirection} onDirectionChange={setSelectedDirection} compact />
             </div>
-          </div>
-
-          {/* Divider */}
-          <div className="h-px bg-border/60 mb-3" />
+          )}
 
           {/* ── Your Trip ── */}
           <div>
