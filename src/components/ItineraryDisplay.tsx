@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { format } from "date-fns";
 import { 
   MapPin, 
@@ -10,7 +11,11 @@ import {
   Plus,
   Trash2,
   Pencil,
-  Navigation
+  Navigation,
+  ChevronDown,
+  ChevronUp,
+  ChevronsDown,
+  ChevronsUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { 
@@ -28,6 +33,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 interface ItineraryDisplayProps {
   itinerary: DayPlan[];
@@ -54,6 +64,29 @@ const ItineraryDisplay = ({
 }: ItineraryDisplayProps) => {
   const directionalNodes = getDirectionalNodes(direction);
   
+  // Collapse state: day 1 expanded, rest collapsed
+  const [expandedDays, setExpandedDays] = useState<Set<number>>(() => new Set([0]));
+
+  const toggleDay = (index: number) => {
+    setExpandedDays(prev => {
+      const next = new Set(prev);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
+  };
+
+  const allExpanded = itinerary.every((_, i) => expandedDays.has(i));
+  const toggleAll = () => {
+    if (allExpanded) {
+      setExpandedDays(new Set());
+    } else {
+      setExpandedDays(new Set(itinerary.map((_, i) => i)));
+    }
+  };
+
+  const anyExpanded = expandedDays.size > 0;
+
   const getValidEndNodes = (startNode: TrailNode): TrailNode[] => {
     const startIndex = directionalNodes.findIndex(n => n.id === startNode.id);
     return directionalNodes.slice(startIndex + 1).filter(n => n.hasAccommodation || n === directionalNodes[directionalNodes.length - 1]);
@@ -74,18 +107,34 @@ const ItineraryDisplay = ({
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-2">
-        <h2 className="text-2xl font-bold">
-          Your Itinerary{" "}
-          <span className="text-sm font-normal text-muted-foreground">
-            ({directionLabel} • {speedProfile.name} pace • {hoursPerDay}h/day)
-          </span>
-        </h2>
-        <div className="flex items-center gap-2 text-sm text-primary bg-primary/10 px-3 py-2 rounded-lg border border-primary/20">
-          <Pencil className="h-4 w-4" />
-          <span>
-            <strong>Tip:</strong> Click on any destination to customise your route and overnight stops
-          </span>
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold">
+            Your Itinerary{" "}
+            <span className="text-sm font-normal text-muted-foreground">
+              ({directionLabel} • {speedProfile.name} pace • {hoursPerDay}h/day)
+            </span>
+          </h2>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleAll}
+            className="text-muted-foreground hover:text-primary shrink-0"
+          >
+            {allExpanded ? (
+              <><ChevronsUp className="h-4 w-4 mr-1" /> Collapse all</>
+            ) : (
+              <><ChevronsDown className="h-4 w-4 mr-1" /> Expand all</>
+            )}
+          </Button>
         </div>
+        {anyExpanded && (
+          <div className="flex items-center gap-2 text-sm text-primary bg-primary/10 px-3 py-2 rounded-lg border border-primary/20">
+            <Pencil className="h-4 w-4" />
+            <span>
+              <strong>Tip:</strong> Click on any destination to customise your route and overnight stops
+            </span>
+          </div>
+        )}
       </div>
       
       {/* Timeline */}
@@ -103,6 +152,7 @@ const ItineraryDisplay = ({
           
           const isTrailComplete = !day.isRestDay && isAtTrailEnd(day.endNode);
           const canDelete = day.isRestDay || trailCompletedOnPreviousDay;
+          const isExpanded = expandedDays.has(index);
           
           return (
             <DayCard
@@ -113,6 +163,8 @@ const ItineraryDisplay = ({
               isLast={index === itinerary.length - 1}
               isFirstWalkingDay={index === firstWalkingDayIndex}
               isTrailComplete={isTrailComplete}
+              isExpanded={isExpanded}
+              onToggle={() => toggleDay(index)}
               validStartNodes={getValidStartNodes(index)}
               validEndNodes={day.isRestDay ? [] : getValidEndNodes(day.startNode)}
               directionalNodes={directionalNodes}
@@ -126,7 +178,6 @@ const ItineraryDisplay = ({
           );
         })}
       </div>
-      
     </div>
   );
 };
@@ -138,6 +189,8 @@ interface DayCardProps {
   isLast: boolean;
   isFirstWalkingDay: boolean;
   isTrailComplete: boolean;
+  isExpanded: boolean;
+  onToggle: () => void;
   validStartNodes: TrailNode[];
   validEndNodes: TrailNode[];
   directionalNodes: TrailNode[];
@@ -156,6 +209,8 @@ const DayCard = ({
   isLast,
   isFirstWalkingDay,
   isTrailComplete,
+  isExpanded,
+  onToggle,
   validStartNodes,
   validEndNodes,
   directionalNodes,
@@ -168,7 +223,7 @@ const DayCard = ({
 }: DayCardProps) => {
   if (day.isRestDay) {
     return (
-      <div className="relative pl-12 pb-6">
+      <div className="relative pl-12 pb-4 md:pb-6">
         {!isFirst && (
           <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-border" />
         )}
@@ -178,7 +233,7 @@ const DayCard = ({
         {!isLast && (
           <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-border" />
         )}
-        <div className="ml-4 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-4">
+        <div className="ml-4 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-3 md:p-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
@@ -209,9 +264,55 @@ const DayCard = ({
       </div>
     );
   }
-  
+
+  // Collapsed view
+  if (!isExpanded) {
+    return (
+      <div className="relative pl-12 pb-4 md:pb-6">
+        {!isFirst && (
+          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-primary" />
+        )}
+        <div className="absolute left-0 top-8 flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground font-bold">
+          {day.day}
+        </div>
+        {!isLast && (
+          <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-primary" />
+        )}
+        <button
+          onClick={onToggle}
+          className="ml-4 w-[calc(100%-1rem)] text-left trail-card p-3 md:p-4 hover:ring-2 hover:ring-primary/30 transition-all cursor-pointer"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              {day.date && (
+                <div className="text-xs text-muted-foreground mb-1">
+                  {format(day.date, "EEE, MMM d")}
+                </div>
+              )}
+              <div className="font-semibold text-sm md:text-base truncate">
+                {day.startNode.name} → {day.endNode.name}
+              </div>
+              <div className="flex items-center gap-3 mt-1 text-xs md:text-sm text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <Mountain className="h-3.5 w-3.5" />
+                  {formatDistance(day.distance, units)}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5" />
+                  {formatTime(day.walkingTime)}
+                </span>
+              </div>
+            </div>
+            <ChevronDown className="h-5 w-5 text-muted-foreground shrink-0" />
+          </div>
+        </button>
+      </div>
+    );
+  }
+
+  // Expanded view
   return (
-    <div className="relative pl-12 pb-6">
+    <div className="relative pl-12 pb-4 md:pb-6">
       {!isFirst && (
         <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-primary" />
       )}
@@ -221,7 +322,16 @@ const DayCard = ({
       {!isLast && (
         <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-primary" />
       )}
-      <div className="ml-4 trail-card p-5">
+      <div className="ml-4 trail-card p-4 md:p-5">
+        {/* Collapse toggle */}
+        <button
+          onClick={onToggle}
+          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary mb-2 cursor-pointer"
+        >
+          <ChevronUp className="h-4 w-4" />
+          Collapse
+        </button>
+
         {day.date && (
           <div className="text-sm text-muted-foreground mb-3">
             {format(day.date, "EEEE, MMMM d, yyyy")}
@@ -233,7 +343,7 @@ const DayCard = ({
               <MapPin className="h-4 w-4" />
             </div>
             <span className="text-sm font-medium text-muted-foreground">From</span>
-            <span className="text-lg font-semibold">{day.startNode.name}</span>
+            <span className="text-base md:text-lg font-semibold">{day.startNode.name}</span>
           </div>
           <div className="flex items-center gap-2 pl-3">
             <div className="w-0.5 h-4 bg-primary" />
@@ -260,7 +370,7 @@ const DayCard = ({
                   )}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-lg font-semibold">{day.endNode.name}</span>
+                    <span className="text-base md:text-lg font-semibold">{day.endNode.name}</span>
                     <Pencil className="h-3.5 w-3.5 text-muted-foreground ml-auto" />
                   </div>
                 </SelectTrigger>
@@ -282,7 +392,7 @@ const DayCard = ({
         </div>
         
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-lg bg-muted/50">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 p-3 md:p-4 rounded-lg bg-muted/50">
           <StatItem 
             icon={<Mountain className="h-4 w-4" />} 
             value={formatDistance(day.distance, units)} 
@@ -311,7 +421,7 @@ const DayCard = ({
         )}
 
         {/* Action buttons */}
-        <div className="mt-2 flex justify-between items-center">
+        <div className="mt-2 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2">
           {onRemove ? (
             <Button
               variant="ghost"
@@ -331,7 +441,7 @@ const DayCard = ({
               variant="ghost"
               size="sm"
               onClick={onAddRestDay}
-              className="text-muted-foreground hover:text-primary"
+              className="text-muted-foreground hover:text-primary w-full sm:w-auto"
             >
               <Plus className="h-4 w-4 mr-1" />
               Add rest day after
@@ -341,7 +451,7 @@ const DayCard = ({
               variant="ghost"
               size="sm"
               onClick={onAddWalkingDay}
-              className="text-primary hover:text-primary hover:bg-primary/10"
+              className="text-primary hover:text-primary hover:bg-primary/10 w-full sm:w-auto"
             >
               <Plus className="h-4 w-4 mr-1" />
               Add another day on the trail
@@ -351,7 +461,7 @@ const DayCard = ({
               variant="ghost"
               size="sm"
               onClick={onAddRestDay}
-              className="text-muted-foreground hover:text-primary"
+              className="text-muted-foreground hover:text-primary w-full sm:w-auto"
             >
               <Plus className="h-4 w-4 mr-1" />
               Add rest day after

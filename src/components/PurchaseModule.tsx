@@ -1,18 +1,16 @@
 import { format } from "date-fns";
-import { Phone, Check, ArrowRight, FileText, Hotel, Route, Smartphone, BookOpen, Headphones, Calendar, Users } from "lucide-react";
+import { Phone, FileText, Hotel, Route, Smartphone, BookOpen, Headphones, Calendar, Users, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type DayPlan } from "@/lib/trailData";
 import { type TrailDirection } from "@/components/DirectionSelector";
 import { formatDistance, formatElevation, formatTime, type UnitSystem } from "@/lib/formatUtils";
 import { getTrailConfig } from "@/config";
+import { useCurrency } from "@/hooks/useCurrency";
 import BookTripButton from "@/components/BookTripButton";
 
 const MULTIPLIER: Record<number, number> = {
   1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0,
 };
-
-const formatGBP = (amount: number) =>
-  new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
 
 interface PurchaseModuleProps {
   itinerary: DayPlan[];
@@ -23,6 +21,7 @@ interface PurchaseModuleProps {
   partySize: number;
   units: UnitSystem;
   onSaveQuote: () => void;
+  onOpenEnquiry: () => void;
   overridePricing?: {
     totalPrice: number;
     pricePerPerson: number;
@@ -48,15 +47,16 @@ const PurchaseModule = ({
   partySize,
   units,
   onSaveQuote,
+  onOpenEnquiry,
   overridePricing,
 }: PurchaseModuleProps) => {
   const trailConfig = getTrailConfig();
+  const { formatPrice } = useCurrency();
   const walkingDays = itinerary.filter(d => !d.isRestDay);
   const activeDays = walkingDays.length;
   const nights = Math.max(0, activeDays - 1);
   const totalDays = itinerary.length;
 
-  // Use override pricing if provided (price locking from saved quote)
   const multiplier = MULTIPLIER[partySize] ?? partySize;
   const liveTotalPrice = (49 * partySize) + (140 * nights * multiplier);
   const totalPrice = overridePricing?.totalPrice ?? liveTotalPrice;
@@ -73,7 +73,7 @@ const PurchaseModule = ({
   return (
     <div className="mt-8 rounded-xl overflow-hidden shadow-lg">
       {/* ─── ZONE 1 — Your Adventure ─── */}
-      <div className="bg-secondary text-secondary-foreground px-5 py-4 md:px-6 md:py-4">
+      <div className="bg-secondary text-secondary-foreground px-4 py-4 md:px-6 md:py-4">
         <div className="font-bold mb-3 tracking-tight" style={{fontSize: '22px'}}>Your {trailConfig.name} Adventure</div>
 
         <div>
@@ -93,7 +93,7 @@ const PurchaseModule = ({
       </div>
 
       {/* ─── ZONE 2 — What's Included ─── */}
-      <div className="bg-background px-5 py-6 md:px-6 md:py-7">
+      <div className="bg-background px-4 py-6 md:px-6 md:py-7">
         <p className="text-[0.65rem] uppercase tracking-widest text-muted-foreground mb-4">What's Included</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {INCLUDED_ITEMS.map((item, idx) => {
@@ -116,54 +116,61 @@ const PurchaseModule = ({
       </div>
 
       {/* ─── ZONE 3 — Purchase Action ─── */}
-      <div className="bg-muted px-5 py-6 md:px-6 md:py-7">
-        {/* Pricing bar */}
-        <div className="border border-border rounded-lg bg-background divide-y divide-border sm:divide-y-0 sm:flex sm:divide-x mb-6">
-          <PriceCell label="Per Person" value={formatGBP(pricePerPerson)} />
-          <PriceCell label="Trip Total" value={formatGBP(totalPrice)} />
-          <PriceCell label="Deposit Today" value={formatGBP(deposit)} highlight />
+      <div className="bg-muted px-4 py-6 md:px-6 md:py-7">
+        {/* Pricing bar — stacks on mobile */}
+        <div className="border border-border rounded-lg bg-background flex flex-col sm:flex-row sm:divide-x divide-y sm:divide-y-0 divide-border mb-6">
+          <PriceCell label="Per Person" value={formatPrice(pricePerPerson)} />
+          <PriceCell label="Trip Total" value={formatPrice(totalPrice)} />
+          <PriceCell label="Deposit Today" value={formatPrice(deposit)} highlight />
         </div>
 
         {/* CTAs */}
         <div className="flex flex-col items-center gap-3">
           <BookTripButton
-  speedProfileId={speedProfileId}
-  partySize={partySize}
-  depositLabel={formatGBP(deposit)}
-  days={activeDays}
-  nights={nights}
-  totalPrice={totalPrice}
-  startDate={startDate}
-/>
+            speedProfileId={speedProfileId}
+            partySize={partySize}
+            depositLabel={formatPrice(deposit)}
+            days={activeDays}
+            nights={nights}
+            totalPrice={totalPrice}
+            deposit={deposit}
+            startDate={startDate}
+          />
 
           <Button
             size="lg"
             variant="outline"
-            className="w-4/5 h-11 text-sm gap-2 border-[hsl(200,25%,33%)] text-secondary hover:bg-secondary/5"
+            className="w-full sm:w-4/5 h-11 text-sm gap-2 border-[hsl(200,25%,33%)] text-secondary hover:bg-secondary/5"
             onClick={onSaveQuote}
           >
             <FileText className="h-4 w-4" />
             Save My Quote — get a PDF sent to you
           </Button>
 
-          {/* Divider with 'or' */}
+          <Button
+            size="lg"
+            variant="outline"
+            className="w-full sm:w-4/5 h-11 text-sm gap-2"
+            onClick={onOpenEnquiry}
+          >
+            <MessageCircle className="h-4 w-4" />
+            Get Expert Advice
+          </Button>
+
+          {/* Divider */}
           <div className="flex items-center gap-4 w-full my-0.5">
             <div className="flex-1 h-px bg-border" />
             <span className="text-xs text-muted-foreground">or</span>
             <div className="flex-1 h-px bg-border" />
           </div>
 
-          {/* Phone row */}
-          <a
-            href="tel:01315602740"
-            className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
-          >
-            <Phone className="h-5 w-5" />
-            <div>
-              <div className="font-semibold">0131 560 2740</div>
-              <div className="text-xs text-muted-foreground">8am–6pm, every day — we love talking trails</div>
-            </div>
-          </a>
+          {/* Prefer to talk */}
+          <p className="text-sm text-muted-foreground text-center">
+            Prefer to talk? Call us on{" "}
+            <a href="tel:01315602740" className="text-primary font-medium hover:underline">0131 560 2740</a>{" "}
+            or email{" "}
+            <a href="mailto:hello@bigtrailadventures.com" className="text-primary font-medium hover:underline">hello@bigtrailadventures.com</a>
+          </p>
 
           {/* Reassurance */}
           <p className="text-center text-xs text-muted-foreground italic mt-2">
@@ -174,9 +181,6 @@ const PurchaseModule = ({
     </div>
   );
 };
-
-/* ── Sub-components ── */
-
 
 const PriceCell = ({
   label,

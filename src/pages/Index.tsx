@@ -12,6 +12,7 @@ import PurchaseModule from "@/components/PurchaseModule";
 import ShareTripButton from "@/components/ShareTripButton";
 import AdminQuoteView from "@/components/AdminQuoteView";
 import SavedQuoteNotice from "@/components/SavedQuoteNotice";
+import EnquiryForm from "@/components/EnquiryForm";
 
 import MapDisplay from "@/components/MapDisplay";
 import { getTrailConfig } from "@/config";
@@ -29,6 +30,7 @@ import type { UnitSystem } from "@/lib/formatUtils";
 import QuoteRequestForm from "@/components/QuoteRequestForm";
 import { useTripUrlParams, resolveSpeedFromUrl } from "@/hooks/useUrlParams";
 import { loadQuote, type SavedQuote } from "@/lib/quoteStorage";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const Index = () => {
   const urlParams = useTripUrlParams();
@@ -47,6 +49,7 @@ const Index = () => {
   const [units, setUnits] = useState<UnitSystem>("metric");
   const [partySize, setPartySize] = useState<number>(initialParty);
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [enquiryOpen, setEnquiryOpen] = useState(false);
 
   // Saved quote state (for price locking & admin view)
   const [savedQuote, setSavedQuote] = useState<SavedQuote | null>(null);
@@ -257,6 +260,7 @@ const Index = () => {
   // Pricing — use saved quote prices if available (price locking)
   const trailConfig = getTrailConfig();
   const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };
+  const { formatPrice, convertAmount, currency } = useCurrency();
 
   const livePricing = useMemo(() => {
     const activeDays = itinerary.filter(d => !d.isRestDay).length;
@@ -278,6 +282,10 @@ const Index = () => {
         depositPerPerson: savedQuote.pricing.deposit_per_person,
       }
     : livePricing;
+
+  // Enquiry form props
+  const activeDays = itinerary.filter(d => !d.isRestDay).length;
+  const nights = Math.max(0, activeDays - 1);
 
   return (
     <div className="min-h-screen bg-background pt-6">
@@ -339,9 +347,9 @@ const Index = () => {
       {/* Two-column layout: map + day cards */}
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Map — sticky on desktop */}
+          {/* Map — sticky on desktop, shorter on mobile */}
           <div className="lg:w-1/2 lg:sticky lg:top-4 lg:self-start">
-            <MapDisplay itinerary={itinerary} direction={selectedDirection} className="h-[calc(100vh-8rem)]" />
+            <MapDisplay itinerary={itinerary} direction={selectedDirection} className="h-[300px] lg:h-[calc(100vh-8rem)]" />
           </div>
 
           {/* Day cards — scrolling */}
@@ -377,6 +385,7 @@ const Index = () => {
           partySize={partySize}
           units={units}
           onSaveQuote={() => setQuoteOpen(true)}
+          onOpenEnquiry={() => setEnquiryOpen(true)}
           overridePricing={savedQuote ? pricing : undefined}
         />
 
@@ -394,6 +403,20 @@ const Index = () => {
           pricePerPerson={pricing.pricePerPerson}
           deposit={pricing.deposit}
           depositPerPerson={pricing.depositPerPerson}
+        />
+
+        {/* Enquiry modal */}
+        <EnquiryForm
+          open={enquiryOpen}
+          onOpenChange={setEnquiryOpen}
+          trailName={trailConfig.name}
+          days={activeDays}
+          nights={nights}
+          partySize={partySize}
+          travelerType={selectedSpeed.name}
+          estimatedTotalGBP={pricing.totalPrice}
+          displayCurrency={currency}
+          displayTotal={convertAmount(pricing.totalPrice)}
         />
       </main>
     </div>
