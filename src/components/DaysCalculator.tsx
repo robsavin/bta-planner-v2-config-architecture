@@ -1,7 +1,7 @@
-import { Clock, Calendar } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Clock } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { formatTime } from "@/lib/formatUtils";
-import StepBadge from "./StepBadge";
 
 interface DaysCalculatorProps {
   totalHours: number;
@@ -12,14 +12,37 @@ interface DaysCalculatorProps {
   compact?: boolean;
 }
 
+const getHoursDescription = (hours: number): string => {
+  if (hours <= 5) return "Relaxed days with time to linger";
+  if (hours <= 6.5) return "Easy going — plenty of time to explore";
+  if (hours <= 8) return "A solid day's walking";
+  if (hours <= 9.5) return "Full days on the trail";
+  return "Long days, big miles";
+};
+
 const DaysCalculator = ({
   totalHours,
   hoursPerDay,
   onHoursPerDayChange,
   calculatedDays,
-  stepNumber = 4,
   compact = false,
 }: DaysCalculatorProps) => {
+  const [displayDays, setDisplayDays] = useState(calculatedDays);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const prevDays = useRef(calculatedDays);
+
+  useEffect(() => {
+    if (calculatedDays !== prevDays.current) {
+      setIsAnimating(true);
+      const timeout = setTimeout(() => {
+        setDisplayDays(calculatedDays);
+        setIsAnimating(false);
+      }, 150);
+      prevDays.current = calculatedDays;
+      return () => clearTimeout(timeout);
+    }
+  }, [calculatedDays]);
+
   if (compact) {
     return (
       <div className="space-y-2">
@@ -35,68 +58,52 @@ const DaysCalculator = ({
           step={0.5}
           className="w-full"
         />
-        <div className="flex justify-between text-xs text-muted-foreground">
-          <span>4h</span>
-          <span>8h</span>
-          <span>12h</span>
-        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 rounded-xl border-2 border-border bg-card p-6 shadow-soft">
-      <div className="flex items-center gap-3">
-        <StepBadge number={stepNumber} />
-        <Clock className="h-5 w-5 text-primary" />
-        <h3 className="text-lg font-semibold">Choose your Daily Hours</h3>
+    <div className="space-y-4">
+      {/* Hero feedback */}
+      <div className="flex items-baseline gap-3">
+        <span
+          className={`text-5xl font-display text-bta-amber transition-all duration-200 ${
+            isAnimating ? "opacity-30 scale-95" : "opacity-100 scale-100"
+          }`}
+        >
+          {displayDays}
+        </span>
+        <span className="text-lg text-bta-dark-teal font-medium">
+          days · {formatTime(totalHours)} walking
+        </span>
       </div>
-      
-      <div className="text-center">
-        <div className="inline-flex items-center gap-2 text-muted-foreground mb-2">
-          <Clock className="h-4 w-4" />
-          <span className="text-sm uppercase tracking-wider">Total Moving Time</span>
+
+      {/* Slider */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between text-sm">
+          <span className="flex items-center gap-1.5 text-bta-dark-teal font-medium">
+            <Clock className="h-3.5 w-3.5" />
+            {hoursPerDay}h per day
+          </span>
         </div>
-        <div className="text-4xl font-bold text-foreground">
-          {formatTime(totalHours)}
-        </div>
-      </div>
-      
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">Hours Per Day</span>
-          <span className="text-lg font-bold text-primary">{hoursPerDay}h</span>
-        </div>
-        
         <Slider
           value={[hoursPerDay]}
           onValueChange={(value) => onHoursPerDayChange(value[0])}
           min={4}
           max={12}
           step={0.5}
-          className="w-full"
+          className="w-full [&_[role=slider]]:bg-bta-amber [&_[role=slider]]:border-bta-amber [&_[role=slider]]:shadow-md"
         />
-        
         <div className="flex justify-between text-xs text-muted-foreground">
-          <span>Easy (4h)</span>
-          <span>Standard (8h)</span>
-          <span>Long (12h)</span>
+          <span>4h</span>
+          <span>8h</span>
+          <span>12h</span>
         </div>
       </div>
-      
-      <div className="rounded-lg bg-muted p-6 text-center">
-        <div className="inline-flex items-center gap-2 text-muted-foreground mb-2">
-          <Calendar className="h-4 w-4" />
-          <span className="text-sm uppercase tracking-wider">Your Journey</span>
-        </div>
-        <div className="text-5xl font-bold text-primary mb-2">
-          {calculatedDays}
-          <span className="text-2xl font-normal text-foreground ml-2">days</span>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          Based on an average of {hoursPerDay} hours on the trail per day
-        </p>
-      </div>
+
+      <p className="text-sm italic text-bta-forest min-h-[1.25rem]">
+        {getHoursDescription(hoursPerDay)}
+      </p>
     </div>
   );
 };

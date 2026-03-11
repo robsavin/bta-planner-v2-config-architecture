@@ -28,6 +28,7 @@ interface PurchaseModuleProps {
     deposit: number;
     depositPerPerson: number;
   };
+  pricePulse?: boolean;
 }
 
 const INCLUDED_ITEMS = [
@@ -49,6 +50,7 @@ const PurchaseModule = ({
   onSaveQuote,
   onOpenEnquiry,
   overridePricing,
+  pricePulse = false,
 }: PurchaseModuleProps) => {
   const trailConfig = getTrailConfig();
   const { formatPrice } = useCurrency();
@@ -118,7 +120,7 @@ const PurchaseModule = ({
       {/* ─── ZONE 3 — Purchase Action ─── */}
       <div className="bg-muted px-4 py-6 md:px-6 md:py-7">
         {/* Pricing bar — stacks on mobile */}
-        <div className="border border-border rounded-lg bg-background flex flex-col sm:flex-row sm:divide-x divide-y sm:divide-y-0 divide-border mb-6">
+        <div className={`border border-border rounded-lg bg-background flex flex-col sm:flex-row sm:divide-x divide-y sm:divide-y-0 divide-border mb-6 transition-opacity duration-300 ${pricePulse ? "opacity-60" : "opacity-100"}`}>
           <PriceCell label="Per Person" value={formatPrice(pricePerPerson)} />
           <PriceCell label="Trip Total" value={formatPrice(totalPrice)} />
           <PriceCell label="Deposit Today" value={formatPrice(deposit)} highlight />

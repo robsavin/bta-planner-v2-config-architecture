@@ -63,6 +63,12 @@
     --trail-brown: 25 40% 35%;
     --trail-path: 35 50% 70%;
 
+    /* BTA brand accents */
+    --bta-dark-teal: 195 33% 25%;
+    --bta-forest: 157 24% 39%;
+    --bta-amber: 28 60% 50%;
+    --bta-offwhite: 40 33% 97%;
+
     /* Shadows */
     --shadow-soft: 0 4px 20px -4px hsl(0 0% 7% / 0.08);
     --shadow-card: 0 8px 30px -8px hsl(0 0% 7% / 0.1);
