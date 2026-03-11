@@ -253,8 +253,8 @@ const Index = () => {
       <section className="border-b border-border bg-card" aria-label="Trip settings">
         <div className="container mx-auto px-4 py-4">
           {/* Headline */}
-          <h1 className="font-display font-bold uppercase text-bta-dark-teal text-2xl md:text-[32px] leading-tight mb-4">
-            Build Your {trailConfig.name}
+          <h1 className="font-display font-bold text-bta-dark-teal text-2xl md:text-[32px] leading-tight mb-4">
+            Build your {trailConfig.name}
           </h1>
 
           {/* Top row: admin share + units */}
@@ -270,7 +270,7 @@ const Index = () => {
 
           {/* ── Your Route ── */}
           <div className="mb-3">
-            <p className="font-display text-xs uppercase tracking-widest text-bta-forest mb-2">Your Route</p>
+            <p className="font-display font-medium text-xs uppercase tracking-widest text-bta-forest mb-2">Your Route</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <DirectionSelector selectedDirection={selectedDirection} onDirectionChange={setSelectedDirection} compact />
             </div>
@@ -281,17 +281,17 @@ const Index = () => {
 
           {/* ── Your Trip ── */}
           <div>
-            <p className="font-display text-xs uppercase tracking-widest text-bta-dark-teal mb-2">Your Trip</p>
+            <p className="font-display font-medium text-xs uppercase tracking-widest text-bta-dark-teal mb-2">Your Trip</p>
             <div className="space-y-4">
               {/* Pace */}
               <div className="space-y-1">
-                <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Pace</label>
+                <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">Pace</label>
                 <SpeedSelector selectedSpeed={selectedSpeed} onSpeedChange={handleSpeedChange} />
               </div>
 
               {/* Daily Hours */}
-              <div className="space-y-1">
-                <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Daily Hours</label>
+              <div className="space-y-1.5">
+                <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">Daily Hours</label>
                 <DaysCalculator
                   totalHours={totalHours} hoursPerDay={hoursPerDay}
                   onHoursPerDayChange={handleHoursChange} calculatedDays={calculatedDays}
@@ -302,19 +302,19 @@ const Index = () => {
               {/* Start Date + Party Size — side by side on desktop, stacked on mobile */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">
+                  <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">
                     When do you want to start?
                   </label>
                   <DateSelector selectedDate={startDate} onDateChange={setStartDate} compact />
                 </div>
                 <div className="space-y-1">
-                  <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Party Size</label>
+                  <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">Party Size</label>
                   <PartySizeSelector partySize={partySize} onPartySizeChange={handlePartySizeChange} />
                 </div>
               </div>
 
               {/* Live price line */}
-              <div className="pt-1">
+              <div className="pt-3">
                 <div className={`flex items-baseline gap-1.5 flex-wrap transition-opacity duration-300 ${pricePulse ? "opacity-60" : "opacity-100"}`}>
                   <span className="font-display font-bold text-bta-dark-teal" style={{ fontSize: "22px" }}>
                     {formatPrice(pricing.totalPrice)}
@@ -323,7 +323,7 @@ const Index = () => {
                     for {partySize} {partySize === 1 ? "person" : "people"} · {nights} {nights === 1 ? "night" : "nights"}
                   </span>
                 </div>
-                <p className="text-xs italic text-bta-forest mt-0.5">
+                <p className="italic text-bta-forest/60 mt-0.5" style={{ fontSize: "11px" }}>
                   This is your price. No hidden costs, no surprises.
                 </p>
               </div>
@@ -335,7 +335,7 @@ const Index = () => {
       {/* Two-column layout: map + day cards */}
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          <div className="lg:w-1/2 lg:sticky lg:top-4 lg:self-start">
+          <div className="relative lg:w-1/2 lg:sticky lg:top-4 lg:self-start" style={{ zIndex: 1 }}>
             <MapDisplay itinerary={itinerary} direction={selectedDirection} className="h-[300px] lg:h-[calc(100vh-8rem)]" />
           </div>
           <div className="lg:w-1/2">
