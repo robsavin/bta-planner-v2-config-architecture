@@ -150,12 +150,18 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className }: MapD
         const minIdx = Math.min(startIdx, endIdx);
         const maxIdx = Math.max(startIdx, endIdx);
         const segmentPoints = trailPoints.slice(minIdx, maxIdx + 1);
-        if (segmentPoints.length > 1) {
-          L.polyline(segmentPoints.map((p): L.LatLngExpression => [p.lat, p.lng]), { color: colour, weight: 6, opacity: 0.9 }).addTo(map);
-        }
         const startCoords = nodeCoordinates[day.startNode.id];
-        if (startCoords) {
-          const snappedStart = snapToTrail(startCoords, trailPoints);
+        const endCoords = nodeCoordinates[day.endNode.id];
+        const snappedStart = startCoords ? snapToTrail(startCoords, trailPoints) : null;
+        const snappedEnd = endCoords ? snapToTrail(endCoords, trailPoints) : null;
+        if (segmentPoints.length > 1) {
+          const lineCoords: L.LatLngExpression[] = [];
+          if (snappedStart) lineCoords.push(snappedStart);
+          lineCoords.push(...segmentPoints.map((p): L.LatLngExpression => [p.lat, p.lng]));
+          if (snappedEnd) lineCoords.push(snappedEnd);
+          L.polyline(lineCoords, { color: colour, weight: 6, opacity: 0.9 }).addTo(map);
+        }
+        if (snappedStart) {
           L.marker(snappedStart, {
             icon: L.divIcon({
               className: "day-marker",
@@ -164,18 +170,14 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className }: MapD
             }),
           }).addTo(map).bindPopup(`<strong>Day ${day.day}: ${day.startNode.name} → ${day.endNode.name}</strong><br/>${day.distance} km • ${formatTime(day.walkingTime)}`);
         }
-        if (index === lastWalkingDayIndex) {
-          const endCoords = nodeCoordinates[day.endNode.id];
-          if (endCoords) {
-            const snappedEnd = snapToTrail(endCoords, trailPoints);
-            L.marker(snappedEnd, {
-              icon: L.divIcon({
-                className: "day-marker",
-                html: `<div style="background-color: #16a34a; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.4); font-size: 16px;">🏁</div>`,
-                iconSize: [32, 32], iconAnchor: [16, 16],
-              }),
-            }).addTo(map).bindPopup(`<strong>Finish: ${day.endNode.name}</strong>`);
-          }
+        if (index === lastWalkingDayIndex && snappedEnd) {
+          L.marker(snappedEnd, {
+            icon: L.divIcon({
+              className: "day-marker",
+              html: `<div style="background-color: #16a34a; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.4); font-size: 16px;">🏁</div>`,
+              iconSize: [32, 32], iconAnchor: [16, 16],
+            }),
+          }).addTo(map).bindPopup(`<strong>Finish: ${day.endNode.name}</strong>`);
         }
         walkingDayIndex++;
       });
