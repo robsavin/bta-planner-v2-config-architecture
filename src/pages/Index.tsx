@@ -302,13 +302,13 @@ const Index = () => {
               {/* Start Date + Party Size — side by side on desktop, stacked on mobile */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">
+                  <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">
                     When do you want to start?
                   </label>
                   <DateSelector selectedDate={startDate} onDateChange={setStartDate} compact />
                 </div>
                 <div className="space-y-1">
-                  <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Party Size</label>
+                  <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">Party Size</label>
                   <PartySizeSelector partySize={partySize} onPartySizeChange={handlePartySizeChange} />
                 </div>
               </div>
