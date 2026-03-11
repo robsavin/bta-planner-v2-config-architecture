@@ -142,21 +142,21 @@ const PurchaseModule = ({
           <Button
             size="lg"
             variant="outline"
-            className="w-full sm:w-4/5 h-11 text-sm gap-2 border-[hsl(200,25%,33%)] text-secondary hover:bg-secondary/5"
+            className="w-full sm:w-4/5 h-auto min-h-[2.75rem] py-2.5 text-sm gap-2 border-[hsl(200,25%,33%)] text-secondary hover:bg-secondary/5 whitespace-normal text-center leading-tight"
             onClick={onSaveQuote}
           >
-            <FileText className="h-4 w-4" />
-            Save My Quote — get a PDF sent to you
+            <FileText className="h-4 w-4 shrink-0" />
+            <span>Save My Quote — get a PDF sent to you</span>
           </Button>
 
           <Button
             size="lg"
             variant="outline"
-            className="w-full sm:w-4/5 h-11 text-sm gap-2"
+            className="w-full sm:w-4/5 h-auto min-h-[2.75rem] py-2.5 text-sm gap-2 whitespace-normal text-center leading-tight"
             onClick={onOpenEnquiry}
           >
-            <MessageCircle className="h-4 w-4" />
-            Get Expert Advice
+            <MessageCircle className="h-4 w-4 shrink-0" />
+            <span>Get Expert Advice</span>
           </Button>
 
           {/* Divider */}

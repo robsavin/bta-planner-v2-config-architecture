@@ -85,12 +85,14 @@ const BookTripButton = ({ speedProfileId, partySize, depositLabel, days, nights,
     <div className="flex flex-col items-center">
       <Button
         size="lg"
-        className="w-full h-14 text-[1.1rem] font-bold gap-3 rounded-lg"
+        className="w-full h-auto min-h-[3.5rem] py-3 text-base sm:text-[1.1rem] font-bold gap-2 sm:gap-3 rounded-lg whitespace-normal text-center leading-tight"
         onClick={handleClick}
         disabled={submitting}
       >
-        {submitting ? "Adding to cart…" : depositLabel ? `Book This Trip — Pay ${depositLabel} deposit today` : "Book This Trip"}
-        {!submitting && <ArrowRight className="h-5 w-5" />}
+        <span className="flex-1">
+          {submitting ? "Adding to cart…" : depositLabel ? `Book This Trip — Pay ${depositLabel} deposit today` : "Book This Trip"}
+        </span>
+        {!submitting && <ArrowRight className="h-5 w-5 shrink-0" />}
       </Button>
       {fallbackMsg && (
         <p className="mt-3 text-sm text-muted-foreground text-center max-w-md">
