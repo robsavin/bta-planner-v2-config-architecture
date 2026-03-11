@@ -248,7 +248,7 @@ const Index = () => {
       <section className="border-b border-border bg-card" aria-label="Trip settings">
         <div className="container mx-auto px-4 py-4">
           {/* Top row: admin share + units */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-3">
             {urlParams.admin && (
               <ShareTripButton
                 trail={trailConfig.id} pace={selectedSpeed.id} direction={selectedDirection}
