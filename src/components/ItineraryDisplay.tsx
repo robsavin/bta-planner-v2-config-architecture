@@ -221,19 +221,30 @@ const DayCard = ({
   onAddWalkingDay,
   direction
 }: DayCardProps) => {
+  const lineColor = day.isRestDay ? "hsl(var(--border))" : "hsl(var(--primary))";
+
+  // Timeline column shared across all card types
+  const renderTimeline = (circle: React.ReactNode) => (
+    <div className="flex flex-col items-center shrink-0" style={{ width: 40 }}>
+      {!isFirst && (
+        <div style={{ width: 2, height: 32, backgroundColor: lineColor, flexShrink: 0 }} />
+      )}
+      {circle}
+      {!isLast && (
+        <div style={{ width: 2, flex: 1, backgroundColor: lineColor, minHeight: 8 }} />
+      )}
+    </div>
+  );
+
   if (day.isRestDay) {
     return (
-      <div className="relative pl-12 pb-4 md:pb-6">
-        {!isFirst && (
-          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-border" />
+      <div className="flex pb-4 md:pb-6">
+        {renderTimeline(
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card shrink-0">
+            <Coffee className="h-5 w-5 text-primary" />
+          </div>
         )}
-        <div className="absolute left-0 top-8 flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card">
-          <Coffee className="h-5 w-5 text-primary" />
-        </div>
-        {!isLast && (
-          <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-border" />
-        )}
-        <div className="ml-4 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-3 md:p-4">
+        <div className="ml-4 flex-1 min-w-0 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-3 md:p-4">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
@@ -265,22 +276,20 @@ const DayCard = ({
     );
   }
 
+  const dayCircle = (
+    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground font-bold shrink-0">
+      {day.day}
+    </div>
+  );
+
   // Collapsed view
   if (!isExpanded) {
     return (
-      <div className="relative pl-12 pb-4 md:pb-6">
-        {!isFirst && (
-          <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-primary" />
-        )}
-        <div className="absolute left-0 top-8 flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground font-bold">
-          {day.day}
-        </div>
-        {!isLast && (
-          <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-primary" />
-        )}
+      <div className="flex pb-4 md:pb-6">
+        {renderTimeline(dayCircle)}
         <button
           onClick={onToggle}
-          className="ml-4 w-[calc(100%-1rem)] text-left trail-card p-3 md:p-4 hover:ring-2 hover:ring-primary/30 transition-all cursor-pointer"
+          className="ml-4 flex-1 min-w-0 text-left trail-card p-3 md:p-4 hover:ring-2 hover:ring-primary/30 transition-all cursor-pointer"
         >
           <div className="flex items-center justify-between gap-2">
             <div className="flex-1 min-w-0">
@@ -312,17 +321,9 @@ const DayCard = ({
 
   // Expanded view
   return (
-    <div className="relative pl-12 pb-4 md:pb-6">
-      {!isFirst && (
-        <div className="absolute left-[1.1rem] top-0 h-8 w-0.5 bg-primary" />
-      )}
-      <div className="absolute left-0 top-8 flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground font-bold">
-        {day.day}
-      </div>
-      {!isLast && (
-        <div className="absolute left-[1.1rem] top-[4.5rem] bottom-0 w-0.5 bg-primary" />
-      )}
-      <div className="ml-4 trail-card p-4 md:p-5">
+    <div className="flex pb-4 md:pb-6">
+      {renderTimeline(dayCircle)}
+      <div className="ml-4 flex-1 min-w-0 trail-card p-4 md:p-5">
         {/* Collapse toggle */}
         <button
           onClick={onToggle}
