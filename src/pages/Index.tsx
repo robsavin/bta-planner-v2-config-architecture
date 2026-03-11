@@ -228,7 +228,8 @@ const Index = () => {
     const multiplier = MULTIPLIER[partySize] ?? partySize;
     const totalPrice = (49 * partySize) + (140 * nights * multiplier);
     const pricePerPerson = Math.round(totalPrice / partySize);
-    const depPerPerson = trailConfig.depositPerPerson;
+    const rootEl = document.getElementById("root");
+    const depPerPerson = Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson;
     const deposit = depPerPerson * partySize;
     return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson, nights };
   }, [itinerary, partySize, trailConfig.depositPerPerson]);
@@ -323,9 +324,6 @@ const Index = () => {
                     for {partySize} {partySize === 1 ? "person" : "people"} · {nights} {nights === 1 ? "night" : "nights"}
                   </span>
                 </div>
-                <p className="italic text-bta-forest/60 mt-0.5" style={{ fontSize: "11px" }}>
-                  This is your price. No hidden costs, no surprises.
-                </p>
               </div>
             </div>
           </div>

@@ -63,7 +63,9 @@ const PurchaseModule = ({
   const liveTotalPrice = (49 * partySize) + (140 * nights * multiplier);
   const totalPrice = overridePricing?.totalPrice ?? liveTotalPrice;
   const pricePerPerson = overridePricing?.pricePerPerson ?? Math.round(liveTotalPrice / partySize);
-  const depositPerPerson = overridePricing?.depositPerPerson ?? trailConfig.depositPerPerson;
+  const rootEl = document.getElementById("root");
+  const configDeposit = Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson;
+  const depositPerPerson = overridePricing?.depositPerPerson ?? configDeposit;
   const deposit = overridePricing?.deposit ?? (depositPerPerson * partySize);
 
   const totalDistance = walkingDays.reduce((sum, d) => sum + d.distance, 0);
