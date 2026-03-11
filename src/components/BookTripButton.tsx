@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { getTrailConfig } from "@/config";
 import { trackEvent } from "@/lib/analytics";
-import { useCurrency } from "@/hooks/useCurrency";
+
 
 interface BookTripButtonProps {
   speedProfileId: string;
