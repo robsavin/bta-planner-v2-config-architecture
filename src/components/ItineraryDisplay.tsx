@@ -235,16 +235,12 @@ const DayCard = ({
 }: DayCardProps) => {
   const lineColor = day.isRestDay ? "hsl(var(--border))" : "hsl(var(--primary))";
 
-  // Timeline column shared across all card types
+  // Timeline column — circles only, line is on parent
   const renderTimeline = (circle: React.ReactNode) => (
     <div className="flex flex-col items-center shrink-0" style={{ width: 40 }}>
-      {!isFirst && (
-        <div style={{ width: 2, height: 32, backgroundColor: lineColor, flexShrink: 0 }} />
-      )}
-      {circle}
-      {!isLast && (
-        <div style={{ width: 2, flex: 1, backgroundColor: lineColor, minHeight: 8 }} />
-      )}
+      <div className="relative z-10">
+        {circle}
+      </div>
     </div>
   );
 
