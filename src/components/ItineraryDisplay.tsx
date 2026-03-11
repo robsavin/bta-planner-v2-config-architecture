@@ -293,7 +293,7 @@ const DayCard = ({
   // Collapsed view
   if (!isExpanded) {
     return (
-      <div className="flex pb-4 md:pb-6">
+      <div className={cn("flex", !isLast && "pb-4 md:pb-6")}>
         {renderTimeline(dayCircle)}
         <button
           onClick={onToggle}
