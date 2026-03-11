@@ -150,12 +150,18 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className }: MapD
         const minIdx = Math.min(startIdx, endIdx);
         const maxIdx = Math.max(startIdx, endIdx);
         const segmentPoints = trailPoints.slice(minIdx, maxIdx + 1);
-        if (segmentPoints.length > 1) {
-          L.polyline(segmentPoints.map((p): L.LatLngExpression => [p.lat, p.lng]), { color: colour, weight: 6, opacity: 0.9 }).addTo(map);
-        }
         const startCoords = nodeCoordinates[day.startNode.id];
-        if (startCoords) {
-          const snappedStart = snapToTrail(startCoords, trailPoints);
+        const endCoords = nodeCoordinates[day.endNode.id];
+        const snappedStart = startCoords ? snapToTrail(startCoords, trailPoints) : null;
+        const snappedEnd = endCoords ? snapToTrail(endCoords, trailPoints) : null;
+        if (segmentPoints.length > 1) {
+          const lineCoords: L.LatLngExpression[] = [];
+          if (snappedStart) lineCoords.push(snappedStart);
+          lineCoords.push(...segmentPoints.map((p): L.LatLngExpression => [p.lat, p.lng]));
+          if (snappedEnd) lineCoords.push(snappedEnd);
+          L.polyline(lineCoords, { color: colour, weight: 6, opacity: 0.9 }).addTo(map);
+        }
+        if (snappedStart) {
           L.marker(snappedStart, {
             icon: L.divIcon({
               className: "day-marker",
