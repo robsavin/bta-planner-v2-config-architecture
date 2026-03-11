@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { Clock } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { formatTime } from "@/lib/formatUtils";
 
@@ -60,29 +59,23 @@ const DaysCalculator = ({
 
   return (
     <div className="space-y-2">
-      {/* Hero feedback — Option A: big number */}
-      <div className="flex items-baseline gap-1">
+      {/* Compact single-line feedback */}
+      <div className="flex items-baseline gap-1.5 flex-wrap">
         <span
           className={`font-display font-bold text-bta-amber transition-all duration-200 ${
             isAnimating ? "opacity-30 scale-95" : "opacity-100 scale-100"
           }`}
-          style={{ fontSize: "64px", lineHeight: 1 }}
+          style={{ fontSize: "28px", lineHeight: 1.2 }}
         >
-          {displayDays}
+          {displayDays} days
         </span>
-        <span
-          className="font-display font-bold text-bta-dark-teal"
-          style={{ fontSize: "64px", lineHeight: 1 }}
-        >
-          days
+        <span className="text-sm text-bta-forest" style={{ fontSize: "14px" }}>
+          · {formatTime(totalHours)} {activityWord} · {hoursPerDay}h per day
         </span>
       </div>
-      <p className="text-[13px] text-bta-forest">
-        {formatTime(totalHours)} {activityWord} · {hoursPerDay}h per day
-      </p>
 
       {/* Slider */}
-      <div className="space-y-1.5 pt-1">
+      <div className="space-y-1.5">
         <Slider
           value={[hoursPerDay]}
           onValueChange={(value) => onHoursPerDayChange(value[0])}

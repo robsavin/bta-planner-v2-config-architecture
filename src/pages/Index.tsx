@@ -32,8 +32,11 @@ import { useTripUrlParams, resolveSpeedFromUrl } from "@/hooks/useUrlParams";
 import { loadQuote, type SavedQuote } from "@/lib/quoteStorage";
 import { useCurrency } from "@/hooks/useCurrency";
 
+const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };
+
 const Index = () => {
   const urlParams = useTripUrlParams();
+  const trailConfig = getTrailConfig();
 
   const initialSpeed = resolveSpeedFromUrl(urlParams.pace) ?? speedProfiles[1];
   const initialDirection = urlParams.direction ?? "south-to-north";
@@ -141,8 +144,9 @@ const Index = () => {
         }
         return newItinerary;
       });
+      triggerPricePulse();
     },
-    [selectedSpeed],
+    [selectedSpeed, triggerPricePulse],
   );
 
   const handleAddRestDay = useCallback(
@@ -163,8 +167,9 @@ const Index = () => {
         }
         return newItinerary;
       });
+      triggerPricePulse();
     },
-    [startDate],
+    [startDate, triggerPricePulse],
   );
 
   const handleRemoveDay = useCallback(
@@ -178,8 +183,9 @@ const Index = () => {
         }
         return newItinerary;
       });
+      triggerPricePulse();
     },
-    [startDate],
+    [startDate, triggerPricePulse],
   );
 
   const handleAddWalkingDay = useCallback(
@@ -208,32 +214,31 @@ const Index = () => {
         }
         return newItinerary;
       });
+      triggerPricePulse();
     },
-    [startDate, directionalNodes, selectedSpeed],
+    [startDate, directionalNodes, selectedSpeed, triggerPricePulse],
   );
 
-  // Pricing
-  const trailConfig = getTrailConfig();
-  const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };
+  // Pricing — nights = totalDays - 1 (includes rest days)
   const { formatPrice, convertAmount, currency } = useCurrency();
 
   const livePricing = useMemo(() => {
-    const activeDays = itinerary.filter(d => !d.isRestDay).length;
-    const nights = Math.max(0, activeDays - 1);
+    const totalDays = itinerary.length;
+    const nights = Math.max(0, totalDays - 1);
     const multiplier = MULTIPLIER[partySize] ?? partySize;
     const totalPrice = (49 * partySize) + (140 * nights * multiplier);
     const pricePerPerson = Math.round(totalPrice / partySize);
     const depPerPerson = trailConfig.depositPerPerson;
     const deposit = depPerPerson * partySize;
-    return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson };
+    return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson, nights };
   }, [itinerary, partySize, trailConfig.depositPerPerson]);
 
   const pricing = savedQuote
-    ? { totalPrice: savedQuote.pricing.total_price, pricePerPerson: savedQuote.pricing.per_person, deposit: savedQuote.pricing.deposit, depositPerPerson: savedQuote.pricing.deposit_per_person }
+    ? { totalPrice: savedQuote.pricing.total_price, pricePerPerson: savedQuote.pricing.per_person, deposit: savedQuote.pricing.deposit, depositPerPerson: savedQuote.pricing.deposit_per_person, nights: livePricing.nights }
     : livePricing;
 
   const activeDays = itinerary.filter(d => !d.isRestDay).length;
-  const nights = Math.max(0, activeDays - 1);
+  const nights = livePricing.nights;
 
   return (
     <div className="min-h-screen bg-background pt-6">
@@ -247,6 +252,11 @@ const Index = () => {
       {/* ─── Config Panel ─── */}
       <section className="border-b border-border bg-card" aria-label="Trip settings">
         <div className="container mx-auto px-4 py-4">
+          {/* Headline */}
+          <h1 className="font-display font-bold uppercase text-bta-dark-teal text-2xl md:text-[32px] leading-tight mb-4">
+            Build Your {trailConfig.name}
+          </h1>
+
           {/* Top row: admin share + units */}
           <div className="flex items-center justify-between mb-3">
             {urlParams.admin && (
@@ -279,7 +289,7 @@ const Index = () => {
                 <SpeedSelector selectedSpeed={selectedSpeed} onSpeedChange={handleSpeedChange} />
               </div>
 
-              {/* Daily Hours — hero */}
+              {/* Daily Hours */}
               <div className="space-y-1">
                 <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Daily Hours</label>
                 <DaysCalculator
@@ -301,6 +311,21 @@ const Index = () => {
                   <label className="font-display text-sm uppercase tracking-wider text-bta-dark-teal">Party Size</label>
                   <PartySizeSelector partySize={partySize} onPartySizeChange={handlePartySizeChange} />
                 </div>
+              </div>
+
+              {/* Live price line */}
+              <div className="pt-1">
+                <div className={`flex items-baseline gap-1.5 flex-wrap transition-opacity duration-300 ${pricePulse ? "opacity-60" : "opacity-100"}`}>
+                  <span className="font-display font-bold text-bta-dark-teal" style={{ fontSize: "22px" }}>
+                    {formatPrice(pricing.totalPrice)}
+                  </span>
+                  <span className="text-bta-forest" style={{ fontSize: "13px" }}>
+                    for {partySize} {partySize === 1 ? "person" : "people"} · {nights} {nights === 1 ? "night" : "nights"}
+                  </span>
+                </div>
+                <p className="text-xs italic text-bta-forest mt-0.5">
+                  This is your price. No hidden costs, no surprises.
+                </p>
               </div>
             </div>
           </div>
