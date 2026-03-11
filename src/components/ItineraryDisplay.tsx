@@ -246,7 +246,7 @@ const DayCard = ({
 
   if (day.isRestDay) {
     return (
-      <div className="flex pb-4 md:pb-6">
+      <div className={cn("flex", !isLast && "pb-4 md:pb-6")}>
         {renderTimeline(
           <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card shrink-0">
             <Coffee className="h-5 w-5 text-primary" />
