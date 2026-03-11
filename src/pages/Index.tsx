@@ -2,11 +2,10 @@ import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { addDays, format } from "date-fns";
 
 import SpeedSelector from "@/components/SpeedSelector";
-import DirectionSelector, { type TrailDirection } from "@/components/DirectionSelector";
+import { type TrailDirection } from "@/components/DirectionSelector";
 import DateSelector from "@/components/DateSelector";
 import DaysCalculator from "@/components/DaysCalculator";
 import ItineraryDisplay from "@/components/ItineraryDisplay";
-import UnitToggle from "@/components/UnitToggle";
 import PartySizeSelector from "@/components/PartySizeSelector";
 import PurchaseModule from "@/components/PurchaseModule";
 import ShareTripButton from "@/components/ShareTripButton";
