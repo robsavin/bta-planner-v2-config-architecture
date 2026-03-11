@@ -67,7 +67,7 @@ const SpeedSelector = ({ selectedSpeed, onSpeedChange, compact = false }: SpeedS
           );
         })}
       </div>
-      <p className="text-sm italic text-bta-forest min-h-[1.25rem]">
+      <p className="text-sm italic text-bta-forest/70 min-h-[1.25rem]">
         {selectedSpeed.description}
       </p>
     </div>
