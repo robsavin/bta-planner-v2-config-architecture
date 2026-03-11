@@ -280,7 +280,7 @@ const Index = () => {
 
               {/* Daily Hours */}
               <div className="space-y-1.5">
-                <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">Daily Hours</label>
+                <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">Adjust Your Days</label>
                 <DaysCalculator
                   totalHours={totalHours} hoursPerDay={hoursPerDay}
                   onHoursPerDayChange={handleHoursChange} calculatedDays={calculatedDays}
