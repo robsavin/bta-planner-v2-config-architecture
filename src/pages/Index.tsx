@@ -53,6 +53,13 @@ const Index = () => {
   const [enquiryOpen, setEnquiryOpen] = useState(false);
 
   // Price pulse state
+  // Admin mode detection
+  useEffect(() => {
+    const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
+    console.log('Admin mode:', isAdmin);
+  }, []);
+
+  // Price pulse state
   const [pricePulse, setPricePulse] = useState(false);
   const pulseTimeout = useRef<ReturnType<typeof setTimeout>>();
   const triggerPricePulse = useCallback(() => {
@@ -258,15 +265,18 @@ const Index = () => {
           </h1>
           <p className="text-sm text-bta-forest/70 text-center mb-4">Customise your pace, dates and party size</p>
 
-          {/* Admin share */}
-          {urlParams.admin && (
-            <div className="flex justify-center mb-3">
-              <ShareTripButton
-                trail={trailConfig.id} pace={selectedSpeed.id} direction={selectedDirection}
-                days={itinerary.length} partySize={partySize} startDate={startDate} dailyHours={hoursPerDay}
-              />
-            </div>
-          )}
+      {/* Admin share */}
+          {(() => {
+            const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
+            return isAdmin ? (
+              <div className="flex justify-center mb-3">
+                <ShareTripButton
+                  trail={trailConfig.id} pace={selectedSpeed.id} direction={selectedDirection}
+                  days={itinerary.length} partySize={partySize} startDate={startDate} dailyHours={hoursPerDay}
+                />
+              </div>
+            ) : null;
+          })()}
 
           {/* ── Your Trip ── */}
           <div>
@@ -280,7 +290,7 @@ const Index = () => {
 
               {/* Daily Hours */}
               <div className="space-y-1.5">
-                <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">Adjust Your Days</label>
+                <label className="font-display font-medium text-sm uppercase tracking-wider text-bta-dark-teal">Daily Walking Hours</label>
                 <DaysCalculator
                   totalHours={totalHours} hoursPerDay={hoursPerDay}
                   onHoursPerDayChange={handleHoursChange} calculatedDays={calculatedDays}
@@ -322,7 +332,7 @@ const Index = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="relative lg:w-1/2 lg:sticky lg:top-4 lg:self-start" style={{ zIndex: 1 }}>
-            <MapDisplay itinerary={itinerary} direction={selectedDirection} className="h-[300px] lg:h-[calc(100vh-8rem)]" />
+            <MapDisplay itinerary={itinerary} direction={selectedDirection} units={units} className="h-[300px] lg:h-[calc(100vh-8rem)]" />
           </div>
           <div className="lg:w-1/2">
             <ItineraryDisplay

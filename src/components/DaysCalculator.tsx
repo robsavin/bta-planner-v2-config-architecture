@@ -26,14 +26,20 @@ const DaysCalculator = ({
           · {hoursPerDay}h per day
         </span>
       </div>
-      <Slider
-        value={[hoursPerDay]}
-        onValueChange={([v]) => onHoursPerDayChange(v)}
-        min={4}
-        max={12}
-        step={0.5}
-        className="w-full [&_[data-slot=slider-range]]:bg-bta-amber [&_[data-slot=slider-thumb]]:border-bta-amber [&>span>span]:bg-bta-amber [&>span+span]:border-bta-amber"
-      />
+      <div className="space-y-1">
+        <Slider
+          value={[hoursPerDay]}
+          onValueChange={([v]) => onHoursPerDayChange(v)}
+          min={4}
+          max={12}
+          step={0.5}
+          className="w-full [&_[data-slot=slider-range]]:bg-bta-amber [&_[data-slot=slider-thumb]]:border-bta-amber [&>span>span]:bg-bta-amber [&>span+span]:border-bta-amber"
+        />
+        <div className="flex justify-between">
+          <span className="text-[11px] text-muted-foreground">Easier</span>
+          <span className="text-[11px] text-muted-foreground">Harder</span>
+        </div>
+      </div>
     </div>
   );
 };

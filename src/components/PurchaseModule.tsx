@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Phone, FileText, Hotel, Route, Smartphone, BookOpen, Headphones, Calendar, Users, MessageCircle } from "lucide-react";
+import { FileText, Hotel, Route, Backpack, BookOpen, Headphones, Calendar, Users, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type DayPlan } from "@/lib/trailData";
 import { type TrailDirection } from "@/components/DirectionSelector";
@@ -32,11 +32,11 @@ interface PurchaseModuleProps {
 }
 
 const INCLUDED_ITEMS = [
-  { name: "Hotels with breakfast", detail: "Handpicked accommodation at every stop", icon: Hotel },
-  { name: "Custom route", detail: "Door-to-door, built around your pace", icon: Route },
-  { name: "BTA App", detail: "Navigate your route offline", icon: Smartphone },
-  { name: "Trail Book", detail: "Your personal guide to every stage", icon: BookOpen },
-  { name: "On-trail support", detail: "We're here if you need us", icon: Headphones },
+  { name: "Hotels with breakfast", detail: "Handpicked accommodation at every stop, chosen for comfort after a long day on the trail", icon: Hotel },
+  { name: "Baggage transfer", detail: "Your luggage moves between accommodations so you walk unencumbered", icon: Backpack },
+  { name: "Door-to-door route", detail: "Full GPX files for your custom route, built around your pace and start point", icon: Route },
+  { name: "Personalised Trail Book", detail: "Your day-by-day companion with everything you need before and during the trail", icon: BookOpen },
+  { name: "On-trail support", detail: "We're here if you need us, every day you're out there", icon: Headphones },
 ];
 
 const PurchaseModule = ({
@@ -99,19 +99,15 @@ const PurchaseModule = ({
       {/* ─── ZONE 2 — What's Included ─── */}
       <div className="bg-background px-4 py-6 md:px-6 md:py-7">
         <p className="text-[0.65rem] uppercase tracking-widest text-muted-foreground mb-4">What's Included</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {INCLUDED_ITEMS.map((item, idx) => {
+        <div className="space-y-3">
+          {INCLUDED_ITEMS.map((item) => {
             const Icon = item.icon;
-            const isLast = idx === INCLUDED_ITEMS.length - 1;
             return (
-              <div
-                key={item.name}
-                className={`border border-border rounded-lg p-4 flex items-start gap-3 ${isLast ? "md:col-span-2" : ""}`}
-              >
-                <Icon className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
+              <div key={item.name} className="flex items-start gap-3">
+                <Icon className="h-[18px] w-[18px] text-primary flex-shrink-0 mt-0.5" />
                 <div>
-                  <div className="font-semibold text-sm text-foreground">{item.name}</div>
-                  <div className="text-xs text-muted-foreground">{item.detail}</div>
+                  <span className="font-semibold text-sm text-foreground">{item.name}</span>
+                  <span className="text-sm text-muted-foreground"> · {item.detail}</span>
                 </div>
               </div>
             );

@@ -4,6 +4,8 @@ import "leaflet/dist/leaflet.css";
 import { useTrailPoints, findPointIndexAtDistance } from "@/hooks/useTrailPoints";
 import type { TrailPoint } from "@/lib/gpxParser";
 import { type DayPlan, type TrailDirection } from "@/lib/trailData";
+import type { UnitSystem } from "@/lib/formatUtils";
+import ElevationProfile from "@/components/ElevationProfile";
 import { getTrailConfig } from "@/config";
 import { Loader2 } from "lucide-react";
 import { formatTime } from "@/lib/formatUtils";
@@ -25,6 +27,7 @@ interface MapDisplayProps {
   itinerary?: DayPlan[];
   direction?: TrailDirection;
   className?: string;
+  units?: UnitSystem;
 }
 
 // Build nodeCoordinates from trail config
@@ -52,7 +55,7 @@ function snapToTrail(nodeCoords: [number, number], trailPoints: TrailPoint[]): [
   return [nearestPoint.lat, nearestPoint.lng];
 }
 
-const MapDisplay = ({ itinerary, direction = "south-to-north", className }: MapDisplayProps) => {
+const MapDisplay = ({ itinerary, direction = "south-to-north", className, units = "metric" }: MapDisplayProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const { trailPoints, loading, error, cumulativeDistances, totalGpxDistance } = useTrailPoints();
@@ -212,6 +215,18 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className }: MapD
   return (
     <div className="flex flex-col">
       <div ref={mapRef} className={cn("rounded-lg overflow-hidden border border-border", className)} style={{ minHeight: 400 }} />
+      {itinerary && itinerary.length > 0 && trailPoints.length > 0 && (
+        <div className="mt-3">
+          <ElevationProfile
+            trailPoints={trailPoints}
+            cumulativeDistances={cumulativeDistances}
+            totalGpxDistance={totalGpxDistance}
+            itinerary={itinerary}
+            direction={direction}
+            units={units}
+          />
+        </div>
+      )}
       {walkingDays.length > 0 && (
         <div className="mt-3 mb-4 flex flex-wrap gap-x-4 gap-y-2 bg-background/80 rounded-md px-2 py-2">
           {walkingDays.map((day, index) => (
