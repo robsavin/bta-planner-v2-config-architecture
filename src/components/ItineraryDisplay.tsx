@@ -213,6 +213,7 @@ interface DayCardProps {
 const DayCard = ({ 
   day, 
   dayIndex,
+  walkingDayIndex,
   isFirst, 
   isLast,
   isFirstWalkingDay,
