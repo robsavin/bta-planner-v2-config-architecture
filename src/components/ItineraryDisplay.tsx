@@ -234,13 +234,13 @@ const DayCard = ({
 
   // Timeline column — circle + connector line to next card
   const renderTimeline = (circle: React.ReactNode) => (
-    <div className="flex flex-col items-center shrink-0" style={{ width: 40 }}>
-      <div className="relative z-10">
+    <div style={{ width: 40, display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+      <div style={{ position: 'relative', zIndex: 10 }}>
         {circle}
       </div>
       {/* Connector line to next day */}
       {!isLast && (
-        <div className="flex-1 w-0.5" style={{ backgroundColor: dayColor, minHeight: 8 }} />
+        <div style={{ flex: 1, width: 2, backgroundColor: dayColor, minHeight: 8 }} />
       )}
     </div>
   );
