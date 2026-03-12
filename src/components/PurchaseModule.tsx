@@ -64,7 +64,9 @@ const PurchaseModule = ({
   const totalPrice = overridePricing?.totalPrice ?? liveTotalPrice;
   const pricePerPerson = overridePricing?.pricePerPerson ?? Math.round(liveTotalPrice / partySize);
   const rootEl = document.getElementById("root");
-  const configDeposit = Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson;
+  const paceKey = speedProfileId.replace(/-([a-z])/g, (_: string, c: string) => c.toUpperCase());
+  const variantPriceAttr = rootEl?.dataset['variantPrice' + paceKey.charAt(0).toUpperCase() + paceKey.slice(1)];
+  const configDeposit = variantPriceAttr ? parseFloat(variantPriceAttr) : (Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson);
   const depositPerPerson = overridePricing?.depositPerPerson ?? configDeposit;
   const deposit = overridePricing?.deposit ?? (depositPerPerson * partySize);
 
