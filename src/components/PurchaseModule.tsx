@@ -130,7 +130,7 @@ const PurchaseModule = ({
         <div className="flex flex-col items-center gap-3">
           <BookTripButton
             speedProfileId={speedProfileId}
-            partySize={partySize}
+            speedProfileName={speedProfileName}
             depositLabel={formatPrice(deposit)}
             days={activeDays}
             nights={nights}
