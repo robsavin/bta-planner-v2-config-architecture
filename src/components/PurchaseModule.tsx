@@ -132,6 +132,7 @@ const PurchaseModule = ({
             speedProfileName={speedProfileName}
             partySize={partySize}
             depositLabel={formatPrice(deposit)}
+            days={activeDays}
             nights={nights}
             totalPrice={totalPrice}
             deposit={deposit}

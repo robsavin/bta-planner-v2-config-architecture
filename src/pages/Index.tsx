@@ -246,7 +246,6 @@ const Index = () => {
     const variantDeposit = getVariantPriceForPace(selectedSpeed.name) ?? getVariantPriceForPace(selectedSpeed.id);
     const depPerPerson = variantDeposit ?? trailConfig.depositPerPerson;
     const deposit = depPerPerson * partySize;
-    const deposit = depPerPerson * partySize;
     return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson, nights };
   }, [itinerary, partySize, trailConfig.depositPerPerson, selectedSpeed.id, selectedSpeed.name]);
 
