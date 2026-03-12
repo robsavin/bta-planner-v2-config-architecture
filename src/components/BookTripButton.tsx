@@ -16,23 +16,19 @@ interface BookTripButtonProps {
   startDate: Date;
 }
 
-const PACE_MAP: Record<string, { dataAttr: string; configKey: keyof ReturnType<typeof getTrailConfig>["shopifyVariants"] }> = {
-  explorer:     { dataAttr: "data-variant-explorer",      configKey: "explorer" },
-  hiker:        { dataAttr: "data-variant-hiker",          configKey: "hiker" },
-  fastpacker:   { dataAttr: "data-variant-fastpacker",     configKey: "fastpacker" },
-  trailrunner:  { dataAttr: "data-variant-trail-runner",   configKey: "trailRunner" },
+// Maps speed profile IDs to dataset property names (camelCase as per HTMLElement.dataset)
+const PACE_DATASET_KEY: Record<string, string> = {
+  explorer:    "variantExplorer",
+  hiker:       "variantHiker",
+  fastpacker:  "variantFastpacker",
+  trailrunner: "variantTrailRunner",
 };
 
 function getVariantId(speedProfileId: string): string | null {
-  const entry = PACE_MAP[speedProfileId];
-  if (!entry) return null;
-  const mountEl = document.getElementById("root");
-  if (mountEl) {
-    const fromAttr = mountEl.getAttribute(entry.dataAttr);
-    if (fromAttr) return fromAttr;
-  }
-  const config = getTrailConfig();
-  return config.shopifyVariants[entry.configKey] ?? null;
+  const datasetKey = PACE_DATASET_KEY[speedProfileId];
+  if (!datasetKey) return null;
+  const rootEl = document.getElementById("root");
+  return rootEl?.dataset[datasetKey] ?? null;
 }
 
 const BookTripButton = ({ speedProfileId, partySize, depositLabel, days, nights, totalPrice, deposit, startDate }: BookTripButtonProps) => {

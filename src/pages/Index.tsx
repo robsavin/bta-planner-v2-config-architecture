@@ -58,22 +58,7 @@ const Index = () => {
   const [partySize, setPartySize] = useState<number>(initialParty);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
-  const [variantDeposit, setVariantDeposit] = useState<number | null>(null);
-
-  // Fetch variant price for deposit whenever pace changes
-  useEffect(() => {
-    const attr = PACE_VARIANT_ATTRS[selectedSpeed.id];
-    if (!attr) return;
-    const rootEl = document.getElementById("root");
-    const variantId = rootEl?.getAttribute(attr);
-    if (!variantId) return;
-    fetch(`/variants/${variantId}.js`)
-      .then(r => r.json())
-      .then(v => {
-        if (v?.price) setVariantDeposit(v.price / 100);
-      })
-      .catch(() => { /* fall back to data-deposit */ });
-  }, [selectedSpeed.id]);
+  // Deposit is read from data-deposit on #root (per person)
 
   // Price pulse state
   // Admin mode detection
