@@ -48,7 +48,6 @@ const BookTripButton = ({ speedProfileId, speedProfileName, partySize, depositLa
             "Trip nights": nights,
             "Number of travellers": partySize,
             "Full Trip Total": Math.round(totalPrice),
-            "Package": document.getElementById("root")?.dataset.packageType ?? "",
             "Start date": startDate.toLocaleDateString("en-GB"),
             "_deposit_per_person": "true",
           },

@@ -234,13 +234,13 @@ const DayCard = ({
 
   // Timeline column — circle + connector line to next card
   const renderTimeline = (circle: React.ReactNode) => (
-    <div className="flex flex-col items-center shrink-0" style={{ width: 40 }}>
-      <div className="relative z-10">
+    <div style={{ width: 40, display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+      <div style={{ position: 'relative', zIndex: 10 }}>
         {circle}
       </div>
       {/* Connector line to next day */}
       {!isLast && (
-        <div className="flex-1 w-0.5" style={{ backgroundColor: dayColor, minHeight: 8 }} />
+        <div style={{ flex: 1, width: 2, backgroundColor: dayColor, minHeight: 8 }} />
       )}
     </div>
   );
@@ -249,7 +249,7 @@ const DayCard = ({
     return (
       <div className={cn("flex", !isLast && "pb-4 md:pb-6")}>
         {renderTimeline(
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-primary/50 bg-card shrink-0 ring-4 ring-background">
+          <div style={{ display: 'flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px dashed', borderColor: 'hsl(var(--primary) / 0.5)', backgroundColor: 'hsl(var(--card))', flexShrink: 0, boxShadow: '0 0 0 4px hsl(var(--background))' }}>
             <Coffee className="h-5 w-5 text-primary" />
           </div>
         )}
@@ -287,8 +287,12 @@ const DayCard = ({
 
   const dayCircle = (
     <div
-      className="flex h-10 w-10 items-center justify-center rounded-full border-2 text-white font-bold shrink-0 ring-4 ring-background"
-      style={{ backgroundColor: dayColor, borderColor: dayColor }}
+      style={{
+        display: 'flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center',
+        borderRadius: '50%', border: `2px solid ${dayColor}`, backgroundColor: dayColor,
+        color: 'white', fontWeight: 'bold', flexShrink: 0,
+        boxShadow: '0 0 0 4px hsl(var(--background))',
+      }}
     >
       {day.day}
     </div>
