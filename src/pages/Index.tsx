@@ -29,6 +29,7 @@ import type { UnitSystem } from "@/lib/formatUtils";
 import QuoteRequestForm from "@/components/QuoteRequestForm";
 import { useTripUrlParams, resolveSpeedFromUrl } from "@/hooks/useUrlParams";
 import { loadQuote, type SavedQuote } from "@/lib/quoteStorage";
+import { useCurrency } from "@/hooks/useCurrency";
 import { getVariantPriceForPace } from "@/lib/shopifyVariantData";
 
 const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };

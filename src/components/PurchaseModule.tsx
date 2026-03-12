@@ -6,6 +6,7 @@ import { type TrailDirection } from "@/components/DirectionSelector";
 import { formatDistance, formatElevation, formatTime, type UnitSystem } from "@/lib/formatUtils";
 import { getTrailConfig } from "@/config";
 import { useCurrency } from "@/hooks/useCurrency";
+import BookTripButton from "@/components/BookTripButton";
 import { getVariantPriceForPace } from "@/lib/shopifyVariantData";
 
 const MULTIPLIER: Record<number, number> = {
