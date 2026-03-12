@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Phone, FileText, Hotel, Route, Smartphone, BookOpen, Headphones, Calendar, Users, MessageCircle } from "lucide-react";
+import { FileText, Hotel, Route, Backpack, BookOpen, Headphones, Calendar, Users, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type DayPlan } from "@/lib/trailData";
 import { type TrailDirection } from "@/components/DirectionSelector";
