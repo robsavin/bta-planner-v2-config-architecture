@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState, useEffect } from "react";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { useMemo, useState, useEffect } from "react";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import type { TrailPoint } from "@/lib/gpxParser";
 import type { DayPlan } from "@/lib/trailData";
 import type { TrailDirection } from "@/components/DirectionSelector";
@@ -35,8 +35,7 @@ const ElevationProfile = ({
   direction,
   units = "metric",
 }: ElevationProfileProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [chartWidth, setChartWidth] = useState(0);
+  const [chartKey, setChartKey] = useState(0);
   const hasElevation = trailPoints.some((p) => p.elevation != null);
 
   const trailConfig = getTrailConfig();
@@ -86,20 +85,7 @@ const ElevationProfile = ({
   }, [trailPoints, cumulativeDistances, itinerary, direction, scaleFactor, trailTotalDistance, distFactor, hasElevation]);
 
   useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        setChartWidth(containerRef.current.offsetWidth);
-      }
-    };
-    const timerId = setTimeout(updateWidth, 50);
-    const observer = new ResizeObserver(updateWidth);
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-    return () => {
-      clearTimeout(timerId);
-      observer.disconnect();
-    };
+    setTimeout(() => setChartKey(1), 100);
   }, []);
 
   if (!hasElevation) return null;
@@ -121,9 +107,9 @@ const ElevationProfile = ({
   const distLabel = isImperial ? "mi" : "km";
 
   return (
-    <div ref={containerRef} className="w-full bg-muted/30 rounded-lg border border-border p-2" style={{ height: 140 }}>
-      {chartWidth > 0 && (
-        <AreaChart width={chartWidth} height={124} data={chartData} margin={{ top: 4, right: 8, bottom: 0, left: -12 }}>
+    <div className="w-full bg-muted/30 rounded-lg border border-border p-2" style={{ width: '100%', minWidth: '300px', height: '140px' }}>
+      <ResponsiveContainer key={chartKey} width="99%" height="100%">
+        <AreaChart data={chartData} margin={{ top: 4, right: 8, bottom: 0, left: -12 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
           <XAxis
             dataKey="distance"
@@ -167,7 +153,7 @@ const ElevationProfile = ({
             />
           ))}
         </AreaChart>
-      )}
+      </ResponsiveContainer>
     </div>
   );
 };
