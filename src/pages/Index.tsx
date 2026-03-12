@@ -33,6 +33,13 @@ import { useCurrency } from "@/hooks/useCurrency";
 
 const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };
 
+const PACE_VARIANT_ATTRS: Record<string, string> = {
+  explorer: "data-variant-explorer",
+  hiker: "data-variant-hiker",
+  fastpacker: "data-variant-fastpacker",
+  trailrunner: "data-variant-trail-runner",
+};
+
 const Index = () => {
   const urlParams = useTripUrlParams();
   const trailConfig = getTrailConfig();
@@ -51,6 +58,22 @@ const Index = () => {
   const [partySize, setPartySize] = useState<number>(initialParty);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
+  const [variantDeposit, setVariantDeposit] = useState<number | null>(null);
+
+  // Fetch variant price for deposit whenever pace changes
+  useEffect(() => {
+    const attr = PACE_VARIANT_ATTRS[selectedSpeed.id];
+    if (!attr) return;
+    const rootEl = document.getElementById("root");
+    const variantId = rootEl?.getAttribute(attr);
+    if (!variantId) return;
+    fetch(`/variants/${variantId}.js`)
+      .then(r => r.json())
+      .then(v => {
+        if (v?.price) setVariantDeposit(v.price / 100);
+      })
+      .catch(() => { /* fall back to data-deposit */ });
+  }, [selectedSpeed.id]);
 
   // Price pulse state
   // Admin mode detection
@@ -235,10 +258,11 @@ const Index = () => {
     const totalPrice = (49 * partySize) + (140 * nights * multiplier);
     const pricePerPerson = Math.round(totalPrice / partySize);
     const rootEl = document.getElementById("root");
-    const depPerPerson = Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson;
+    const fallbackDeposit = Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson;
+    const depPerPerson = variantDeposit ?? fallbackDeposit;
     const deposit = depPerPerson * partySize;
     return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson, nights };
-  }, [itinerary, partySize, trailConfig.depositPerPerson]);
+  }, [itinerary, partySize, trailConfig.depositPerPerson, variantDeposit]);
 
   const pricing = savedQuote
     ? { totalPrice: savedQuote.pricing.total_price, pricePerPerson: savedQuote.pricing.per_person, deposit: savedQuote.pricing.deposit, depositPerPerson: savedQuote.pricing.deposit_per_person, nights: livePricing.nights }

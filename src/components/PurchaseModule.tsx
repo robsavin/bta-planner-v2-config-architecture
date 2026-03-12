@@ -157,13 +157,6 @@ const PurchaseModule = ({
             <span>Get Expert Advice</span>
           </Button>
 
-          {/* Divider */}
-          <div className="flex items-center gap-4 w-full my-0.5">
-            <div className="flex-1 h-px bg-border" />
-            <span className="text-xs text-muted-foreground">or</span>
-            <div className="flex-1 h-px bg-border" />
-          </div>
-
           {/* Prefer to talk */}
           <p className="text-sm text-muted-foreground text-center">
             Prefer to talk? Call us on{" "}
