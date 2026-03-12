@@ -140,18 +140,7 @@ const ItineraryDisplay = ({
       
       {/* Timeline */}
       <div className="relative">
-        {/* Continuous vertical line running from centre of first circle to centre of last */}
-        {itinerary.length > 1 && (
-          <div
-            className="absolute bg-primary"
-            style={{
-              width: 2,
-              left: 19, // centre of 40px timeline column
-              top: 20,  // centre of first 40px circle
-              bottom: 20, // centre of last 40px circle (offset from bottom of container)
-            }}
-          />
-        )}
+        {/* Continuous vertical line — now per-segment coloured, handled inside DayCard */}
         {itinerary.map((day, index) => {
           const firstWalkingDayIndex = itinerary.findIndex(d => !d.isRestDay);
           const finalNode = directionalNodes[directionalNodes.length - 1];
