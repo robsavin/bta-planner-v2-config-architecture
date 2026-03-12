@@ -131,7 +131,7 @@ const PurchaseModule = ({
           <BookTripButton
             speedProfileId={speedProfileId}
             speedProfileName={speedProfileName}
-            depositLabel={formatPrice(deposit)}
+            partySize={partySize}
             days={activeDays}
             nights={nights}
             totalPrice={totalPrice}
