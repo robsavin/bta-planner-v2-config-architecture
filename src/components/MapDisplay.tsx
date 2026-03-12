@@ -215,6 +215,18 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className, units 
   return (
     <div className="flex flex-col">
       <div ref={mapRef} className={cn("rounded-lg overflow-hidden border border-border", className)} style={{ minHeight: 400 }} />
+      {itinerary && itinerary.length > 0 && trailPoints.length > 0 && (
+        <div className="mt-3">
+          <ElevationProfile
+            trailPoints={trailPoints}
+            cumulativeDistances={cumulativeDistances}
+            totalGpxDistance={totalGpxDistance}
+            itinerary={itinerary}
+            direction={direction}
+            units={units}
+          />
+        </div>
+      )}
       {walkingDays.length > 0 && (
         <div className="mt-3 mb-4 flex flex-wrap gap-x-4 gap-y-2 bg-background/80 rounded-md px-2 py-2">
           {walkingDays.map((day, index) => (
