@@ -35,6 +35,8 @@ const ElevationProfile = ({
   direction,
   units = "metric",
 }: ElevationProfileProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [chartWidth, setChartWidth] = useState(0);
   const hasElevation = trailPoints.some((p) => p.elevation != null);
 
   const trailConfig = getTrailConfig();
@@ -83,28 +85,6 @@ const ElevationProfile = ({
     return points;
   }, [trailPoints, cumulativeDistances, itinerary, direction, scaleFactor, trailTotalDistance, distFactor, hasElevation]);
 
-  if (!hasElevation) return null;
-
-  // Build areas per day
-  const walkingDays = itinerary.filter((d) => !d.isRestDay);
-  const dayKeys = walkingDays.map((_, i) => `day${i}`);
-
-  // Transform data: for each point, put elevation under the correct day key
-  const chartData = data.map((pt) => {
-    const entry: Record<string, number | null> = { distance: pt.distance };
-    dayKeys.forEach((key, i) => {
-      entry[key] = pt.dayIndex === i ? pt.elevation : null;
-    });
-    // Also keep a combined elevation for gap-filling
-    entry.elevation = pt.elevation;
-    return entry;
-  });
-
-  const distLabel = isImperial ? "mi" : "km";
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [chartWidth, setChartWidth] = useState(0);
-
   useEffect(() => {
     const updateWidth = () => {
       if (containerRef.current) {
@@ -121,6 +101,24 @@ const ElevationProfile = ({
       observer.disconnect();
     };
   }, []);
+
+  if (!hasElevation) return null;
+
+  // Build areas per day
+  const walkingDays = itinerary.filter((d) => !d.isRestDay);
+  const dayKeys = walkingDays.map((_, i) => `day${i}`);
+
+  // Transform data: for each point, put elevation under the correct day key
+  const chartData = data.map((pt) => {
+    const entry: Record<string, number | null> = { distance: pt.distance };
+    dayKeys.forEach((key, i) => {
+      entry[key] = pt.dayIndex === i ? pt.elevation : null;
+    });
+    entry.elevation = pt.elevation;
+    return entry;
+  });
+
+  const distLabel = isImperial ? "mi" : "km";
 
   return (
     <div ref={containerRef} className="w-full bg-muted/30 rounded-lg border border-border p-2" style={{ height: 140 }}>
