@@ -165,6 +165,7 @@ const ItineraryDisplay = ({
               key={`${day.day}-${index}`}
               day={day}
               dayIndex={index}
+              walkingDayIndex={walkingDayIdx}
               isFirst={index === 0}
               isLast={index === itinerary.length - 1}
               isFirstWalkingDay={index === firstWalkingDayIndex}
