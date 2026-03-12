@@ -286,7 +286,10 @@ const DayCard = ({
   }
 
   const dayCircle = (
-    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground font-bold shrink-0 ring-4 ring-background">
+    <div
+      className="flex h-10 w-10 items-center justify-center rounded-full border-2 text-white font-bold shrink-0 ring-4 ring-background"
+      style={{ backgroundColor: dayColor, borderColor: dayColor }}
+    >
       {day.day}
     </div>
   );
