@@ -68,6 +68,7 @@ const BookTripButton = ({ speedProfileId, speedProfileName, partySize, depositLa
   return (
     <div className="flex flex-col items-center">
       <Button
+        type="button"
         size="lg"
         className={`w-full h-auto min-h-[3.5rem] py-3 text-base sm:text-[1.1rem] font-bold gap-2 sm:gap-3 rounded-lg whitespace-normal text-center leading-tight ${addedToCart ? "!bg-[#4a7c6f] hover:!bg-[#3d6b5f]" : ""}`}
         onClick={handleClick}
