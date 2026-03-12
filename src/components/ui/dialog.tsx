@@ -53,11 +53,12 @@ const DialogContent = React.forwardRef<
       >
         <DialogPrimitive.Content
           ref={ref}
+          data-dialog-scrollable
           className={cn(
-            "relative z-[9999] flex flex-col w-full max-w-lg max-h-[90vh] gap-4 border bg-background p-6 shadow-lg duration-200 overflow-y-auto [-webkit-overflow-scrolling:touch] rounded-lg box-border data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+            "relative z-[9999] flex flex-col w-full max-w-lg max-h-[90vh] gap-4 border bg-background p-6 shadow-lg duration-200 overflow-x-hidden overflow-y-auto [-webkit-overflow-scrolling:touch] overscroll-contain rounded-lg box-border data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
             className,
           )}
-          style={{ zIndex: 9999, ...(style ?? {}) }}
+          style={{ zIndex: 9999, touchAction: "pan-y", ...(style ?? {}) }}
           {...props}
         >
           {children}
