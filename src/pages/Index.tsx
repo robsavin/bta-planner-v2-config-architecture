@@ -53,6 +53,13 @@ const Index = () => {
   const [enquiryOpen, setEnquiryOpen] = useState(false);
 
   // Price pulse state
+  // Admin mode detection
+  useEffect(() => {
+    const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
+    console.log('Admin mode:', isAdmin);
+  }, []);
+
+  // Price pulse state
   const [pricePulse, setPricePulse] = useState(false);
   const pulseTimeout = useRef<ReturnType<typeof setTimeout>>();
   const triggerPricePulse = useCallback(() => {
