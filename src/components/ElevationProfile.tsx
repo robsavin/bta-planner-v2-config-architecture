@@ -129,7 +129,7 @@ const ElevationProfile = ({
         <YAxis
           tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
           tickFormatter={(v: number) => `${v}m`}
-          width={42}
+          width={35}
         />
         <Tooltip
           content={({ active, payload }) => {
