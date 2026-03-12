@@ -18,6 +18,7 @@ import {
   ChevronsUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getDayColour } from "@/lib/dayColours";
 import { 
   type DayPlan, 
   type TrailNode, 
