@@ -35,8 +35,7 @@ const ElevationProfile = ({
   direction,
   units = "metric",
 }: ElevationProfileProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [chartWidth, setChartWidth] = useState(0);
+  const [chartKey, setChartKey] = useState(0);
   const hasElevation = trailPoints.some((p) => p.elevation != null);
 
   const trailConfig = getTrailConfig();
