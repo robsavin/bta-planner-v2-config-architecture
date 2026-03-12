@@ -35,8 +35,8 @@ const ElevationProfile = ({
   direction,
   units = "metric",
 }: ElevationProfileProps) => {
-  const [chartKey, setChartKey] = useState(0);
-  const hasElevation = trailPoints.some((p) => p.elevation != null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [chartWidth, setChartWidth] = useState(0);
 
   const trailConfig = getTrailConfig();
   const trailTotalDistance = trailConfig.nodes[trailConfig.nodes.length - 1].distanceFromStart;
