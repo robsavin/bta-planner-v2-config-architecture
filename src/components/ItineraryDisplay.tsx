@@ -18,6 +18,7 @@ import {
   ChevronsUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getDayColour } from "@/lib/dayColours";
 import { 
   type DayPlan, 
   type TrailNode, 
@@ -139,23 +140,16 @@ const ItineraryDisplay = ({
       
       {/* Timeline */}
       <div className="relative">
-        {/* Continuous vertical line running from centre of first circle to centre of last */}
-        {itinerary.length > 1 && (
-          <div
-            className="absolute bg-primary"
-            style={{
-              width: 2,
-              left: 19, // centre of 40px timeline column
-              top: 20,  // centre of first 40px circle
-              bottom: 20, // centre of last 40px circle (offset from bottom of container)
-            }}
-          />
-        )}
+        {/* Continuous vertical line — now per-segment coloured, handled inside DayCard */}
         {itinerary.map((day, index) => {
           const firstWalkingDayIndex = itinerary.findIndex(d => !d.isRestDay);
+          // Compute walking day index for colour
+          let walkingDayIdx = 0;
+          for (let i = 0; i < index; i++) {
+            if (!itinerary[i].isRestDay) walkingDayIdx++;
+          }
           const finalNode = directionalNodes[directionalNodes.length - 1];
-          
-          const isAtTrailEnd = (node: TrailNode) => 
+          const isAtTrailEnd = (node: TrailNode) =>
             node.id.includes('-end') || node.id === finalNode.id;
           
           const trailCompletedOnPreviousDay = itinerary.slice(0, index).some(
@@ -171,6 +165,7 @@ const ItineraryDisplay = ({
               key={`${day.day}-${index}`}
               day={day}
               dayIndex={index}
+              walkingDayIndex={walkingDayIdx}
               isFirst={index === 0}
               isLast={index === itinerary.length - 1}
               isFirstWalkingDay={index === firstWalkingDayIndex}
@@ -197,6 +192,7 @@ const ItineraryDisplay = ({
 interface DayCardProps {
   day: DayPlan;
   dayIndex: number;
+  walkingDayIndex: number;
   isFirst: boolean;
   isLast: boolean;
   isFirstWalkingDay: boolean;
@@ -217,6 +213,7 @@ interface DayCardProps {
 const DayCard = ({ 
   day, 
   dayIndex,
+  walkingDayIndex,
   isFirst, 
   isLast,
   isFirstWalkingDay,
@@ -233,14 +230,18 @@ const DayCard = ({
   onAddWalkingDay,
   direction
 }: DayCardProps) => {
-  const lineColor = day.isRestDay ? "hsl(var(--border))" : "hsl(var(--primary))";
+  const dayColor = day.isRestDay ? "hsl(var(--border))" : getDayColour(walkingDayIndex);
 
-  // Timeline column — circles only, line is on parent
+  // Timeline column — circle + connector line to next card
   const renderTimeline = (circle: React.ReactNode) => (
     <div className="flex flex-col items-center shrink-0" style={{ width: 40 }}>
       <div className="relative z-10">
         {circle}
       </div>
+      {/* Connector line to next day */}
+      {!isLast && (
+        <div className="flex-1 w-0.5" style={{ backgroundColor: dayColor, minHeight: 8 }} />
+      )}
     </div>
   );
 
@@ -285,7 +286,10 @@ const DayCard = ({
   }
 
   const dayCircle = (
-    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground font-bold shrink-0 ring-4 ring-background">
+    <div
+      className="flex h-10 w-10 items-center justify-center rounded-full border-2 text-white font-bold shrink-0 ring-4 ring-background"
+      style={{ backgroundColor: dayColor, borderColor: dayColor }}
+    >
       {day.day}
     </div>
   );

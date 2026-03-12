@@ -243,11 +243,12 @@ const Index = () => {
     const totalPrice = (49 * partySize) + (140 * nights * multiplier);
     const pricePerPerson = Math.round(totalPrice / partySize);
     const rootEl = document.getElementById("root");
-    const fallbackDeposit = Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson;
-    const depPerPerson = fallbackDeposit;
+    const paceKey = selectedSpeed.id.replace(/-([a-z])/g, (_: string, c: string) => c.toUpperCase());
+    const variantPriceAttr = rootEl?.dataset['variantPrice' + paceKey.charAt(0).toUpperCase() + paceKey.slice(1)];
+    const depPerPerson = variantPriceAttr ? parseFloat(variantPriceAttr) : (Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson);
     const deposit = depPerPerson * partySize;
     return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson, nights };
-  }, [itinerary, partySize, trailConfig.depositPerPerson]);
+  }, [itinerary, partySize, trailConfig.depositPerPerson, selectedSpeed.id]);
 
   const pricing = savedQuote
     ? { totalPrice: savedQuote.pricing.total_price, pricePerPerson: savedQuote.pricing.per_person, deposit: savedQuote.pricing.deposit, depositPerPerson: savedQuote.pricing.deposit_per_person, nights: livePricing.nights }
