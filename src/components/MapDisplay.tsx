@@ -37,11 +37,7 @@ const nodeCoordinates: Record<string, [number, number]> = Object.fromEntries(
   trailConfig.nodes.map((n) => [n.id, n.coordinates])
 );
 
-// Colour palette for day segments
-const dayColours = [
-  "#2563eb", "#16a34a", "#ea580c", "#dc2626", "#7c3aed",
-  "#0891b2", "#c026d3", "#65a30d", "#e11d48", "#f59e0b",
-];
+import { dayColours } from "@/lib/dayColours";
 
 function snapToTrail(nodeCoords: [number, number], trailPoints: TrailPoint[]): [number, number] {
   let minDist = Infinity;
