@@ -244,10 +244,10 @@ const Index = () => {
     const pricePerPerson = Math.round(totalPrice / partySize);
     const rootEl = document.getElementById("root");
     const fallbackDeposit = Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson;
-    const depPerPerson = variantDeposit ?? fallbackDeposit;
+    const depPerPerson = fallbackDeposit;
     const deposit = depPerPerson * partySize;
     return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson, nights };
-  }, [itinerary, partySize, trailConfig.depositPerPerson, variantDeposit]);
+  }, [itinerary, partySize, trailConfig.depositPerPerson]);
 
   const pricing = savedQuote
     ? { totalPrice: savedQuote.pricing.total_price, pricePerPerson: savedQuote.pricing.per_person, deposit: savedQuote.pricing.deposit, depositPerPerson: savedQuote.pricing.deposit_per_person, nights: livePricing.nights }
