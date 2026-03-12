@@ -86,13 +86,15 @@ const ElevationProfile = ({
   }, [trailPoints, cumulativeDistances, itinerary, direction, scaleFactor, trailTotalDistance, distFactor, hasElevation]);
 
   useEffect(() => {
-    const measure = () => {
-      if (containerRef.current) {
-        setChartWidth(containerRef.current.offsetWidth);
-      }
-    };
+    const el = containerRef.current;
+    if (!el) return;
+    const measure = () => setChartWidth(el.offsetWidth);
+    // Initial measure after a short delay for embedded contexts
     const timerId = setTimeout(measure, 200);
-    return () => clearTimeout(timerId);
+    // Re-measure on resize
+    const ro = new ResizeObserver(() => measure());
+    ro.observe(el);
+    return () => { clearTimeout(timerId); ro.disconnect(); };
   }, []);
 
   if (!hasElevation) return null;
@@ -114,7 +116,7 @@ const ElevationProfile = ({
 
   return (
     <div ref={containerRef} className="w-full bg-muted/30 rounded-lg border border-border" style={{ height: 140, overflow: 'hidden', maxWidth: '100%', padding: 0, width: '100%' }}>
-      <AreaChart width={width} height={140} data={chartData} margin={{ top: 5, right: 5, left: 40, bottom: 20 }}>
+      <AreaChart width={width} height={140} data={chartData} margin={{ top: 5, right: 5, left: 10, bottom: 20 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
         <XAxis
           dataKey="distance"
@@ -127,7 +129,7 @@ const ElevationProfile = ({
         <YAxis
           tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
           tickFormatter={(v: number) => `${v}m`}
-          width={42}
+          width={35}
         />
         <Tooltip
           content={({ active, payload }) => {
