@@ -68,8 +68,6 @@ const PurchaseModule = ({
   const configDeposit = variantDeposit ?? trailConfig.depositPerPerson;
   const depositPerPerson = overridePricing?.depositPerPerson ?? configDeposit;
   const deposit = overridePricing?.deposit ?? (depositPerPerson * partySize);
-  const depositPerPerson = overridePricing?.depositPerPerson ?? configDeposit;
-  const deposit = overridePricing?.deposit ?? (depositPerPerson * partySize);
 
   const totalDistance = walkingDays.reduce((sum, d) => sum + d.distance, 0);
   const totalAscent = walkingDays.reduce((sum, d) => sum + d.ascent, 0);
