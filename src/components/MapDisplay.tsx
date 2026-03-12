@@ -4,6 +4,8 @@ import "leaflet/dist/leaflet.css";
 import { useTrailPoints, findPointIndexAtDistance } from "@/hooks/useTrailPoints";
 import type { TrailPoint } from "@/lib/gpxParser";
 import { type DayPlan, type TrailDirection } from "@/lib/trailData";
+import type { UnitSystem } from "@/lib/formatUtils";
+import ElevationProfile from "@/components/ElevationProfile";
 import { getTrailConfig } from "@/config";
 import { Loader2 } from "lucide-react";
 import { formatTime } from "@/lib/formatUtils";
