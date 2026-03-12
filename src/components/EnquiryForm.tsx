@@ -221,6 +221,7 @@ const EnquiryForm = ({
             <Button variant="outline" onClick={handleClose}>Close</Button>
           </div>
         )}
+        </div>
       </DialogContent>
     </Dialog>
   );
