@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShoppingCart } from "lucide-react";
 import { getTrailConfig } from "@/config";
 import { trackEvent } from "@/lib/analytics";
 
@@ -38,8 +38,15 @@ function getVariantId(speedProfileId: string): string | null {
 const BookTripButton = ({ speedProfileId, partySize, depositLabel, days, nights, totalPrice, deposit, startDate }: BookTripButtonProps) => {
   const [fallbackMsg, setFallbackMsg] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
 
   const handleClick = async () => {
+    // If already added, navigate to cart
+    if (addedToCart) {
+      window.location.href = "/cart";
+      return;
+    }
+
     trackEvent("book_trip_click", { pace: speedProfileId, partySize });
     const variantId = getVariantId(speedProfileId);
     if (!variantId) {
@@ -67,7 +74,7 @@ const BookTripButton = ({ speedProfileId, partySize, depositLabel, days, nights,
         }),
       });
       if (res.ok) {
-        window.location.href = "/cart";
+        setAddedToCart(true);
       } else {
         setFallbackMsg(true);
       }
@@ -82,14 +89,21 @@ const BookTripButton = ({ speedProfileId, partySize, depositLabel, days, nights,
     <div className="flex flex-col items-center">
       <Button
         size="lg"
-        className="w-full h-auto min-h-[3.5rem] py-3 text-base sm:text-[1.1rem] font-bold gap-2 sm:gap-3 rounded-lg whitespace-normal text-center leading-tight"
+        className={`w-full h-auto min-h-[3.5rem] py-3 text-base sm:text-[1.1rem] font-bold gap-2 sm:gap-3 rounded-lg whitespace-normal text-center leading-tight ${addedToCart ? "!bg-[#4a7c6f] hover:!bg-[#3d6b5f]" : ""}`}
         onClick={handleClick}
         disabled={submitting}
       >
         <span className="flex-1">
-          {submitting ? "Adding to cart…" : depositLabel ? `Book This Trip — Pay ${depositLabel} deposit today` : "Book This Trip"}
+          {submitting
+            ? "Adding to cart…"
+            : addedToCart
+              ? "Added to cart — view your cart →"
+              : depositLabel
+                ? `Book This Trip — Pay ${depositLabel} deposit today`
+                : "Book This Trip"}
         </span>
-        {!submitting && <ArrowRight className="h-5 w-5 shrink-0" />}
+        {!submitting && !addedToCart && <ArrowRight className="h-5 w-5 shrink-0" />}
+        {addedToCart && <ShoppingCart className="h-5 w-5 shrink-0" />}
       </Button>
       {fallbackMsg && (
         <p className="mt-3 text-sm text-muted-foreground text-center max-w-md">

@@ -113,7 +113,7 @@ const ElevationProfile = ({
   const width = chartWidth || 600;
 
   return (
-    <div ref={containerRef} className="w-full bg-muted/30 rounded-lg border border-border p-2" style={{ height: 140 }}>
+    <div ref={containerRef} className="w-full bg-muted/30 rounded-lg border border-border p-2" style={{ height: 140, overflow: 'hidden', maxWidth: '100%' }}>
       <AreaChart width={width} height={124} data={chartData} margin={{ top: 5, right: 10, left: 45, bottom: 20 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
         <XAxis

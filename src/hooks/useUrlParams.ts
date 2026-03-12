@@ -1,5 +1,4 @@
-import { useEffect, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useMemo } from "react";
 import { speedProfiles } from "@/lib/trailData";
 import type { SpeedProfile } from "@/lib/trailData";
 import type { TrailDirection } from "@/components/DirectionSelector";
@@ -16,46 +15,56 @@ export interface TripUrlParams {
   admin?: boolean;
 }
 
+/**
+ * Reads URL params from both window.location.search and hash-based search params,
+ * so it works in both standalone and Shopify embedded contexts.
+ */
 export function useTripUrlParams(): TripUrlParams {
-  const [searchParams] = useSearchParams();
-
   return useMemo(() => {
+    // Merge params from main URL search and hash search
+    const mainParams = new URLSearchParams(window.location.search);
+    const hashSearch = window.location.hash.includes("?")
+      ? new URLSearchParams(window.location.hash.split("?")[1])
+      : new URLSearchParams();
+
+    const get = (key: string): string | null => mainParams.get(key) ?? hashSearch.get(key);
+
     const params: TripUrlParams = {};
 
-    const trail = searchParams.get("trail");
+    const trail = get("trail");
     if (trail) params.trail = trail;
 
-    const pace = searchParams.get("pace");
+    const pace = get("pace");
     if (pace) params.pace = pace;
 
-    const direction = searchParams.get("direction");
+    const direction = get("direction");
     if (direction === "south-to-north" || direction === "north-to-south") {
       params.direction = direction;
     }
 
-    const days = searchParams.get("days");
+    const days = get("days");
     if (days) params.days = parseInt(days, 10);
 
-    const partySize = searchParams.get("partySize");
+    const partySize = get("partySize");
     if (partySize) params.partySize = parseInt(partySize, 10);
 
-    const startDate = searchParams.get("startDate");
+    const startDate = get("startDate");
     if (startDate) {
       const d = new Date(startDate);
       if (!isNaN(d.getTime())) params.startDate = d;
     }
 
-    const dailyHours = searchParams.get("dailyHours");
+    const dailyHours = get("dailyHours");
     if (dailyHours) params.dailyHours = parseInt(dailyHours, 10);
 
-    const quote = searchParams.get("quote");
+    const quote = get("quote");
     if (quote) params.quote = quote;
 
-    const admin = searchParams.get("admin");
+    const admin = get("admin");
     if (admin === "true") params.admin = true;
 
     return params;
-  }, [searchParams]);
+  }, []);
 }
 
 export function buildShareUrl(config: {
