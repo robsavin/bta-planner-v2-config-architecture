@@ -33,7 +33,7 @@ const DateSelector = ({ selectedDate, onDateChange, stepNumber = 3, compact = fa
             {selectedDate ? format(selectedDate, "MMM d, yyyy") : <span>Pick a date</span>}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 z-50 bg-popover" align="start">
+        <PopoverContent className="w-auto p-0 bg-popover" align="start" style={{ zIndex: 9999, position: 'relative' }}>
           <Calendar
             mode="single"
             selected={selectedDate}
@@ -68,7 +68,7 @@ const DateSelector = ({ selectedDate, onDateChange, stepNumber = 3, compact = fa
             {selectedDate ? format(selectedDate, "EEEE, MMMM do, yyyy") : <span>Pick a date</span>}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 z-50 bg-popover" align="start">
+        <PopoverContent className="w-auto p-0 bg-popover" align="start" style={{ zIndex: 9999, position: 'relative' }}>
           <Calendar
             mode="single"
             selected={selectedDate}
