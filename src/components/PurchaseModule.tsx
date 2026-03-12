@@ -32,11 +32,11 @@ interface PurchaseModuleProps {
 }
 
 const INCLUDED_ITEMS = [
-  { name: "Hotels with breakfast", detail: "Handpicked accommodation at every stop", icon: Hotel },
-  { name: "Custom route", detail: "Door-to-door, built around your pace", icon: Route },
-  { name: "BTA App", detail: "Navigate your route offline", icon: Smartphone },
-  { name: "Trail Book", detail: "Your personal guide to every stage", icon: BookOpen },
-  { name: "On-trail support", detail: "We're here if you need us", icon: Headphones },
+  { name: "Hotels with breakfast", detail: "Handpicked accommodation at every stop, chosen for comfort after a long day on the trail", icon: Hotel },
+  { name: "Baggage transfer", detail: "Your luggage moves between accommodations so you walk unencumbered", icon: Backpack },
+  { name: "Door-to-door route", detail: "Full GPX files for your custom route, built around your pace and start point", icon: Route },
+  { name: "Personalised Trail Book", detail: "Your day-by-day companion with everything you need before and during the trail", icon: BookOpen },
+  { name: "On-trail support", detail: "We're here if you need us, every day you're out there", icon: Headphones },
 ];
 
 const PurchaseModule = ({
