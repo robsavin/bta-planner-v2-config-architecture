@@ -33,6 +33,13 @@ import { useCurrency } from "@/hooks/useCurrency";
 
 const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };
 
+const PACE_VARIANT_ATTRS: Record<string, string> = {
+  explorer: "data-variant-explorer",
+  hiker: "data-variant-hiker",
+  fastpacker: "data-variant-fastpacker",
+  trailrunner: "data-variant-trail-runner",
+};
+
 const Index = () => {
   const urlParams = useTripUrlParams();
   const trailConfig = getTrailConfig();
