@@ -86,13 +86,15 @@ const ElevationProfile = ({
   }, [trailPoints, cumulativeDistances, itinerary, direction, scaleFactor, trailTotalDistance, distFactor, hasElevation]);
 
   useEffect(() => {
-    const measure = () => {
-      if (containerRef.current) {
-        setChartWidth(containerRef.current.offsetWidth);
-      }
-    };
+    const el = containerRef.current;
+    if (!el) return;
+    const measure = () => setChartWidth(el.offsetWidth);
+    // Initial measure after a short delay for embedded contexts
     const timerId = setTimeout(measure, 200);
-    return () => clearTimeout(timerId);
+    // Re-measure on resize
+    const ro = new ResizeObserver(() => measure());
+    ro.observe(el);
+    return () => { clearTimeout(timerId); ro.disconnect(); };
   }, []);
 
   if (!hasElevation) return null;
