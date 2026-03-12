@@ -192,6 +192,7 @@ const ItineraryDisplay = ({
 interface DayCardProps {
   day: DayPlan;
   dayIndex: number;
+  walkingDayIndex: number;
   isFirst: boolean;
   isLast: boolean;
   isFirstWalkingDay: boolean;
