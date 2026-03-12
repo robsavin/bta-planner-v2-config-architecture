@@ -16,7 +16,7 @@ interface BookTripButtonProps {
   startDate: Date;
 }
 
-const BookTripButton = ({ speedProfileId, partySize, depositLabel, days, nights, totalPrice, deposit, startDate }: BookTripButtonProps) => {
+const BookTripButton = ({ speedProfileId, speedProfileName, partySize, depositLabel, days, nights, totalPrice, deposit, startDate }: BookTripButtonProps) => {
   const [fallbackMsg, setFallbackMsg] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
