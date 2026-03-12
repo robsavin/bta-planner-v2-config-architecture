@@ -248,7 +248,7 @@ const Index = () => {
     const depPerPerson = variantPriceAttr ? parseFloat(variantPriceAttr) : (Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson);
     const deposit = depPerPerson * partySize;
     return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson, nights };
-  }, [itinerary, partySize, trailConfig.depositPerPerson]);
+  }, [itinerary, partySize, trailConfig.depositPerPerson, selectedSpeed.id]);
 
   const pricing = savedQuote
     ? { totalPrice: savedQuote.pricing.total_price, pricePerPerson: savedQuote.pricing.per_person, deposit: savedQuote.pricing.deposit, depositPerPerson: savedQuote.pricing.deposit_per_person, nights: livePricing.nights }
