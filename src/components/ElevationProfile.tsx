@@ -35,6 +35,8 @@ const ElevationProfile = ({
   direction,
   units = "metric",
 }: ElevationProfileProps) => {
+  const hasElevation = trailPoints.some((p) => p.elevation != null);
+
   const trailConfig = getTrailConfig();
   const trailTotalDistance = trailConfig.nodes[trailConfig.nodes.length - 1].distanceFromStart;
   const scaleFactor = totalGpxDistance / trailTotalDistance;
@@ -81,7 +83,6 @@ const ElevationProfile = ({
     return points;
   }, [trailPoints, cumulativeDistances, itinerary, direction, scaleFactor, trailTotalDistance, distFactor, hasElevation]);
 
-  const hasElevation = trailPoints.some((p) => p.elevation != null);
   if (!hasElevation) return null;
 
   // Build areas per day
