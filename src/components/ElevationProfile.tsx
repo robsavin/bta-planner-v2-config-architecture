@@ -7,10 +7,7 @@ import type { UnitSystem } from "@/lib/formatUtils";
 import { findPointIndexAtDistance } from "@/hooks/useTrailPoints";
 import { getTrailConfig } from "@/config";
 
-const dayColours = [
-  "#2563eb", "#16a34a", "#ea580c", "#dc2626", "#7c3aed",
-  "#0891b2", "#c026d3", "#65a30d", "#e11d48", "#f59e0b",
-];
+import { dayColours } from "@/lib/dayColours";
 
 interface ElevationProfileProps {
   trailPoints: TrailPoint[];
