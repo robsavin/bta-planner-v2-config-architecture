@@ -140,6 +140,7 @@ const PurchaseModule = ({
           />
 
           <Button
+            type="button"
             size="lg"
             variant="outline"
             className="w-full sm:w-4/5 h-auto min-h-[2.75rem] py-2.5 text-sm gap-2 border-[hsl(200,25%,33%)] text-secondary hover:bg-secondary/5 whitespace-normal text-center leading-tight"
