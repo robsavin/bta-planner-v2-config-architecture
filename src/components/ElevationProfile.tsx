@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { useMemo, useRef, useState, useEffect } from "react";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import type { TrailPoint } from "@/lib/gpxParser";
 import type { DayPlan } from "@/lib/trailData";
 import type { TrailDirection } from "@/components/DirectionSelector";
@@ -35,6 +35,8 @@ const ElevationProfile = ({
   direction,
   units = "metric",
 }: ElevationProfileProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [chartWidth, setChartWidth] = useState(0);
   const hasElevation = trailPoints.some((p) => p.elevation != null);
 
   const trailConfig = getTrailConfig();
@@ -83,6 +85,23 @@ const ElevationProfile = ({
     return points;
   }, [trailPoints, cumulativeDistances, itinerary, direction, scaleFactor, trailTotalDistance, distFactor, hasElevation]);
 
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setChartWidth(containerRef.current.offsetWidth);
+      }
+    };
+    const timerId = setTimeout(updateWidth, 50);
+    const observer = new ResizeObserver(updateWidth);
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+    return () => {
+      clearTimeout(timerId);
+      observer.disconnect();
+    };
+  }, []);
+
   if (!hasElevation) return null;
 
   // Build areas per day
@@ -95,7 +114,6 @@ const ElevationProfile = ({
     dayKeys.forEach((key, i) => {
       entry[key] = pt.dayIndex === i ? pt.elevation : null;
     });
-    // Also keep a combined elevation for gap-filling
     entry.elevation = pt.elevation;
     return entry;
   });
@@ -103,9 +121,9 @@ const ElevationProfile = ({
   const distLabel = isImperial ? "mi" : "km";
 
   return (
-    <div className="w-full bg-muted/30 rounded-lg border border-border p-2" style={{ height: 140 }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={chartData} margin={{ top: 4, right: 8, bottom: 0, left: -12 }}>
+    <div ref={containerRef} className="w-full bg-muted/30 rounded-lg border border-border p-2" style={{ height: 140 }}>
+      {chartWidth > 0 && (
+        <AreaChart width={chartWidth} height={124} data={chartData} margin={{ top: 4, right: 8, bottom: 0, left: -12 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
           <XAxis
             dataKey="distance"
@@ -135,9 +153,7 @@ const ElevationProfile = ({
               );
             }}
           />
-          {/* Render a subtle base area for gaps */}
           <Area dataKey="elevation" stroke="hsl(var(--border))" fill="hsl(var(--muted))" fillOpacity={0.3} strokeWidth={0} dot={false} connectNulls />
-          {/* Coloured area per day */}
           {dayKeys.map((key, i) => (
             <Area
               key={key}
@@ -151,7 +167,7 @@ const ElevationProfile = ({
             />
           ))}
         </AreaChart>
-      </ResponsiveContainer>
+      )}
     </div>
   );
 };
