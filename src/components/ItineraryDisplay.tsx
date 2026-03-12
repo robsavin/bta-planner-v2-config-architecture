@@ -230,14 +230,18 @@ const DayCard = ({
   onAddWalkingDay,
   direction
 }: DayCardProps) => {
-  const lineColor = day.isRestDay ? "hsl(var(--border))" : "hsl(var(--primary))";
+  const dayColor = day.isRestDay ? "hsl(var(--border))" : getDayColour(walkingDayIndex);
 
-  // Timeline column — circles only, line is on parent
+  // Timeline column — circle + connector line to next card
   const renderTimeline = (circle: React.ReactNode) => (
     <div className="flex flex-col items-center shrink-0" style={{ width: 40 }}>
       <div className="relative z-10">
         {circle}
       </div>
+      {/* Connector line to next day */}
+      {!isLast && (
+        <div className="flex-1 w-0.5" style={{ backgroundColor: dayColor, minHeight: 8 }} />
+      )}
     </div>
   );
 
