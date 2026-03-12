@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { useMemo, useRef, useState, useEffect } from "react";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import type { TrailPoint } from "@/lib/gpxParser";
 import type { DayPlan } from "@/lib/trailData";
 import type { TrailDirection } from "@/components/DirectionSelector";
