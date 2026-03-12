@@ -111,7 +111,11 @@ const EnquiryForm = ({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90dvh] flex flex-col p-0 overflow-hidden">
+        <div
+          className="overflow-y-auto overscroll-contain p-6 flex flex-col gap-4"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
         {!isSent ? (
           <>
             <DialogHeader>
@@ -217,6 +221,7 @@ const EnquiryForm = ({
             <Button variant="outline" onClick={handleClose}>Close</Button>
           </div>
         )}
+        </div>
       </DialogContent>
     </Dialog>
   );
