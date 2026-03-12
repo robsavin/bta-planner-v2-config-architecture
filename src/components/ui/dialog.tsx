@@ -40,21 +40,16 @@ const DialogContent = React.forwardRef<
     <DialogPortal container={portalContainer}>
       <DialogOverlay />
       <div
-        className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden overscroll-none p-4"
-        style={{ zIndex: 9999 }}
+        className="fixed inset-0 z-[9999] flex items-start justify-center overflow-x-hidden overflow-y-auto overscroll-y-contain p-4 [-webkit-overflow-scrolling:touch] sm:items-center"
+        style={{ zIndex: 9999, touchAction: "pan-y" }}
       >
         <DialogPrimitive.Content
           ref={ref}
           className={cn(
-            "relative z-[9999] flex min-h-0 flex-col w-[calc(100%-2rem)] max-w-[560px] max-h-[calc(100dvh-2rem)] sm:max-h-[90vh] gap-4 border bg-background p-6 shadow-lg duration-200 overflow-x-hidden overflow-y-auto [-webkit-overflow-scrolling:touch] overscroll-y-contain box-border rounded-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+            "relative z-[9999] my-4 flex w-[calc(100%-2rem)] max-w-[560px] flex-col gap-4 border bg-background p-6 shadow-lg duration-200 overflow-x-hidden box-border rounded-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
             className,
           )}
-          style={{
-            zIndex: 9999,
-            touchAction: "pan-y",
-            overscrollBehavior: "contain none",
-            ...(style ?? {}),
-          }}
+          style={{ zIndex: 9999, ...(style ?? {}) }}
           {...props}
         >
           {children}
