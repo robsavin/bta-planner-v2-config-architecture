@@ -35,9 +35,6 @@ const ElevationProfile = ({
   direction,
   units = "metric",
 }: ElevationProfileProps) => {
-  const hasElevation = trailPoints.some((p) => p.elevation != null);
-  if (!hasElevation) return null;
-
   const trailConfig = getTrailConfig();
   const trailTotalDistance = trailConfig.nodes[trailConfig.nodes.length - 1].distanceFromStart;
   const scaleFactor = totalGpxDistance / trailTotalDistance;
@@ -45,7 +42,7 @@ const ElevationProfile = ({
   const distFactor = isImperial ? 0.621371 : 1;
 
   const data = useMemo(() => {
-    // Build day boundaries as GPX indices
+    if (!hasElevation) return [];
     const walkingDays = itinerary.filter((d) => !d.isRestDay);
     const boundaries: { startIdx: number; endIdx: number; dayIndex: number }[] = [];
 
@@ -65,7 +62,6 @@ const ElevationProfile = ({
       });
     });
 
-    // Sample points (max ~300 for performance)
     const step = Math.max(1, Math.floor(trailPoints.length / 300));
     const points: ChartPoint[] = [];
 
@@ -83,7 +79,10 @@ const ElevationProfile = ({
       points.push({ distance: Number(dist.toFixed(2)), elevation: Math.round(pt.elevation), dayIndex: dayIdx });
     }
     return points;
-  }, [trailPoints, cumulativeDistances, itinerary, direction, scaleFactor, trailTotalDistance, distFactor]);
+  }, [trailPoints, cumulativeDistances, itinerary, direction, scaleFactor, trailTotalDistance, distFactor, hasElevation]);
+
+  const hasElevation = trailPoints.some((p) => p.elevation != null);
+  if (!hasElevation) return null;
 
   // Build areas per day
   const walkingDays = itinerary.filter((d) => !d.isRestDay);
