@@ -143,7 +143,11 @@ const ItineraryDisplay = ({
         {/* Continuous vertical line — now per-segment coloured, handled inside DayCard */}
         {itinerary.map((day, index) => {
           const firstWalkingDayIndex = itinerary.findIndex(d => !d.isRestDay);
-          const finalNode = directionalNodes[directionalNodes.length - 1];
+          // Compute walking day index for colour
+          let walkingDayIdx = 0;
+          for (let i = 0; i < index; i++) {
+            if (!itinerary[i].isRestDay) walkingDayIdx++;
+          }
           
           const isAtTrailEnd = (node: TrailNode) => 
             node.id.includes('-end') || node.id === finalNode.id;
