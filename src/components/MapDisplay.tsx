@@ -55,7 +55,7 @@ function snapToTrail(nodeCoords: [number, number], trailPoints: TrailPoint[]): [
   return [nearestPoint.lat, nearestPoint.lng];
 }
 
-const MapDisplay = ({ itinerary, direction = "south-to-north", className }: MapDisplayProps) => {
+const MapDisplay = ({ itinerary, direction = "south-to-north", className, units = "metric" }: MapDisplayProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const { trailPoints, loading, error, cumulativeDistances, totalGpxDistance } = useTrailPoints();
