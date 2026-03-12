@@ -27,6 +27,7 @@ interface MapDisplayProps {
   itinerary?: DayPlan[];
   direction?: TrailDirection;
   className?: string;
+  units?: UnitSystem;
 }
 
 // Build nodeCoordinates from trail config
