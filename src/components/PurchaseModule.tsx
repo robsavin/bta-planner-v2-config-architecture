@@ -7,6 +7,7 @@ import { formatDistance, formatElevation, formatTime, type UnitSystem } from "@/
 import { getTrailConfig } from "@/config";
 import { useCurrency } from "@/hooks/useCurrency";
 import BookTripButton from "@/components/BookTripButton";
+import { getVariantPriceForPace } from "@/lib/shopifyVariantData";
 
 const MULTIPLIER: Record<number, number> = {
   1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0,
@@ -63,10 +64,8 @@ const PurchaseModule = ({
   const liveTotalPrice = (49 * partySize) + (140 * nights * multiplier);
   const totalPrice = overridePricing?.totalPrice ?? liveTotalPrice;
   const pricePerPerson = overridePricing?.pricePerPerson ?? Math.round(liveTotalPrice / partySize);
-  const rootEl = document.getElementById("root");
-  const paceKey = speedProfileId.replace(/-([a-z])/g, (_: string, c: string) => c.toUpperCase());
-  const variantPriceAttr = rootEl?.dataset['variantPrice' + paceKey.charAt(0).toUpperCase() + paceKey.slice(1)];
-  const configDeposit = variantPriceAttr ? parseFloat(variantPriceAttr) : (Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson);
+  const variantDeposit = getVariantPriceForPace(speedProfileName) ?? getVariantPriceForPace(speedProfileId);
+  const configDeposit = variantDeposit ?? trailConfig.depositPerPerson;
   const depositPerPerson = overridePricing?.depositPerPerson ?? configDeposit;
   const deposit = overridePricing?.deposit ?? (depositPerPerson * partySize);
 
@@ -130,6 +129,7 @@ const PurchaseModule = ({
         <div className="flex flex-col items-center gap-3">
           <BookTripButton
             speedProfileId={speedProfileId}
+            speedProfileName={speedProfileName}
             partySize={partySize}
             depositLabel={formatPrice(deposit)}
             days={activeDays}

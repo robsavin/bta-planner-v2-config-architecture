@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ShoppingCart } from "lucide-react";
-import { getTrailConfig } from "@/config";
 import { trackEvent } from "@/lib/analytics";
-
+import { getVariantIdForPace } from "@/lib/shopifyVariantData";
 
 interface BookTripButtonProps {
   speedProfileId: string;
+  speedProfileName: string;
   partySize: number;
   depositLabel?: string;
   days: number;
@@ -16,22 +16,7 @@ interface BookTripButtonProps {
   startDate: Date;
 }
 
-// Maps speed profile IDs to dataset property names (camelCase as per HTMLElement.dataset)
-const PACE_DATASET_KEY: Record<string, string> = {
-  explorer:    "variantExplorer",
-  hiker:       "variantHiker",
-  fastpacker:  "variantFastpacker",
-  trailrunner: "variantTrailRunner",
-};
-
-function getVariantId(speedProfileId: string): string | null {
-  const datasetKey = PACE_DATASET_KEY[speedProfileId];
-  if (!datasetKey) return null;
-  const rootEl = document.getElementById("root");
-  return rootEl?.dataset[datasetKey] ?? null;
-}
-
-const BookTripButton = ({ speedProfileId, partySize, depositLabel, days, nights, totalPrice, deposit, startDate }: BookTripButtonProps) => {
+const BookTripButton = ({ speedProfileId, speedProfileName, partySize, depositLabel, days, nights, totalPrice, deposit, startDate }: BookTripButtonProps) => {
   const [fallbackMsg, setFallbackMsg] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
@@ -44,7 +29,7 @@ const BookTripButton = ({ speedProfileId, partySize, depositLabel, days, nights,
     }
 
     trackEvent("book_trip_click", { pace: speedProfileId, partySize });
-    const variantId = getVariantId(speedProfileId);
+    const variantId = getVariantIdForPace(speedProfileName) ?? getVariantIdForPace(speedProfileId);
     if (!variantId) {
       setFallbackMsg(true);
       return;

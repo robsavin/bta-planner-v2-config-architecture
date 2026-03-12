@@ -30,6 +30,7 @@ import QuoteRequestForm from "@/components/QuoteRequestForm";
 import { useTripUrlParams, resolveSpeedFromUrl } from "@/hooks/useUrlParams";
 import { loadQuote, type SavedQuote } from "@/lib/quoteStorage";
 import { useCurrency } from "@/hooks/useCurrency";
+import { getVariantPriceForPace } from "@/lib/shopifyVariantData";
 
 const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };
 
@@ -242,13 +243,11 @@ const Index = () => {
     const multiplier = MULTIPLIER[partySize] ?? partySize;
     const totalPrice = (49 * partySize) + (140 * nights * multiplier);
     const pricePerPerson = Math.round(totalPrice / partySize);
-    const rootEl = document.getElementById("root");
-    const paceKey = selectedSpeed.id.replace(/-([a-z])/g, (_: string, c: string) => c.toUpperCase());
-    const variantPriceAttr = rootEl?.dataset['variantPrice' + paceKey.charAt(0).toUpperCase() + paceKey.slice(1)];
-    const depPerPerson = variantPriceAttr ? parseFloat(variantPriceAttr) : (Number(rootEl?.getAttribute("data-deposit")) || trailConfig.depositPerPerson);
+    const variantDeposit = getVariantPriceForPace(selectedSpeed.name) ?? getVariantPriceForPace(selectedSpeed.id);
+    const depPerPerson = variantDeposit ?? trailConfig.depositPerPerson;
     const deposit = depPerPerson * partySize;
     return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson, nights };
-  }, [itinerary, partySize, trailConfig.depositPerPerson, selectedSpeed.id]);
+  }, [itinerary, partySize, trailConfig.depositPerPerson, selectedSpeed.id, selectedSpeed.name]);
 
   const pricing = savedQuote
     ? { totalPrice: savedQuote.pricing.total_price, pricePerPerson: savedQuote.pricing.per_person, deposit: savedQuote.pricing.deposit, depositPerPerson: savedQuote.pricing.deposit_per_person, nights: livePricing.nights }
