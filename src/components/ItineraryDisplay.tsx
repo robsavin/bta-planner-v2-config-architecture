@@ -148,8 +148,8 @@ const ItineraryDisplay = ({
           for (let i = 0; i < index; i++) {
             if (!itinerary[i].isRestDay) walkingDayIdx++;
           }
+          const finalNode = directionalNodes[directionalNodes.length - 1];
           
-          const isAtTrailEnd = (node: TrailNode) => 
             node.id.includes('-end') || node.id === finalNode.id;
           
           const trailCompletedOnPreviousDay = itinerary.slice(0, index).some(
