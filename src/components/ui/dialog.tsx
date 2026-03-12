@@ -40,8 +40,16 @@ const DialogContent = React.forwardRef<
     <DialogPortal container={portalContainer}>
       <DialogOverlay />
       <div
-        className="fixed inset-0 z-[9999] flex items-center justify-center overflow-x-hidden overflow-y-auto [-webkit-overflow-scrolling:touch] p-4"
-        style={{ zIndex: 9999 }}
+        className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden p-4"
+        style={{ zIndex: 9999, touchAction: "none" }}
+        onTouchMove={(e) => {
+          // Prevent outer wrapper from scrolling/bouncing
+          const target = e.target as HTMLElement;
+          const scrollable = target.closest('[data-dialog-scrollable]');
+          if (!scrollable) {
+            e.preventDefault();
+          }
+        }}
       >
         <DialogPrimitive.Content
           ref={ref}
