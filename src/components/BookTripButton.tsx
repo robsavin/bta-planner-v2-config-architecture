@@ -29,7 +29,7 @@ const BookTripButton = ({ speedProfileId, speedProfileName, partySize, depositLa
     }
 
     trackEvent("book_trip_click", { pace: speedProfileId, partySize });
-    const variantId = getVariantId(speedProfileId);
+    const variantId = getVariantIdForPace(speedProfileName) ?? getVariantIdForPace(speedProfileId);
     if (!variantId) {
       setFallbackMsg(true);
       return;
