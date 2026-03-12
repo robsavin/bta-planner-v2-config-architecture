@@ -258,15 +258,18 @@ const Index = () => {
           </h1>
           <p className="text-sm text-bta-forest/70 text-center mb-4">Customise your pace, dates and party size</p>
 
-          {/* Admin share */}
-          {urlParams.admin && (
-            <div className="flex justify-center mb-3">
-              <ShareTripButton
-                trail={trailConfig.id} pace={selectedSpeed.id} direction={selectedDirection}
-                days={itinerary.length} partySize={partySize} startDate={startDate} dailyHours={hoursPerDay}
-              />
-            </div>
-          )}
+      {/* Admin share */}
+          {(() => {
+            const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
+            return isAdmin ? (
+              <div className="flex justify-center mb-3">
+                <ShareTripButton
+                  trail={trailConfig.id} pace={selectedSpeed.id} direction={selectedDirection}
+                  days={itinerary.length} partySize={partySize} startDate={startDate} dailyHours={hoursPerDay}
+                />
+              </div>
+            ) : null;
+          })()}
 
           {/* ── Your Trip ── */}
           <div>
