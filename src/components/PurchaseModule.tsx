@@ -139,6 +139,11 @@ const PurchaseModule = ({
             startDate={startDate}
           />
 
+          <div className="flex items-center justify-center gap-3 py-3">
+            <img src="https://cdn.shopify.com/s/files/1/0911/0824/5849/files/ABTOT_CMYK_logo_5690.jpg?v=1773310436" alt="ABTOT Member 5690" className="h-10 w-auto" />
+            <span className="text-[0.85rem] text-secondary">Your deposit is 100% financially protected · ABTOT Member 5690</span>
+          </div>
+
           <Button
             type="button"
             size="lg"
