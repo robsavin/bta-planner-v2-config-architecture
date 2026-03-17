@@ -141,7 +141,7 @@ const PurchaseModule = ({
 
           <div className="flex items-center justify-center gap-3 py-3">
             <img src="https://cdn.shopify.com/s/files/1/0911/0824/5849/files/ABTOT_CMYK_logo_5690.jpg?v=1773310436" alt="ABTOT Member 5690" className="h-10 w-auto" />
-            <span className="text-[0.85rem] text-secondary">The Association of Bonded Travel Organisers Trust Limited (ABTOT) provides financial protection under The Package Travel and Linked Travel Arrangements Regulations 2018 for Big Trail Adventures (member 5690). Protection is provided for non-flight packages. Full details in our booking conditions.</span>
+            <span className="text-xs text-muted-foreground">The Association of Bonded Travel Organisers Trust Limited (ABTOT) provides financial protection under The Package Travel and Linked Travel Arrangements Regulations 2018 for Big Trail Adventures (member 5690). Protection is provided for non-flight packages. Full details in our booking conditions.</span>
           </div>
 
           <Button
