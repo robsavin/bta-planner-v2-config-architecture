@@ -101,7 +101,7 @@ const StickyBookingBar = ({
     >
       <div className="max-w-[1200px] mx-auto px-4 py-3 flex items-center justify-between gap-3">
         <p className="text-white text-sm truncate flex-1 min-w-0">
-          <span className="font-semibold">{days + nights > days ? `${days + nights} days` : `${days} days`}</span>
+          <span className="font-semibold">{nights + 1} days / {nights} nights</span>
           <span className="mx-1.5 opacity-60">·</span>
           <span>{speedProfileName}</span>
           <span className="mx-1.5 opacity-60">·</span>
