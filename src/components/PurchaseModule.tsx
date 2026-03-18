@@ -188,6 +188,18 @@ const PurchaseModule = ({
           </p>
         </div>
       </div>
+      <StickyBookingBar
+        days={activeDays}
+        nights={nights}
+        speedProfileName={speedProfileName}
+        speedProfileId={speedProfileId}
+        partySize={partySize}
+        totalPrice={totalPrice}
+        deposit={deposit}
+        startDate={startDate}
+        bookButtonRef={bookButtonRef}
+        addedToCart={addedToCart}
+      />
     </div>
   );
 };
