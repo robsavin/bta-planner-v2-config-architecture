@@ -55,6 +55,8 @@ const PurchaseModule = ({
   overridePricing,
   pricePulse = false,
 }: PurchaseModuleProps) => {
+  const bookButtonRef = useRef<HTMLDivElement>(null);
+  const [addedToCart, setAddedToCart] = useState(false);
   const trailConfig = getTrailConfig();
   const { formatPrice } = useCurrency();
   const walkingDays = itinerary.filter(d => !d.isRestDay);
