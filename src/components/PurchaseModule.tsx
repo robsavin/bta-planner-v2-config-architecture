@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { format } from "date-fns";
 import { FileText, Hotel, Route, Backpack, BookOpen, Headphones, Calendar, Users, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { formatDistance, formatElevation, formatTime, type UnitSystem } from "@/
 import { getTrailConfig } from "@/config";
 import { useCurrency } from "@/hooks/useCurrency";
 import BookTripButton from "@/components/BookTripButton";
+import StickyBookingBar from "@/components/StickyBookingBar";
 import { getVariantPriceForPace } from "@/lib/shopifyVariantData";
 
 const MULTIPLIER: Record<number, number> = {
@@ -53,6 +55,8 @@ const PurchaseModule = ({
   overridePricing,
   pricePulse = false,
 }: PurchaseModuleProps) => {
+  const bookButtonRef = useRef<HTMLDivElement>(null);
+  const [addedToCart, setAddedToCart] = useState(false);
   const trailConfig = getTrailConfig();
   const { formatPrice } = useCurrency();
   const walkingDays = itinerary.filter(d => !d.isRestDay);
@@ -127,17 +131,21 @@ const PurchaseModule = ({
 
         {/* CTAs */}
         <div className="flex flex-col items-center gap-3">
-          <BookTripButton
-            speedProfileId={speedProfileId}
-            speedProfileName={speedProfileName}
-            partySize={partySize}
-            depositLabel={formatPrice(deposit)}
-            days={activeDays}
-            nights={nights}
-            totalPrice={totalPrice}
-            deposit={deposit}
-            startDate={startDate}
-          />
+          <div ref={bookButtonRef}>
+            <BookTripButton
+              speedProfileId={speedProfileId}
+              speedProfileName={speedProfileName}
+              partySize={partySize}
+              depositLabel={formatPrice(deposit)}
+              days={activeDays}
+              nights={nights}
+              totalPrice={totalPrice}
+              deposit={deposit}
+              startDate={startDate}
+              addedToCart={addedToCart}
+              onAddedToCart={() => setAddedToCart(true)}
+            />
+          </div>
 
           <div className="flex items-center justify-center gap-3 py-3">
             <img src="https://cdn.shopify.com/s/files/1/0911/0824/5849/files/ABTOT_CMYK_logo_5690.jpg?v=1773310436" alt="ABTOT Member 5690" className="h-10 w-auto" />
@@ -180,6 +188,18 @@ const PurchaseModule = ({
           </p>
         </div>
       </div>
+      <StickyBookingBar
+        days={activeDays}
+        nights={nights}
+        speedProfileName={speedProfileName}
+        speedProfileId={speedProfileId}
+        partySize={partySize}
+        totalPrice={totalPrice}
+        deposit={deposit}
+        startDate={startDate}
+        bookButtonRef={bookButtonRef}
+        addedToCart={addedToCart}
+      />
     </div>
   );
 };

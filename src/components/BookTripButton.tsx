@@ -14,12 +14,15 @@ interface BookTripButtonProps {
   totalPrice: number;
   deposit: number;
   startDate: Date;
+  addedToCart?: boolean;
+  onAddedToCart?: () => void;
 }
 
-const BookTripButton = ({ speedProfileId, speedProfileName, partySize, depositLabel, days, nights, totalPrice, deposit, startDate }: BookTripButtonProps) => {
+const BookTripButton = ({ speedProfileId, speedProfileName, partySize, depositLabel, days, nights, totalPrice, deposit, startDate, addedToCart: controlledAdded, onAddedToCart }: BookTripButtonProps) => {
   const [fallbackMsg, setFallbackMsg] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [addedToCart, setAddedToCart] = useState(false);
+  const [internalAdded, setInternalAdded] = useState(false);
+  const addedToCart = controlledAdded ?? internalAdded;
 
   const handleClick = async () => {
     // If already added, navigate to cart
@@ -54,7 +57,8 @@ const BookTripButton = ({ speedProfileId, speedProfileName, partySize, depositLa
         }),
       });
       if (res.ok) {
-        setAddedToCart(true);
+        setInternalAdded(true);
+        onAddedToCart?.();
       } else {
         setFallbackMsg(true);
       }
