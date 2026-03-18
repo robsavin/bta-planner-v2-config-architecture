@@ -57,7 +57,8 @@ const BookTripButton = ({ speedProfileId, speedProfileName, partySize, depositLa
         }),
       });
       if (res.ok) {
-        setAddedToCart(true);
+        setInternalAdded(true);
+        onAddedToCart?.();
       } else {
         setFallbackMsg(true);
       }
