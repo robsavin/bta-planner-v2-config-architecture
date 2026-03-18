@@ -131,17 +131,21 @@ const PurchaseModule = ({
 
         {/* CTAs */}
         <div className="flex flex-col items-center gap-3">
-          <BookTripButton
-            speedProfileId={speedProfileId}
-            speedProfileName={speedProfileName}
-            partySize={partySize}
-            depositLabel={formatPrice(deposit)}
-            days={activeDays}
-            nights={nights}
-            totalPrice={totalPrice}
-            deposit={deposit}
-            startDate={startDate}
-          />
+          <div ref={bookButtonRef}>
+            <BookTripButton
+              speedProfileId={speedProfileId}
+              speedProfileName={speedProfileName}
+              partySize={partySize}
+              depositLabel={formatPrice(deposit)}
+              days={activeDays}
+              nights={nights}
+              totalPrice={totalPrice}
+              deposit={deposit}
+              startDate={startDate}
+              addedToCart={addedToCart}
+              onAddedToCart={() => setAddedToCart(true)}
+            />
+          </div>
 
           <div className="flex items-center justify-center gap-3 py-3">
             <img src="https://cdn.shopify.com/s/files/1/0911/0824/5849/files/ABTOT_CMYK_logo_5690.jpg?v=1773310436" alt="ABTOT Member 5690" className="h-10 w-auto" />
