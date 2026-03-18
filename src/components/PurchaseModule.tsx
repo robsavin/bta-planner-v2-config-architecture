@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { format } from "date-fns";
 import { FileText, Hotel, Route, Backpack, BookOpen, Headphones, Calendar, Users, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
