@@ -14,6 +14,8 @@ interface BookTripButtonProps {
   totalPrice: number;
   deposit: number;
   startDate: Date;
+  addedToCart?: boolean;
+  onAddedToCart?: () => void;
 }
 
 const BookTripButton = ({ speedProfileId, speedProfileName, partySize, depositLabel, days, nights, totalPrice, deposit, startDate }: BookTripButtonProps) => {
