@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { format } from "date-fns";
 import { FileText, Hotel, Route, Backpack, BookOpen, Headphones, Calendar, Users, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -78,6 +78,35 @@ const PurchaseModule = ({
   const totalWalkingTime = walkingDays.reduce((sum, d) => sum + d.walkingTime, 0);
 
   const directionLabel = direction === "south-to-north" ? "South → North" : "North → South";
+
+  // Post itinerary data to parent window whenever key values change
+  useEffect(() => {
+    window.parent.postMessage({
+      type: 'BTA_ITINERARY_UPDATE',
+      payload: {
+        days: totalDays,
+        nights,
+        pace: speedProfileName,
+        paceId: speedProfileId,
+        party: partySize,
+        totalPrice,
+        priceFormatted: formatPrice(totalPrice),
+        deposit,
+        depositFormatted: formatPrice(deposit),
+      },
+    }, '*');
+  }, [totalDays, nights, speedProfileName, speedProfileId, partySize, totalPrice, deposit, formatPrice]);
+
+  // Listen for parent requesting the booking action
+  useEffect(() => {
+    const handler = (event: MessageEvent) => {
+      if (event.data?.type === 'BTA_OPEN_BOOKING_MODAL') {
+        bookButtonRef.current?.querySelector('button')?.click();
+      }
+    };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, []);
 
   return (
     <div className="mt-8 rounded-xl overflow-hidden shadow-lg">
