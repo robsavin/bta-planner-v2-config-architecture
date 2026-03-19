@@ -234,12 +234,22 @@ const Index = () => {
     [startDate, directionalNodes, selectedSpeed, triggerPricePulse],
   );
 
+  // Accommodation add-on state
+  const [arrivalNight, setArrivalNight] = useState(false);
+  const [departureNight, setDepartureNight] = useState(false);
+
+  const handleArrivalNightChange = useCallback((v: boolean) => { setArrivalNight(v); triggerPricePulse(); }, [triggerPricePulse]);
+  const handleDepartureNightChange = useCallback((v: boolean) => { setDepartureNight(v); triggerPricePulse(); }, [triggerPricePulse]);
+
   // Pricing — nights = totalDays - 1 (includes rest days)
   const { formatPrice, convertAmount, currency } = useCurrency();
 
+  const addonNights = (arrivalNight ? 1 : 0) + (departureNight ? 1 : 0);
+
   const livePricing = useMemo(() => {
     const totalDays = itinerary.length;
-    const nights = Math.max(0, totalDays - 1);
+    const baseNights = Math.max(0, totalDays - 1);
+    const nights = baseNights + addonNights;
     const multiplier = MULTIPLIER[partySize] ?? partySize;
     const totalPrice = (49 * partySize) + (140 * nights * multiplier);
     const pricePerPerson = Math.round(totalPrice / partySize);
@@ -247,7 +257,7 @@ const Index = () => {
     const depPerPerson = variantDeposit ?? trailConfig.depositPerPerson;
     const deposit = depPerPerson * partySize;
     return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson, nights };
-  }, [itinerary, partySize, trailConfig.depositPerPerson, selectedSpeed.id, selectedSpeed.name]);
+  }, [itinerary, partySize, trailConfig.depositPerPerson, selectedSpeed.id, selectedSpeed.name, addonNights]);
 
   const pricing = savedQuote
     ? { totalPrice: savedQuote.pricing.total_price, pricePerPerson: savedQuote.pricing.per_person, deposit: savedQuote.pricing.deposit, depositPerPerson: savedQuote.pricing.deposit_per_person, nights: livePricing.nights }
@@ -255,6 +265,13 @@ const Index = () => {
 
   const activeDays = itinerary.filter(d => !d.isRestDay).length;
   const nights = livePricing.nights;
+
+  // Addon cost per person per night (for display)
+  const addonCostPerPersonFormatted = useMemo(() => {
+    const multiplier = MULTIPLIER[partySize] ?? partySize;
+    const nightlyCostPerPerson = Math.round((140 * multiplier) / partySize);
+    return formatPrice(nightlyCostPerPerson);
+  }, [partySize, formatPrice]);
 
   return (
     <div className="min-h-screen bg-card" id="bta-planner" style={{ maxWidth: 1200, margin: '0 auto', borderRadius: 12, paddingTop: '2.5rem', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
@@ -348,6 +365,10 @@ const Index = () => {
               itinerary={itinerary} speedProfile={selectedSpeed} direction={selectedDirection}
               units={units} hoursPerDay={hoursPerDay} onUpdateDay={handleUpdateDay}
               onAddRestDay={handleAddRestDay} onRemoveDay={handleRemoveDay} onAddWalkingDay={handleAddWalkingDay}
+              arrivalNight={arrivalNight} onArrivalNightChange={handleArrivalNightChange}
+              departureNight={departureNight} onDepartureNightChange={handleDepartureNightChange}
+              arrivalLabel={trailConfig.startLocation} departureLabel={trailConfig.endLocation}
+              addonCostPerPersonFormatted={addonCostPerPersonFormatted}
             />
           </div>
         </div>

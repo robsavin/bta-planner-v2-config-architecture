@@ -39,6 +39,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import AccommodationAddonCard from "@/components/AccommodationAddonCard";
 
 interface ItineraryDisplayProps {
   itinerary: DayPlan[];
@@ -50,6 +51,14 @@ interface ItineraryDisplayProps {
   onAddRestDay: (afterDayIndex: number) => void;
   onRemoveDay: (dayIndex: number) => void;
   onAddWalkingDay?: (afterDayIndex: number) => void;
+  /** Accommodation add-on props */
+  arrivalNight: boolean;
+  onArrivalNightChange: (v: boolean) => void;
+  departureNight: boolean;
+  onDepartureNightChange: (v: boolean) => void;
+  arrivalLabel: string;
+  departureLabel: string;
+  addonCostPerPersonFormatted: string;
 }
 
 const ItineraryDisplay = ({ 
@@ -61,7 +70,14 @@ const ItineraryDisplay = ({
   onUpdateDay, 
   onAddRestDay,
   onRemoveDay,
-  onAddWalkingDay
+  onAddWalkingDay,
+  arrivalNight,
+  onArrivalNightChange,
+  departureNight,
+  onDepartureNightChange,
+  arrivalLabel,
+  departureLabel,
+  addonCostPerPersonFormatted,
 }: ItineraryDisplayProps) => {
   const directionalNodes = getDirectionalNodes(direction);
   
@@ -140,6 +156,16 @@ const ItineraryDisplay = ({
       
       {/* Timeline */}
       <div className="relative">
+        {/* Arrival night add-on — before Day 1 */}
+        <div className="pb-4 md:pb-6">
+          <AccommodationAddonCard
+            label={`Add an arrival night in ${arrivalLabel}`}
+            costPerPerson={addonCostPerPersonFormatted}
+            checked={arrivalNight}
+            onCheckedChange={onArrivalNightChange}
+          />
+        </div>
+
         {/* Continuous vertical line — now per-segment coloured, handled inside DayCard */}
         {itinerary.map((day, index) => {
           const firstWalkingDayIndex = itinerary.findIndex(d => !d.isRestDay);
@@ -184,6 +210,16 @@ const ItineraryDisplay = ({
             />
           );
         })}
+
+        {/* Departure night add-on — after final day */}
+        <div className="pt-2">
+          <AccommodationAddonCard
+            label={`Add a departure night in ${departureLabel}`}
+            costPerPerson={addonCostPerPersonFormatted}
+            checked={departureNight}
+            onCheckedChange={onDepartureNightChange}
+          />
+        </div>
       </div>
     </div>
   );
