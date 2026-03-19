@@ -29,6 +29,11 @@ export interface TrailConfig {
   /** Display name, e.g. "West Highland Way" */
   name: string;
 
+  /** Location name at the default start of the trail */
+  startLocation: string;
+  /** Location name at the default end of the trail */
+  endLocation: string;
+
   /** Total distance in km (used for hero stats) */
   totalDistanceKm: number;
   /** Total ascent in m */

@@ -8,6 +8,8 @@ import btaLogoWhite from "@/assets/bta-logo-white.webp";
 const westHighlandWay: TrailConfig = {
   id: "west-highland-way",
   name: "West Highland Way",
+  startLocation: "Milngavie",
+  endLocation: "Fort William",
 
   totalDistanceKm: 153,
   totalAscentM: 3122,
