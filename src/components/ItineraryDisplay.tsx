@@ -156,6 +156,16 @@ const ItineraryDisplay = ({
       
       {/* Timeline */}
       <div className="relative">
+        {/* Arrival night add-on — before Day 1 */}
+        <div className="pb-4 md:pb-6">
+          <AccommodationAddonCard
+            label={`Add an arrival night in ${arrivalLabel}`}
+            costPerPerson={addonCostPerPersonFormatted}
+            checked={arrivalNight}
+            onCheckedChange={onArrivalNightChange}
+          />
+        </div>
+
         {/* Continuous vertical line — now per-segment coloured, handled inside DayCard */}
         {itinerary.map((day, index) => {
           const firstWalkingDayIndex = itinerary.findIndex(d => !d.isRestDay);
@@ -200,6 +210,16 @@ const ItineraryDisplay = ({
             />
           );
         })}
+
+        {/* Departure night add-on — after final day */}
+        <div className="pt-2">
+          <AccommodationAddonCard
+            label={`Add a departure night in ${departureLabel}`}
+            costPerPerson={addonCostPerPersonFormatted}
+            checked={departureNight}
+            onCheckedChange={onDepartureNightChange}
+          />
+        </div>
       </div>
     </div>
   );
