@@ -391,7 +391,7 @@ const DayCard = ({
                     <Pencil className="h-3.5 w-3.5 text-muted-foreground ml-auto" />
                   </div>
                 </SelectTrigger>
-                <SelectContent className="bg-popover z-50">
+                <SelectContent className="bg-popover" style={{ zIndex: 9999 }}>
                   {validEndNodes.map((node) => (
                     <SelectItem key={node.id} value={node.id}>
                       <div className="flex items-center gap-2">
