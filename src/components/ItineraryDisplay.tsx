@@ -70,7 +70,14 @@ const ItineraryDisplay = ({
   onUpdateDay, 
   onAddRestDay,
   onRemoveDay,
-  onAddWalkingDay
+  onAddWalkingDay,
+  arrivalNight,
+  onArrivalNightChange,
+  departureNight,
+  onDepartureNightChange,
+  arrivalLabel,
+  departureLabel,
+  addonCostPerPersonFormatted,
 }: ItineraryDisplayProps) => {
   const directionalNodes = getDirectionalNodes(direction);
   
