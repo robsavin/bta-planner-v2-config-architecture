@@ -39,6 +39,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import AccommodationAddonCard from "@/components/AccommodationAddonCard";
 
 interface ItineraryDisplayProps {
   itinerary: DayPlan[];
@@ -50,6 +51,14 @@ interface ItineraryDisplayProps {
   onAddRestDay: (afterDayIndex: number) => void;
   onRemoveDay: (dayIndex: number) => void;
   onAddWalkingDay?: (afterDayIndex: number) => void;
+  /** Accommodation add-on props */
+  arrivalNight: boolean;
+  onArrivalNightChange: (v: boolean) => void;
+  departureNight: boolean;
+  onDepartureNightChange: (v: boolean) => void;
+  arrivalLabel: string;
+  departureLabel: string;
+  addonCostPerPersonFormatted: string;
 }
 
 const ItineraryDisplay = ({ 
