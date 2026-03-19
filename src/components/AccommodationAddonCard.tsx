@@ -18,7 +18,6 @@ const AccommodationAddonCard = ({
     <BedDouble className="h-5 w-5 text-primary shrink-0" />
     <div className="flex-1 min-w-0">
       <span className="text-sm font-medium text-foreground">{label}</span>
-      <span className="text-sm text-muted-foreground ml-1.5">({costPerPerson}/person)</span>
     </div>
     <Checkbox
       checked={checked}
