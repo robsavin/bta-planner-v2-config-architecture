@@ -55,6 +55,7 @@ const PurchaseModule = ({
   onOpenEnquiry,
   overridePricing,
   pricePulse = false,
+  addonNights = 0,
 }: PurchaseModuleProps) => {
   const bookButtonRef = useRef<HTMLDivElement>(null);
   const [addedToCart, setAddedToCart] = useState(false);
