@@ -8,7 +8,7 @@ import { formatDistance, formatElevation, formatTime, type UnitSystem } from "@/
 import { getTrailConfig } from "@/config";
 import { useCurrency } from "@/hooks/useCurrency";
 import BookTripButton from "@/components/BookTripButton";
-import StickyBookingBar from "@/components/StickyBookingBar";
+
 import { getVariantPriceForPace } from "@/lib/shopifyVariantData";
 
 const MULTIPLIER: Record<number, number> = {
@@ -188,18 +188,6 @@ const PurchaseModule = ({
           </p>
         </div>
       </div>
-      <StickyBookingBar
-        days={activeDays}
-        nights={nights}
-        speedProfileName={speedProfileName}
-        speedProfileId={speedProfileId}
-        partySize={partySize}
-        totalPrice={totalPrice}
-        deposit={deposit}
-        startDate={startDate}
-        bookButtonRef={bookButtonRef}
-        addedToCart={addedToCart}
-      />
     </div>
   );
 };
