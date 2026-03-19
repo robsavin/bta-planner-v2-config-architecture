@@ -108,6 +108,23 @@ const PurchaseModule = ({
     return () => window.removeEventListener('message', handler);
   }, []);
 
+  // Notify parent when the Book button scrolls in/out of view
+  useEffect(() => {
+    const el = bookButtonRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        window.parent.postMessage(
+          { type: 'BTA_BOOK_BUTTON_VISIBLE', payload: { visible: entry.isIntersecting } },
+          '*'
+        );
+      },
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="mt-8 rounded-xl overflow-hidden shadow-lg">
       {/* ─── ZONE 1 — Your Adventure ─── */}
