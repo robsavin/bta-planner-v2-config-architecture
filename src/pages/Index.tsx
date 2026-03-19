@@ -365,6 +365,10 @@ const Index = () => {
               itinerary={itinerary} speedProfile={selectedSpeed} direction={selectedDirection}
               units={units} hoursPerDay={hoursPerDay} onUpdateDay={handleUpdateDay}
               onAddRestDay={handleAddRestDay} onRemoveDay={handleRemoveDay} onAddWalkingDay={handleAddWalkingDay}
+              arrivalNight={arrivalNight} onArrivalNightChange={handleArrivalNightChange}
+              departureNight={departureNight} onDepartureNightChange={handleDepartureNightChange}
+              arrivalLabel={trailConfig.startLocation} departureLabel={trailConfig.endLocation}
+              addonCostPerPersonFormatted={addonCostPerPersonFormatted}
             />
           </div>
         </div>
