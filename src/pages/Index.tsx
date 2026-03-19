@@ -382,6 +382,7 @@ const Index = () => {
           speedProfileId={selectedSpeed.id} startDate={startDate} partySize={partySize} units={units}
           onSaveQuote={() => setQuoteOpen(true)} onOpenEnquiry={() => setEnquiryOpen(true)}
           overridePricing={savedQuote ? pricing : undefined} pricePulse={pricePulse}
+          addonNights={addonNights}
         />
 
         <QuoteRequestForm

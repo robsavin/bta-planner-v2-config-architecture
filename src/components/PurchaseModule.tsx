@@ -32,6 +32,7 @@ interface PurchaseModuleProps {
     depositPerPerson: number;
   };
   pricePulse?: boolean;
+  addonNights?: number;
 }
 
 const INCLUDED_ITEMS = [
@@ -54,6 +55,7 @@ const PurchaseModule = ({
   onOpenEnquiry,
   overridePricing,
   pricePulse = false,
+  addonNights = 0,
 }: PurchaseModuleProps) => {
   const bookButtonRef = useRef<HTMLDivElement>(null);
   const [addedToCart, setAddedToCart] = useState(false);
@@ -62,7 +64,7 @@ const PurchaseModule = ({
   const walkingDays = itinerary.filter(d => !d.isRestDay);
   const activeDays = walkingDays.length;
   const totalDays = itinerary.length;
-  const nights = Math.max(0, totalDays - 1);
+  const nights = Math.max(0, totalDays - 1) + addonNights;
 
   const multiplier = MULTIPLIER[partySize] ?? partySize;
   const liveTotalPrice = (49 * partySize) + (140 * nights * multiplier);
