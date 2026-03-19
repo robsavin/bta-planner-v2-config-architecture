@@ -32,6 +32,7 @@ interface PurchaseModuleProps {
     depositPerPerson: number;
   };
   pricePulse?: boolean;
+  addonNights?: number;
 }
 
 const INCLUDED_ITEMS = [
