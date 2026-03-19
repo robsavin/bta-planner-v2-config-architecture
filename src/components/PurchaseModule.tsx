@@ -79,6 +79,35 @@ const PurchaseModule = ({
 
   const directionLabel = direction === "south-to-north" ? "South → North" : "North → South";
 
+  // Post itinerary data to parent window whenever key values change
+  useEffect(() => {
+    window.parent.postMessage({
+      type: 'BTA_ITINERARY_UPDATE',
+      payload: {
+        days: totalDays,
+        nights,
+        pace: speedProfileName,
+        paceId: speedProfileId,
+        party: partySize,
+        totalPrice,
+        priceFormatted: formatPrice(totalPrice),
+        deposit,
+        depositFormatted: formatPrice(deposit),
+      },
+    }, '*');
+  }, [totalDays, nights, speedProfileName, speedProfileId, partySize, totalPrice, deposit, formatPrice]);
+
+  // Listen for parent requesting the booking action
+  useEffect(() => {
+    const handler = (event: MessageEvent) => {
+      if (event.data?.type === 'BTA_OPEN_BOOKING_MODAL') {
+        bookButtonRef.current?.querySelector('button')?.click();
+      }
+    };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
   return (
     <div className="mt-8 rounded-xl overflow-hidden shadow-lg">
       {/* ─── ZONE 1 — Your Adventure ─── */}
