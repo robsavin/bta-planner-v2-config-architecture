@@ -65,6 +65,30 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
   };
 
   return (
+    <>
+    <style>{`
+  .bta-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 768px) {
+    .bta-cards-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .bta-card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #2d4a54;
+    margin: 0 0 0.9rem;
+    line-height: 1;
+  }
+  @media (max-width: 767px) {
+    .bta-card-title { font-size: 24px; }
+  }
+`}</style>
     <section
       style={{
         fontFamily: "Barlow, sans-serif",
