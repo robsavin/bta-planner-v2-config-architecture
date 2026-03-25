@@ -185,7 +185,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
                     color: "#c4813a",
                   }}
                 >
-                  {EFFORT[card.profile.id]}
+                  {card.profile.name} pace
                 </span>
                 {isHiker && (
                   <span
