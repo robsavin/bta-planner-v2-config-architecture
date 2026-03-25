@@ -365,7 +365,7 @@ const Index = () => {
       </section>
 
       {/* Two-column layout: map + day cards */}
-      <main className="container mx-auto px-4 py-8">
+      <main id="planner-itinerary" className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="relative lg:w-1/2 lg:sticky lg:top-4 lg:self-start" style={{ zIndex: 1 }}>
             <MapDisplay itinerary={itinerary} direction={selectedDirection} units={units} className="h-[300px] lg:h-[calc(100vh-8rem)]" />
