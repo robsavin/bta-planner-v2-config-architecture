@@ -334,10 +334,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
               {/* Secondary */}
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleCustomise();
-                }}
+                onClick={() => handleCustomise()}
                 style={{
                   background: "none",
                   border: "none",
