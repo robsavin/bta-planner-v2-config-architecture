@@ -198,16 +198,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
               </div>
 
               {/* Title */}
-              <h3
-                style={{
-                  fontFamily: "Barlow Condensed, sans-serif",
-                  fontSize: 30,
-                  fontWeight: 700,
-                  color: "#2d4a54",
-                  margin: 0,
-                  marginBottom: "0.9rem",
-                }}
-              >
+              <h3 className="bta-card-title">
                 {CARD_NAMES[card.profile.id]}
               </h3>
 
