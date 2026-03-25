@@ -87,6 +87,9 @@ export interface TrailConfig {
   };
 
   /** Branding */
+  /** Optional short name for compact displays */
+  shortName?: string;
+
   branding: {
     /** Organisation name for footer / PDF */
     organisationName: string;

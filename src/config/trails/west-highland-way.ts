@@ -54,6 +54,7 @@ const westHighlandWay: TrailConfig = {
       flatSpeed: 3.5,
       ascentSpeed: 300,
       descentSpeed: 400,
+      socialProof: "Popular with walkers who've done long trails before and want to take time to see wildlife and spend longer at stops",
     },
     {
       id: "hiker",
@@ -62,6 +63,7 @@ const westHighlandWay: TrailConfig = {
       flatSpeed: 4.0,
       ascentSpeed: 400,
       descentSpeed: 600,
+      socialProof: "Most of our customers walk it at this pace — full days in the hills, with energy left for dinner",
     },
     {
       id: "fastpacker",
@@ -70,6 +72,7 @@ const westHighlandWay: TrailConfig = {
       flatSpeed: 5.0,
       ascentSpeed: 600,
       descentSpeed: 1000,
+      socialProof: "For those who've already walked it once, or come from a running background",
     },
     {
       id: "trailrunner",

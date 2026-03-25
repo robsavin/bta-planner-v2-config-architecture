@@ -407,6 +407,7 @@ const Index = () => {
         />
       </main>
     </div>
+    </>
   );
 };
 
