@@ -284,7 +284,8 @@ const Index = () => {
   return (
     <>
     <TripSelector onSelectTrip={handleTripSelect} />
-    <div className="min-h-screen bg-card" id="bta-planner" style={{ margin: '0 auto' }}>
+    <div className="min-h-screen bg-card" id="bta-planner">
+      <div style={{ maxWidth: 1200, margin: '0 auto', paddingTop: '2.5rem' }}>
       {/* Admin quote view */}
       {isAdminView && savedQuote && (
         <section className="container mx-auto px-4 pt-4">
@@ -408,6 +409,7 @@ const Index = () => {
           estimatedTotalGBP={pricing.totalPrice} displayCurrency={currency} displayTotal={convertAmount(pricing.totalPrice)}
         />
       </main>
+      </div>
     </div>
     </>
   );
