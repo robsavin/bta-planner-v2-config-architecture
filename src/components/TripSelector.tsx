@@ -67,6 +67,17 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
   return (
     <>
     <style>{`
+  .bta-trip-selector {
+    padding: 2rem 1rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  @media (max-width: 767px) {
+    .bta-trip-selector {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+  }
   .bta-cards-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -90,11 +101,9 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
   }
 `}</style>
     <section
+      className="bta-trip-selector"
       style={{
         fontFamily: "Barlow, sans-serif",
-        padding: "2rem 1rem",
-        maxWidth: 860,
-        margin: "0 auto",
       }}
     >
       {/* Eyebrow */}
