@@ -338,45 +338,49 @@ const QuoteRequestForm = ({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-md max-h-[90dvh] flex flex-col p-0 overflow-hidden">
-        <div
-          className="overflow-y-auto overscroll-contain p-6 flex flex-col gap-4"
-          style={{ WebkitOverflowScrolling: "touch" }}
-        >
+        <div className="flex flex-1 flex-col p-6">
         {!isDownloaded ? (
           <>
-            <DialogHeader>
+            <DialogHeader className="flex-shrink-0">
               <DialogTitle>Save Your Quote</DialogTitle>
               <DialogDescription>
                 We'll generate a PDF of your personalised itinerary and pricing.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="quote-name">Name *</Label>
-                <Input id="quote-name" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Your name" />
+            <form onSubmit={handleSubmit} className="mt-4 flex flex-1 flex-col overflow-hidden">
+              <div
+                className="flex-1 overflow-y-scroll overscroll-contain [-webkit-overflow-scrolling:touch]"
+                style={{ WebkitOverflowScrolling: "touch" }}
+              >
+                <div className="space-y-4 pr-1">
+                  <div className="space-y-2">
+                    <Label htmlFor="quote-name">Name *</Label>
+                    <Input id="quote-name" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Your name" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="quote-email">Email *</Label>
+                    <Input id="quote-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="quote-phone">Phone (optional)</Label>
+                    <Input id="quote-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+44 7..." />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="quote-notes">Anything we should know? (optional)</Label>
+                    <Textarea
+                      id="quote-notes"
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value.slice(0, 500))}
+                      placeholder="Special requirements, questions about the route, fitness concerns..."
+                      maxLength={500}
+                      className="resize-none"
+                      rows={3}
+                    />
+                    <p className="text-xs text-muted-foreground text-right">{notes.length}/500</p>
+                  </div>
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="quote-email">Email *</Label>
-                <Input id="quote-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="quote-phone">Phone (optional)</Label>
-                <Input id="quote-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+44 7..." />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="quote-notes">Anything we should know? (optional)</Label>
-                <Textarea
-                  id="quote-notes"
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value.slice(0, 500))}
-                  placeholder="Special requirements, questions about the route, fitness concerns..."
-                  maxLength={500}
-                  className="resize-none"
-                  rows={3}
-                />
-                <p className="text-xs text-muted-foreground text-right">{notes.length}/500</p>
-              </div>
-              <Button type="submit" className="w-full" disabled={isGenerating}>
+              <Button type="submit" className="w-full flex-shrink-0 mt-4" disabled={isGenerating}>
                 {isGenerating ? "Generating…" : "Download Quote PDF"}
               </Button>
             </form>
