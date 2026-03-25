@@ -296,7 +296,7 @@ const Index = () => {
       <section className="border-b border-border bg-card" aria-label="Trip settings">
         <div className="container mx-auto px-4 py-4">
           {/* Headline */}
-          <h1 className="font-display font-bold text-bta-dark-teal text-2xl md:text-[32px] leading-tight mb-1 text-center">
+          <h1 className="font-display font-bold text-bta-dark-teal text-2xl md:text-[32px] leading-tight mb-1 text-center" style={{ textTransform: 'uppercase' }}>
             Build your {trailConfig.name}
           </h1>
           <p className="text-sm text-bta-forest/70 text-center mb-4">Customise your pace, dates and party size</p>
