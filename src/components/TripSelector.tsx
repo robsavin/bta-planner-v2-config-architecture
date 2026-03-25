@@ -99,6 +99,21 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
   @media (max-width: 767px) {
     .bta-card-title { font-size: 24px; }
   }
+  .bta-selector-heading {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d4a54;
+    margin: 0 0 0.4rem;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+  @media (min-width: 768px) {
+    .bta-selector-heading {
+      font-size: 36px;
+    }
+  }
 `}</style>
     <section
       className="bta-trip-selector"
