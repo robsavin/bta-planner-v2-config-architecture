@@ -143,13 +143,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
       </p>
 
       {/* Cards grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-          gap: 16,
-        }}
-      >
+      <div className="bta-cards-grid">
         {cards.map((card) => {
           const isHiker = card.profile.id === "hiker";
           return (
