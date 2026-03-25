@@ -362,6 +362,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
         })}
       </div>
     </section>
+    </>
   );
 };
 
