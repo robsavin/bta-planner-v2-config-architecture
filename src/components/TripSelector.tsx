@@ -57,7 +57,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
 
   const handleSelect = (profileId: string) => {
     onSelectTrip(profileId, 2, getDefaultStartDate());
-    document.getElementById("bta-planner")?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById("planner-itinerary")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleCustomise = () => {
