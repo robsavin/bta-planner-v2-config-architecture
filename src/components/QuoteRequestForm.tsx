@@ -390,7 +390,7 @@ const QuoteRequestForm = ({
               <h3 className="font-semibold text-lg">Your quote <span className="font-mono">{quoteRef}</span> has been downloaded.</h3>
               <p className="text-sm text-muted-foreground mt-1">Check your downloads folder for the PDF.</p>
             </div>
-            <Button variant="outline" onClick={handleClose}>Close</Button>
+            <Button variant="outline" onClick={() => handleOpenChange(false)}>Close</Button>
           </div>
         )}
         </div>
