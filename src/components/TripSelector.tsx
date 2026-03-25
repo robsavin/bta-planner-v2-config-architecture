@@ -138,9 +138,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
                 padding: "1.25rem",
                 display: "flex",
                 flexDirection: "column",
-                cursor: "pointer",
               }}
-              onClick={() => handleSelect(card.profile.id)}
             >
               {/* Eyebrow row */}
               <div
