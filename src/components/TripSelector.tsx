@@ -126,8 +126,10 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
       <h2
         style={{
           fontFamily: "Barlow Condensed, sans-serif",
-          fontSize: 28,
+          fontSize: 36,
           fontWeight: 700,
+          letterSpacing: "-0.01em",
+          lineHeight: "1.05",
           color: "#2d4a54",
           margin: 0,
           marginBottom: 8,
