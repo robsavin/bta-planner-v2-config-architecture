@@ -242,6 +242,13 @@ const Index = () => {
   const handleArrivalNightChange = useCallback((v: boolean) => { setArrivalNight(v); triggerPricePulse(); }, [triggerPricePulse]);
   const handleDepartureNightChange = useCallback((v: boolean) => { setDepartureNight(v); triggerPricePulse(); }, [triggerPricePulse]);
 
+  const handleTripSelect = useCallback((speedProfileId: string, party: number, date: Date) => {
+    const profile = speedProfiles.find(p => p.id === speedProfileId);
+    if (profile) handleSpeedChange(profile);
+    handlePartySizeChange(party);
+    setStartDate(date);
+  }, [handleSpeedChange, handlePartySizeChange]);
+
   // Pricing — nights = totalDays - 1 (includes rest days)
   const { formatPrice, convertAmount, currency } = useCurrency();
 
