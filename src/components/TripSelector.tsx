@@ -57,7 +57,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
 
   const handleSelect = (profileId: string) => {
     onSelectTrip(profileId, 2, getDefaultStartDate());
-    document.getElementById("bta-planner")?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById("planner-itinerary")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleCustomise = () => {
@@ -138,9 +138,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
                 padding: "1.25rem",
                 display: "flex",
                 flexDirection: "column",
-                cursor: "pointer",
               }}
-              onClick={() => handleSelect(card.profile.id)}
             >
               {/* Eyebrow row */}
               <div
@@ -312,10 +310,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
               {/* CTA */}
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSelect(card.profile.id);
-                }}
+                onClick={() => handleSelect(card.profile.id)}
                 style={{
                   display: "block",
                   width: "100%",
@@ -339,10 +334,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
               {/* Secondary */}
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleCustomise();
-                }}
+                onClick={() => handleCustomise()}
                 style={{
                   background: "none",
                   border: "none",
