@@ -68,7 +68,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
     <>
     <style>{`
   .bta-trip-selector {
-    padding: 2rem 1rem;
+    padding: 3rem 1rem 1rem;
     max-width: 860px;
     margin: 0 auto;
   }
@@ -126,8 +126,10 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
       <h2
         style={{
           fontFamily: "Barlow Condensed, sans-serif",
-          fontSize: 28,
+          fontSize: 36,
           fontWeight: 700,
+          letterSpacing: "-0.01em",
+          lineHeight: "1.05",
           color: "#2d4a54",
           margin: 0,
           marginBottom: 8,
@@ -139,11 +141,12 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
       {/* Intro */}
       <p
         style={{
-          fontSize: 15,
-          color: "#666",
+          fontSize: 17,
+          color: "#444",
           margin: 0,
           marginBottom: 24,
-          lineHeight: 1.5,
+          lineHeight: "1.75",
+          maxWidth: "640px",
         }}
       >
         Most people walk the {trailConfig.name} in {hikerDays} days. Some want longer to
