@@ -409,6 +409,7 @@ const Index = () => {
           estimatedTotalGBP={pricing.totalPrice} displayCurrency={currency} displayTotal={convertAmount(pricing.totalPrice)}
         />
       </main>
+      </div>
     </div>
     </>
   );
