@@ -318,15 +318,21 @@ const QuoteRequestForm = ({
     }
   };
 
-  const handleClose = () => {
-    onOpenChange(false);
-    setTimeout(() => {
-      setIsDownloaded(false);
-      setName("");
-      setEmail("");
-      setPhone("");
-      setNotes("");
-    }, 200);
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen) {
+      window.parent.postMessage({ type: 'QUOTE_MODAL_OPEN' }, '*');
+      onOpenChange(true);
+    } else {
+      window.parent.postMessage({ type: 'QUOTE_MODAL_CLOSED' }, '*');
+      onOpenChange(false);
+      setTimeout(() => {
+        setIsDownloaded(false);
+        setName("");
+        setEmail("");
+        setPhone("");
+        setNotes("");
+      }, 200);
+    }
   };
 
   return (
