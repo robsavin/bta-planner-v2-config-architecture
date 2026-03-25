@@ -141,11 +141,12 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
       {/* Intro */}
       <p
         style={{
-          fontSize: 15,
-          color: "#666",
+          fontSize: 17,
+          color: "#444",
           margin: 0,
           marginBottom: 24,
-          lineHeight: 1.5,
+          lineHeight: "1.75",
+          maxWidth: "640px",
         }}
       >
         Most people walk the {trailConfig.name} in {hikerDays} days. Some want longer to
