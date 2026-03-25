@@ -310,10 +310,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
               {/* CTA */}
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSelect(card.profile.id);
-                }}
+                onClick={() => handleSelect(card.profile.id)}
                 style={{
                   display: "block",
                   width: "100%",
