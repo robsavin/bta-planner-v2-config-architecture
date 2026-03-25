@@ -20,6 +20,7 @@ export interface SpeedProfileConfig {
   flatSpeed: number; // km/h on flat terrain
   ascentSpeed: number; // m/h vertical gain
   descentSpeed: number; // m/h vertical loss
+  socialProof?: string;
 }
 
 export interface TrailConfig {
@@ -86,6 +87,9 @@ export interface TrailConfig {
   };
 
   /** Branding */
+  /** Optional short name for compact displays */
+  shortName?: string;
+
   branding: {
     /** Organisation name for footer / PDF */
     organisationName: string;

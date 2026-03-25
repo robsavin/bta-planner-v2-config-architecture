@@ -12,6 +12,7 @@ import ShareTripButton from "@/components/ShareTripButton";
 import AdminQuoteView from "@/components/AdminQuoteView";
 import SavedQuoteNotice from "@/components/SavedQuoteNotice";
 import EnquiryForm from "@/components/EnquiryForm";
+import TripSelector from "@/components/TripSelector";
 
 import MapDisplay from "@/components/MapDisplay";
 import { getTrailConfig } from "@/config";
@@ -241,6 +242,13 @@ const Index = () => {
   const handleArrivalNightChange = useCallback((v: boolean) => { setArrivalNight(v); triggerPricePulse(); }, [triggerPricePulse]);
   const handleDepartureNightChange = useCallback((v: boolean) => { setDepartureNight(v); triggerPricePulse(); }, [triggerPricePulse]);
 
+  const handleTripSelect = useCallback((speedProfileId: string, party: number, date: Date) => {
+    const profile = speedProfiles.find(p => p.id === speedProfileId);
+    if (profile) handleSpeedChange(profile);
+    handlePartySizeChange(party);
+    setStartDate(date);
+  }, [handleSpeedChange, handlePartySizeChange]);
+
   // Pricing — nights = totalDays - 1 (includes rest days)
   const { formatPrice, convertAmount, currency } = useCurrency();
 
@@ -274,6 +282,8 @@ const Index = () => {
   }, [partySize, formatPrice]);
 
   return (
+    <>
+    <TripSelector onSelectTrip={handleTripSelect} />
     <div className="min-h-screen bg-card" id="bta-planner" style={{ maxWidth: 1200, margin: '0 auto', borderRadius: 12, paddingTop: '2.5rem', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
       {/* Admin quote view */}
       {isAdminView && savedQuote && (
@@ -399,6 +409,7 @@ const Index = () => {
         />
       </main>
     </div>
+    </>
   );
 };
 
