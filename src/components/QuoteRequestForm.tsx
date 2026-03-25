@@ -318,19 +318,25 @@ const QuoteRequestForm = ({
     }
   };
 
-  const handleClose = () => {
-    onOpenChange(false);
-    setTimeout(() => {
-      setIsDownloaded(false);
-      setName("");
-      setEmail("");
-      setPhone("");
-      setNotes("");
-    }, 200);
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen) {
+      window.parent.postMessage({ type: 'QUOTE_MODAL_OPEN' }, '*');
+      onOpenChange(true);
+    } else {
+      window.parent.postMessage({ type: 'QUOTE_MODAL_CLOSED' }, '*');
+      onOpenChange(false);
+      setTimeout(() => {
+        setIsDownloaded(false);
+        setName("");
+        setEmail("");
+        setPhone("");
+        setNotes("");
+      }, 200);
+    }
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-md max-h-[90dvh] flex flex-col p-0 overflow-hidden">
         <div
           className="overflow-y-auto overscroll-contain p-6 flex flex-col gap-4"
@@ -384,7 +390,7 @@ const QuoteRequestForm = ({
               <h3 className="font-semibold text-lg">Your quote <span className="font-mono">{quoteRef}</span> has been downloaded.</h3>
               <p className="text-sm text-muted-foreground mt-1">Check your downloads folder for the PDF.</p>
             </div>
-            <Button variant="outline" onClick={handleClose}>Close</Button>
+            <Button variant="outline" onClick={() => handleOpenChange(false)}>Close</Button>
           </div>
         )}
         </div>
