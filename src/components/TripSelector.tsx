@@ -68,7 +68,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
     <>
     <style>{`
   .bta-trip-selector {
-    padding: 2rem 1rem;
+    padding: 3rem 1rem 1rem;
     max-width: 860px;
     margin: 0 auto;
   }
