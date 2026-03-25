@@ -160,7 +160,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
               key={card.profile.id}
               style={{
                 background: "#ffffff",
-                border: isHiker ? "2px solid #FF961B" : "0.5px solid #e0e0e0",
+                border: isHiker ? "2px solid #FF961B" : "1px solid #e0e0e0",
                 borderRadius: 12,
                 padding: "1.25rem",
                 display: "flex",
