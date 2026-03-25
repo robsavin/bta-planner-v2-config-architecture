@@ -282,6 +282,8 @@ const Index = () => {
   }, [partySize, formatPrice]);
 
   return (
+    <>
+    <TripSelector onSelectTrip={handleTripSelect} />
     <div className="min-h-screen bg-card" id="bta-planner" style={{ maxWidth: 1200, margin: '0 auto', borderRadius: 12, paddingTop: '2.5rem', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
       {/* Admin quote view */}
       {isAdminView && savedQuote && (
