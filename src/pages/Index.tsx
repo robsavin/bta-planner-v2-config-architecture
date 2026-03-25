@@ -12,6 +12,7 @@ import ShareTripButton from "@/components/ShareTripButton";
 import AdminQuoteView from "@/components/AdminQuoteView";
 import SavedQuoteNotice from "@/components/SavedQuoteNotice";
 import EnquiryForm from "@/components/EnquiryForm";
+import TripSelector from "@/components/TripSelector";
 
 import MapDisplay from "@/components/MapDisplay";
 import { getTrailConfig } from "@/config";
