@@ -1,6 +1,6 @@
 import type { TrailConfig } from "../types";
 import dalesWayGpxZipUrl from "@/data/dalesgpx.zip?url";
-import heroImage from "@/assets/hero-dales.jpg";
+import heroImage from "@/assets/hero-highlands.jpg";
 import btaLogoGif from "@/assets/bta-logo.gif";
 import btaLogoColor from "@/assets/bta-logo-color.png";
 import btaLogoWhite from "@/assets/bta-logo-white.webp";
