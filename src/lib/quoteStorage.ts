@@ -65,6 +65,42 @@ export async function saveQuote(
 
   if (error) throw new Error(`Failed to save quote: ${error.message}`);
 
+  // Fire Zapier webhook (non-blocking)
+  const webhookPayload = {
+    reference,
+    trail_id: trailId,
+    timestamp: new Date().toISOString(),
+    customer: {
+      name: customer.name,
+      email: customer.email,
+      phone: (customer as any).phone ?? null,
+      notes: (customer as any).notes ?? null,
+    },
+    configuration: {
+      pace: configuration.pace,
+      direction: configuration.direction,
+      days: configuration.days,
+      party_size: configuration.party_size,
+      start_date: configuration.start_date ?? null,
+      daily_hours: configuration.daily_hours,
+    },
+    pricing: {
+      total_price: pricing.total_price,
+      per_person: pricing.per_person,
+      deposit: pricing.deposit,
+      deposit_per_person: pricing.deposit_per_person,
+    },
+  };
+
+  fetch("https://hooks.zapier.com/hooks/catch/23441129/unutpvs/", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(webhookPayload),
+  }).catch(() => {
+    // Webhook failure is non-blocking — do not surface to user
+  });
+
   return {
     ...data,
     configuration: data.configuration as unknown as QuoteConfiguration,
