@@ -337,8 +337,8 @@ const QuoteRequestForm = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md max-h-[90dvh] flex flex-col p-0 overflow-hidden">
-        <div className="flex flex-1 flex-col p-6">
+      <DialogContent className="sm:max-w-md max-h-[90dvh] overflow-hidden flex flex-col">
+        <div className="flex flex-1 flex-col min-h-0 p-6">
         {!isDownloaded ? (
           <>
             <DialogHeader className="flex-shrink-0">
@@ -347,10 +347,10 @@ const QuoteRequestForm = ({
                 We'll generate a PDF of your personalised itinerary and pricing.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="mt-4 flex flex-1 flex-col overflow-hidden">
+            <form onSubmit={handleSubmit} className="mt-4 flex flex-1 flex-col min-h-0">
               <div
-                className="flex-1 overflow-y-scroll overscroll-contain [-webkit-overflow-scrolling:touch]"
-                style={{ WebkitOverflowScrolling: "touch" }}
+                className="flex-1 min-h-0"
+                style={{ overflow: 'scroll', WebkitOverflowScrolling: 'touch' }}
               >
                 <div className="space-y-4 pr-1">
                   <div className="space-y-2">
