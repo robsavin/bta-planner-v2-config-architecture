@@ -224,7 +224,7 @@ const EnquiryForm = ({
                 We'll be in touch shortly — usually within a few hours.
               </p>
             </div>
-            <Button variant="outline" onClick={handleClose}>Close</Button>
+            <Button variant="outline" onClick={() => handleOpenChange(false)}>Close</Button>
           </div>
         )}
         </div>
