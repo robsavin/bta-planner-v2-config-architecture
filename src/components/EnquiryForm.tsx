@@ -26,7 +26,7 @@ interface EnquiryFormProps {
   displayTotal: number;
 }
 
-const WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/23441129/ufwmgx1/";
+const WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/23441129/unuaxjy/";
 
 const EnquiryForm = ({
   open,
