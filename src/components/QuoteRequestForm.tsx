@@ -337,9 +337,9 @@ const QuoteRequestForm = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md max-h-[90dvh] flex flex-col p-0 overflow-hidden">
+      <DialogContent className="sm:max-w-md max-h-[85dvh] flex flex-col p-0 overflow-hidden">
         <div
-          className="overflow-y-auto overscroll-contain p-6 flex flex-col gap-4"
+          className="overflow-y-auto overscroll-contain p-6 flex flex-col gap-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           style={{ WebkitOverflowScrolling: "touch" }}
         >
         {!isDownloaded ? (
