@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { getTrailConfig } from "@/config";
 import {
-  speedProfiles,
+  speedProfiles as getSpeedProfiles,
   calculateTotalTimeWithDirection,
   calculateDays,
   type SpeedProfile,
