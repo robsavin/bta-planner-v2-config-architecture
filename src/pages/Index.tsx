@@ -46,7 +46,7 @@ const Index = () => {
   const urlParams = useTripUrlParams();
   const trailConfig = getTrailConfig();
 
-  const initialSpeed = resolveSpeedFromUrl(urlParams.pace) ?? speedProfiles[1];
+  const initialSpeed = resolveSpeedFromUrl(urlParams.pace) ?? getSpeedProfiles()[1];
   const initialDirection = urlParams.direction ?? "south-to-north";
   const initialDate = urlParams.startDate ?? new Date();
   const initialHours = urlParams.dailyHours ?? 8;
