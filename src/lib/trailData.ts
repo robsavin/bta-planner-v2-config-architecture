@@ -101,7 +101,7 @@ export function generateItinerary(
   numberOfDays: number,
   speedProfile: SpeedProfile,
   startDate: Date,
-  nodes: TrailNode[] = trailNodes
+  nodes: TrailNode[] = getTrailConfig().nodes
 ): DayPlan[] {
   const segments = calculateSegments(nodes);
   const totalTime = calculateTotalTime(speedProfile, nodes);
