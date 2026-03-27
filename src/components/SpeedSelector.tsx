@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { speedProfiles, calculateTotalTimeWithDirection, calculateDays, type SpeedProfile } from "@/lib/trailData";
+import { speedProfiles as getSpeedProfiles, calculateTotalTimeWithDirection, calculateDays, type SpeedProfile } from "@/lib/trailData";
 import type { TrailDirection } from "@/components/DirectionSelector";
 import { Badge } from "@/components/ui/badge";
 
