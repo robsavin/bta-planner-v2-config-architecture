@@ -1,7 +1,7 @@
 import heroImage from "@/assets/hero-highlands.jpg";
 import type { TrailConfig } from "@/config/types";
 
-export const hadriansWallPathConfig: TrailConfig = {
+const hadriansWallPathConfig: TrailConfig = {
   id: "hadrians-wall-path",
   name: "Hadrian's Wall Path",
   shortName: "Hadrian's Wall",
@@ -237,3 +237,5 @@ export const hadriansWallPathConfig: TrailConfig = {
     accentColor: "#FF961B",
   },
 };
+
+export default hadriansWallPathConfig;
