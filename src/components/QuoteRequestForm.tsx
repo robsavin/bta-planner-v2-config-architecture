@@ -146,6 +146,8 @@ const QuoteRequestForm = ({
       `Party size: ${partySize}`,
       `Duration: ${itinerary.length} days (${nights} nights)`,
     ];
+    if (arrivalNight) configLines.push(`Arrival night: Yes (in ${config.startLocation})`);
+    if (departureNight) configLines.push(`Departure night: Yes (in ${config.endLocation})`);
     configLines.forEach((line) => {
       doc.text(line, 14, y);
       y += 5;
