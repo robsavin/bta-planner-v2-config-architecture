@@ -171,17 +171,39 @@ const QuoteRequestForm = ({
     y += 4;
 
     doc.setFont("helvetica", "normal");
+
+    // Track day numbering offset for arrival night
+    let dayNum = 0;
+
+    // Arrival night row
+    if (arrivalNight && itinerary.length > 0) {
+      if (y > 270) { doc.addPage(); y = 20; }
+      dayNum += 1;
+      const arrivalLocation = itinerary[0].startNode.name;
+      doc.setFont("helvetica", "italic");
+      doc.text(`${dayNum}`, cols[0], y);
+      doc.text("Arrive", cols[1], y);
+      doc.text(arrivalLocation.substring(0, 20), cols[2], y);
+      doc.text("—", cols[3], y);
+      doc.text("—", cols[4], y);
+      doc.text("—", cols[5], y);
+      doc.text("—", cols[6], y);
+      doc.setFont("helvetica", "normal");
+      y += 5;
+    }
+
     itinerary.forEach((day) => {
       if (y > 270) {
         doc.addPage();
         y = 20;
       }
+      dayNum += 1;
       if (day.isRestDay) {
-        doc.text(`${day.day}`, cols[0], y);
+        doc.text(`${dayNum}`, cols[0], y);
         doc.text("Rest Day", cols[1], y);
         doc.text(`at ${day.startNode.name}`, cols[2], y);
       } else {
-        doc.text(`${day.day}`, cols[0], y);
+        doc.text(`${dayNum}`, cols[0], y);
         doc.text(day.startNode.name.substring(0, 18), cols[1], y);
         doc.text(day.endNode.name.substring(0, 20), cols[2], y);
         doc.text(`${day.distance.toFixed(1)} km`, cols[3], y);
@@ -193,6 +215,24 @@ const QuoteRequestForm = ({
       }
       y += 5;
     });
+
+    // Departure night row
+    if (departureNight && itinerary.length > 0) {
+      if (y > 270) { doc.addPage(); y = 20; }
+      dayNum += 1;
+      const departureLocation = itinerary[itinerary.length - 1].endNode.name;
+      doc.setFont("helvetica", "italic");
+      doc.text(`${dayNum}`, cols[0], y);
+      doc.text("Depart", cols[1], y);
+      doc.text(departureLocation.substring(0, 20), cols[2], y);
+      doc.text("—", cols[3], y);
+      doc.text("—", cols[4], y);
+      doc.text("—", cols[5], y);
+      doc.text("—", cols[6], y);
+      doc.setFont("helvetica", "normal");
+      y += 5;
+    }
+
     y += 5;
 
     // Journey summary
