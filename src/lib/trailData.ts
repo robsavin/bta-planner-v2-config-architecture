@@ -28,7 +28,7 @@ export interface TrailSegment {
 }
 
 // Calculate segments between nodes with time estimates
-export function calculateSegments(nodes: TrailNode[] = trailNodes): TrailSegment[] {
+export function calculateSegments(nodes: TrailNode[] = getTrailConfig().nodes): TrailSegment[] {
   const segments: TrailSegment[] = [];
 
   for (let i = 0; i < nodes.length - 1; i++) {
