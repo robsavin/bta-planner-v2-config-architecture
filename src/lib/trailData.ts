@@ -173,7 +173,7 @@ export function generateItinerary(
 }
 
 // Get all available stop nodes (those with accommodation)
-export function getAccommodationNodes(nodes: TrailNode[] = trailNodes): TrailNode[] {
+export function getAccommodationNodes(nodes: TrailNode[] = getTrailConfig().nodes): TrailNode[] {
   return nodes.filter((node) => node.hasAccommodation);
 }
 
