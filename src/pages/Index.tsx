@@ -401,6 +401,7 @@ const Index = () => {
           speedProfile={selectedSpeed} direction={selectedDirection} hoursPerDay={hoursPerDay}
           startDate={startDate} partySize={partySize} totalPrice={pricing.totalPrice}
           pricePerPerson={pricing.pricePerPerson} deposit={pricing.deposit} depositPerPerson={pricing.depositPerPerson}
+          arrivalNight={arrivalNight} departureNight={departureNight}
         />
 
         <EnquiryForm

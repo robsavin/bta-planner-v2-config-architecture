@@ -33,6 +33,8 @@ interface QuoteRequestFormProps {
   pricePerPerson: number;
   deposit: number;
   depositPerPerson: number;
+  arrivalNight?: boolean;
+  departureNight?: boolean;
 }
 
 const formatGBP = (amount: number) =>
