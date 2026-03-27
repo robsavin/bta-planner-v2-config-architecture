@@ -58,6 +58,8 @@ const QuoteRequestForm = ({
   pricePerPerson,
   deposit,
   depositPerPerson,
+  arrivalNight = false,
+  departureNight = false,
 }: QuoteRequestFormProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
