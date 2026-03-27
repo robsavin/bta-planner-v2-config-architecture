@@ -66,7 +66,7 @@ export function calculateSegmentTime(
 }
 
 // Calculate total time based on speed profile
-export function calculateTotalTime(speedProfile: SpeedProfile, nodes: TrailNode[] = trailNodes): number {
+export function calculateTotalTime(speedProfile: SpeedProfile, nodes: TrailNode[] = getTrailConfig().nodes): number {
   const segments = calculateSegments(nodes);
   let totalTime = 0;
 
