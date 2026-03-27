@@ -17,7 +17,7 @@ import TripSelector from "@/components/TripSelector";
 import MapDisplay from "@/components/MapDisplay";
 import { getTrailConfig } from "@/config";
 import {
-  speedProfiles,
+  speedProfiles as getSpeedProfiles,
   calculateTotalTimeWithDirection,
   calculateDays,
   generateItineraryWithDirection,
