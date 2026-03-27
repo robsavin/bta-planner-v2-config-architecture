@@ -202,7 +202,7 @@ export function getDirectionalNodes(direction: TrailDirection, nodes: TrailNode[
 export function calculateTotalTimeWithDirection(
   speedProfile: SpeedProfile,
   direction: TrailDirection,
-  nodes: TrailNode[] = trailNodes
+  nodes: TrailNode[] = getTrailConfig().nodes
 ): number {
   const dirNodes = getDirectionalNodes(direction, nodes);
   let totalTime = 0;
