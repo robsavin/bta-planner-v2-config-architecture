@@ -36,7 +36,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
   const trailConfig = getTrailConfig();
 
   const cards = useMemo(() => {
-    const eligible = speedProfiles.filter(
+    const eligible = getSpeedProfiles().filter(
       (p) => p.id === "explorer" || p.id === "hiker" || p.id === "fastpacker"
     );
     return eligible.map((profile) => {
