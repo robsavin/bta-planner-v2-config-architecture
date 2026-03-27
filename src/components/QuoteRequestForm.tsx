@@ -71,7 +71,8 @@ const QuoteRequestForm = ({
 
   const config = getTrailConfig();
   const activeDays = itinerary.filter((d) => !d.isRestDay).length;
-  const nights = Math.max(0, activeDays - 1);
+  const addonNights = (arrivalNight ? 1 : 0) + (departureNight ? 1 : 0);
+  const nights = Math.max(0, activeDays - 1) + addonNights;
   const totalDistance = itinerary.reduce((sum, d) => sum + d.distance, 0);
   const totalAscent = itinerary.reduce((sum, d) => sum + d.ascent, 0);
 
