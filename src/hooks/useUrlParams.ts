@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { speedProfiles } from "@/lib/trailData";
+import { speedProfiles as getSpeedProfiles } from "@/lib/trailData";
 import type { SpeedProfile } from "@/lib/trailData";
 import type { TrailDirection } from "@/components/DirectionSelector";
 
