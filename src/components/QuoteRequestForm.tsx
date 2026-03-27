@@ -33,6 +33,8 @@ interface QuoteRequestFormProps {
   pricePerPerson: number;
   deposit: number;
   depositPerPerson: number;
+  arrivalNight?: boolean;
+  departureNight?: boolean;
 }
 
 const formatGBP = (amount: number) =>
@@ -56,6 +58,8 @@ const QuoteRequestForm = ({
   pricePerPerson,
   deposit,
   depositPerPerson,
+  arrivalNight = false,
+  departureNight = false,
 }: QuoteRequestFormProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -67,7 +71,8 @@ const QuoteRequestForm = ({
 
   const config = getTrailConfig();
   const activeDays = itinerary.filter((d) => !d.isRestDay).length;
-  const nights = Math.max(0, activeDays - 1);
+  const addonNights = (arrivalNight ? 1 : 0) + (departureNight ? 1 : 0);
+  const nights = Math.max(0, activeDays - 1) + addonNights;
   const totalDistance = itinerary.reduce((sum, d) => sum + d.distance, 0);
   const totalAscent = itinerary.reduce((sum, d) => sum + d.ascent, 0);
 
@@ -141,6 +146,8 @@ const QuoteRequestForm = ({
       `Party size: ${partySize}`,
       `Duration: ${itinerary.length} days (${nights} nights)`,
     ];
+    if (arrivalNight) configLines.push(`Arrival night: Yes (in ${config.startLocation})`);
+    if (departureNight) configLines.push(`Departure night: Yes (in ${config.endLocation})`);
     configLines.forEach((line) => {
       doc.text(line, 14, y);
       y += 5;
