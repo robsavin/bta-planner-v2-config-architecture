@@ -30,12 +30,6 @@ interface MapDisplayProps {
   units?: UnitSystem;
 }
 
-// Build nodeCoordinates from trail config
-const trailConfig = getTrailConfig();
-const trailNodes = trailConfig.nodes;
-const nodeCoordinates: Record<string, [number, number]> = Object.fromEntries(
-  trailConfig.nodes.map((n) => [n.id, n.coordinates])
-);
 
 import { dayColours } from "@/lib/dayColours";
 
@@ -55,6 +49,13 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className, units 
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const { trailPoints, loading, error, cumulativeDistances, totalGpxDistance } = useTrailPoints();
+
+  // Resolve trail config at render time, not module init time
+  const trailConfig = getTrailConfig();
+  const trailNodes = trailConfig.nodes;
+  const nodeCoordinates: Record<string, [number, number]> = Object.fromEntries(
+    trailConfig.nodes.map((n) => [n.id, n.coordinates])
+  );
 
   useEffect(() => {
     if (!mapRef.current || loading || trailPoints.length === 0) return;

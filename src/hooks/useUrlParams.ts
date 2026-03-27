@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { speedProfiles } from "@/lib/trailData";
+import { speedProfiles as getSpeedProfiles } from "@/lib/trailData";
 import type { SpeedProfile } from "@/lib/trailData";
 import type { TrailDirection } from "@/components/DirectionSelector";
 
@@ -89,5 +89,5 @@ export function buildShareUrl(config: {
 
 export function resolveSpeedFromUrl(paceId: string | undefined): SpeedProfile | undefined {
   if (!paceId) return undefined;
-  return speedProfiles.find((s) => s.id === paceId);
+  return getSpeedProfiles().find((s) => s.id === paceId);
 }

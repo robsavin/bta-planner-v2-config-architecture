@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { speedProfiles, calculateTotalTimeWithDirection, calculateDays, type SpeedProfile } from "@/lib/trailData";
+import { speedProfiles as getSpeedProfiles, calculateTotalTimeWithDirection, calculateDays, type SpeedProfile } from "@/lib/trailData";
 import type { TrailDirection } from "@/components/DirectionSelector";
 import { Badge } from "@/components/ui/badge";
 
@@ -22,7 +22,7 @@ const SpeedSelector = ({
   if (compact) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {speedProfiles.map((profile) => {
+        {getSpeedProfiles().map((profile) => {
           const isSelected = selectedSpeed.id === profile.id;
           const isPopular = profile.id === "hiker";
           const totalHours = calculateTotalTimeWithDirection(profile, direction);
@@ -57,7 +57,7 @@ const SpeedSelector = ({
   // Full (non-compact) version — same card layout
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-      {speedProfiles.map((profile) => {
+      {getSpeedProfiles().map((profile) => {
         const isSelected = selectedSpeed.id === profile.id;
         const isPopular = profile.id === "hiker";
         const totalHours = calculateTotalTimeWithDirection(profile, direction);

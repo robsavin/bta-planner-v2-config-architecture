@@ -10,10 +10,13 @@ export type TrailDirection = "south-to-north" | "north-to-south";
 export type SpeedProfile = SpeedProfileConfig;
 export type TrailNode = TrailNodeConfig;
 
-// Convenience re-exports from the active config (keeps existing call-sites working)
-const config = getTrailConfig();
-export const speedProfiles: SpeedProfile[] = config.speedProfiles;
-export const trailNodes: TrailNode[] = config.nodes;
+// Lazy convenience accessors — resolved at call-time, not import-time
+export function speedProfiles(): SpeedProfile[] {
+  return getTrailConfig().speedProfiles;
+}
+export function trailNodes(): TrailNode[] {
+  return getTrailConfig().nodes;
+}
 
 export interface TrailSegment {
   fromNode: TrailNode;
@@ -25,7 +28,7 @@ export interface TrailSegment {
 }
 
 // Calculate segments between nodes with time estimates
-export function calculateSegments(nodes: TrailNode[] = trailNodes): TrailSegment[] {
+export function calculateSegments(nodes: TrailNode[] = getTrailConfig().nodes): TrailSegment[] {
   const segments: TrailSegment[] = [];
 
   for (let i = 0; i < nodes.length - 1; i++) {
@@ -63,7 +66,7 @@ export function calculateSegmentTime(
 }
 
 // Calculate total time based on speed profile
-export function calculateTotalTime(speedProfile: SpeedProfile, nodes: TrailNode[] = trailNodes): number {
+export function calculateTotalTime(speedProfile: SpeedProfile, nodes: TrailNode[] = getTrailConfig().nodes): number {
   const segments = calculateSegments(nodes);
   let totalTime = 0;
 
@@ -98,7 +101,7 @@ export function generateItinerary(
   numberOfDays: number,
   speedProfile: SpeedProfile,
   startDate: Date,
-  nodes: TrailNode[] = trailNodes
+  nodes: TrailNode[] = getTrailConfig().nodes
 ): DayPlan[] {
   const segments = calculateSegments(nodes);
   const totalTime = calculateTotalTime(speedProfile, nodes);
@@ -170,12 +173,12 @@ export function generateItinerary(
 }
 
 // Get all available stop nodes (those with accommodation)
-export function getAccommodationNodes(nodes: TrailNode[] = trailNodes): TrailNode[] {
+export function getAccommodationNodes(nodes: TrailNode[] = getTrailConfig().nodes): TrailNode[] {
   return nodes.filter((node) => node.hasAccommodation);
 }
 
 // Get nodes in the correct order based on direction
-export function getDirectionalNodes(direction: TrailDirection, nodes: TrailNode[] = trailNodes): TrailNode[] {
+export function getDirectionalNodes(direction: TrailDirection, nodes: TrailNode[] = getTrailConfig().nodes): TrailNode[] {
   if (direction === "north-to-south") {
     const reversed = [...nodes].reverse();
     const totalDistance = nodes[nodes.length - 1].distanceFromStart;
@@ -199,7 +202,7 @@ export function getDirectionalNodes(direction: TrailDirection, nodes: TrailNode[
 export function calculateTotalTimeWithDirection(
   speedProfile: SpeedProfile,
   direction: TrailDirection,
-  nodes: TrailNode[] = trailNodes
+  nodes: TrailNode[] = getTrailConfig().nodes
 ): number {
   const dirNodes = getDirectionalNodes(direction, nodes);
   let totalTime = 0;
@@ -222,7 +225,7 @@ export function generateItineraryWithDirection(
   speedProfile: SpeedProfile,
   startDate: Date,
   direction: TrailDirection,
-  nodes: TrailNode[] = trailNodes
+  nodes: TrailNode[] = getTrailConfig().nodes
 ): DayPlan[] {
   const dirNodes = getDirectionalNodes(direction, nodes);
   const totalTime = calculateTotalTimeWithDirection(speedProfile, direction, nodes);

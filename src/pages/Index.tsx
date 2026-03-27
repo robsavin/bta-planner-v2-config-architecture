@@ -17,7 +17,7 @@ import TripSelector from "@/components/TripSelector";
 import MapDisplay from "@/components/MapDisplay";
 import { getTrailConfig } from "@/config";
 import {
-  speedProfiles,
+  speedProfiles as getSpeedProfiles,
   calculateTotalTimeWithDirection,
   calculateDays,
   generateItineraryWithDirection,
@@ -46,7 +46,7 @@ const Index = () => {
   const urlParams = useTripUrlParams();
   const trailConfig = getTrailConfig();
 
-  const initialSpeed = resolveSpeedFromUrl(urlParams.pace) ?? speedProfiles[1];
+  const initialSpeed = resolveSpeedFromUrl(urlParams.pace) ?? getSpeedProfiles()[1];
   const initialDirection = urlParams.direction ?? "south-to-north";
   const initialDate = urlParams.startDate ?? new Date();
   const initialHours = urlParams.dailyHours ?? 8;
@@ -243,7 +243,7 @@ const Index = () => {
   const handleDepartureNightChange = useCallback((v: boolean) => { setDepartureNight(v); triggerPricePulse(); }, [triggerPricePulse]);
 
   const handleTripSelect = useCallback((speedProfileId: string, party: number, date: Date) => {
-    const profile = speedProfiles.find(p => p.id === speedProfileId);
+    const profile = getSpeedProfiles().find(p => p.id === speedProfileId);
     if (profile) handleSpeedChange(profile);
     handlePartySizeChange(party);
     setStartDate(date);
