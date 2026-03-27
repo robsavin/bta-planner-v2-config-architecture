@@ -1,6 +1,6 @@
 import type { TrailConfig } from "../types";
 import dalesWayGpxZipUrl from "@/data/dalesgpx.zip?url";
-import heroImage from "@/assets/hero-dales.jpg";
+import heroImage from "@/assets/hero-highlands.jpg";
 import btaLogoGif from "@/assets/bta-logo.gif";
 import btaLogoColor from "@/assets/bta-logo-color.png";
 import btaLogoWhite from "@/assets/bta-logo-white.webp";
@@ -10,12 +10,10 @@ import btaLogoWhite from "@/assets/bta-logo-white.webp";
 // https://dales-way-planner.openair.tools (lib/trailData.ts)
 // Distances and ascent/descent figures are source-of-truth from that app.
 //
-// Coordinates are approximate centre-of-settlement — verify if map marker
-// placement is critical.
+// Coordinates are snapped to the actual GPX track (Dales_Way__A.gpx).
 //
 // Before go-live:
-//   - Add @/data/dalesgpx.zip to the data folder
-//   - Add @/assets/hero-dales.jpg to assets
+//   - Replace heroImage import with a Dales-specific hero image
 //   - Update branding.bookingUrl once Shopify product is published
 // ---------------------------------------------------------------------------
 
@@ -53,7 +51,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 0,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [53.9255, -1.8226],
+      coordinates: [53.9288, -1.8305],
       description: "The trail begins at Ilkley's Old Bridge.",
     },
     {
@@ -64,7 +62,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 16,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [53.9333, -1.8833],
+      coordinates: [53.9435, -1.8747],
       description:
         "The trail begins at Ilkley's Old Bridge, following the River Wharfe through meadows to Addingham, pubs and cafe in the village center.",
     },
@@ -76,7 +74,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 57,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [53.9717, -1.9017],
+      coordinates: [53.9705, -1.8936],
       description:
         "From Addingham, the path follows the River Wharfe through lush pastures before joining Bolton Road and following to Bolton Bridge. A cafe and pub provide refreshments in the village centre.",
     },
@@ -88,7 +86,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 151,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.0167, -1.9667],
+      coordinates: [54.0466, -1.9521],
       description:
         "The route follows field paths to Bolton Abbey. Admire the 12th-century Priory ruins before crossing the Wharfe via the famous stepping stones (or adjacent footbridge). Pass the Cavendish Pavilion offering refreshments and continue through Strid Wood. The route continues to Barden Bridge, then through meadows past Howgill to Appletreewick village with its renowned Craven Arms pub.",
     },
@@ -100,7 +98,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 162,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.0417, -1.9833],
+      coordinates: [54.0604, -1.9797],
       description:
         "From Appletreewick, follow riverside meadows past Loup Scar limestone cliff to Burnsall village, where the Red Lion pub and Wharfe View Café offer refreshments.",
     },
@@ -112,7 +110,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 186,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.0742, -1.9999],
+      coordinates: [54.0758, -1.9985],
       description:
         "From Burnsall follow the eastern riverbank through meadows. Continue over Hebden suspension bridge (Hebden village with Old School Tea Room 700m off-route). Continue along field paths to historic Linton Falls. Cross the footbridge to enter Grassington with its cobbled market square, cafés, shops, and pubs.",
     },
@@ -124,7 +122,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 343,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.1372, -2.0403],
+      coordinates: [54.1374, -2.0400],
       description:
         "The path leaves Grassington via Chapel Street, climbing past the golf course. Cross rolling fields with expansive views of Wharfedale. The trail passes above Conistone with its limestone outcrops before descending to Kettlewell, a picturesque village with shops, cafés, and pubs.",
     },
@@ -136,7 +134,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 360,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.1583, -2.0583],
+      coordinates: [54.1524, -2.0604],
       description:
         "From Kettlewell market square, follow the western bank of the Wharfe through wildflower meadows. Pass the distinctive Starbotton Birks limestone formations before reaching Starbotton village with its Fox and Hounds pub.",
     },
@@ -148,7 +146,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 385,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.172, -2.0644],
+      coordinates: [54.1645, -2.0743],
       description:
         "Continue to Buckden along riverside fields, crossing several stiles and footbridges. The imposing mass of Buckden Pike (702m) dominates the skyline. At Buckden the Buck Inn offers meals and accommodation.",
     },
@@ -160,7 +158,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 386,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.1917, -2.0917],
+      coordinates: [54.1915, -2.0940],
       description:
         "The path continues alongside the young River Wharfe through meadows to reach the bridge at Hubberholme, home to the historic St. Michael and All Angels Church with its Mouseman carvings and the 16th-century George Inn.",
     },
@@ -172,7 +170,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 402,
       hasAccommodation: true,
       hasServices: false,
-      coordinates: [54.2333, -2.1833],
+      coordinates: [54.2238, -2.1933],
       description:
         "Follow the Wharfe through Langstrothdale's limestone landscape to Yockenthwaite. From Yockenthwaite Bridge, follow the south bank of the increasingly narrow Wharfe through meadows bordered by drystone walls to the small hamlet of Oughtershaw.",
     },
@@ -184,7 +182,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 593,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.2667, -2.3167],
+      coordinates: [54.2493, -2.3315],
       description:
         "From Oughtershaw, the path climbs steadily toward the watershed, passing Swarthghyll Farm before reaching Cam Houses, allegedly the most isolated farm in England. The ascent tops out at the trail's highest point (520m), rewarding walkers with panoramic views of Ingleborough and Whernside, then descends to Blea Moor Road. A 2.5km detour north leads to Ribblehead with its iconic 24-arch viaduct and the Station Inn pub.",
     },
@@ -196,7 +194,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 782,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.2917, -2.3667],
+      coordinates: [54.2768, -2.3673],
       description:
         "From Blea Moor Road, the path climbs onto the moorland and contours northward with expansive views of Dentdale below. Follow a sometimes boggy moorland track before joining a lane. About 1 km from Cowgill reach the Sportsman Inn.",
     },
@@ -208,7 +206,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 935,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.2784, -2.4614],
+      coordinates: [54.2807, -2.4614],
       description:
         "Follow the riverside path along the Dee through verdant pastures dotted with traditional stone field barns. Dent village features cobbled streets lined with whitewashed cottages. Refreshments at Stone Close Café, Sun Inn, and George & Dragon pub.",
     },
@@ -220,7 +218,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 1081,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.3225, -2.5278],
+      coordinates: [54.3168, -2.5278],
       description:
         "From Dent, follow the riverside path along the Dee through lush meadows. Cross to the northern bank at Brackensgill Bridge, continuing through farmland to Lincoln's Inn Bridge and Millthrop. Detour about 700m into Sedbergh, England's 'Book Town', with numerous cafés and pubs including the Black Bull and Dalesman.",
     },
@@ -232,7 +230,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 1129,
       hasAccommodation: true,
       hasServices: false,
-      coordinates: [54.35, -2.6],
+      coordinates: [54.3589, -2.6026],
       description:
         "The trail follows field paths with views of the dramatic Howgill Fells. Pass through Birks Mill and traverse undulating farmland to The Oaks hamlet. Cross the A684 and continue along the River Lune to the Lune Viaduct.",
     },
@@ -244,7 +242,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 1393,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.37, -2.7167],
+      coordinates: [54.3637, -2.7152],
       description:
         "Ascend gradually across fields and farms before descending back alongside the river. A lane takes you over a lovely stone bridge, then under the Lowgill Viaduct, to Beck Foot hamlet before trails continue westwards over the M6 motorway. From here it is a 4km detour by taxi to Kendal for accommodation and dining.",
     },
@@ -256,7 +254,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 1443,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.3897, -2.7453],
+      coordinates: [54.3588, -2.7420],
       description:
         "From the A6 it is just over 3 km to the outskirts of Burneside, mainly on field paths. The highlight being crossing Sprint Mill Bridge with rapids underneath. There is a pub in Burneside about 500m detour from the trail.",
     },
@@ -268,7 +266,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 1459,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.3851, -2.8107],
+      coordinates: [54.3730, -2.8122],
       description:
         "From Burneside the trail soon follows the riverside path through meadows. Pass through Bowston with its historic bobbin mill and weir. In Staveley there are cafes, a pub and Hawkshead Brewery for refreshments.",
     },
@@ -280,7 +278,7 @@ const dalesWay: TrailConfig = {
       cumulativeDescent: 1717,
       hasAccommodation: true,
       hasServices: true,
-      coordinates: [54.363, -2.9234],
+      coordinates: [54.3636, -2.9200],
       description:
         "From Staveley, the trail climbs steadily on an undulating route through mixed farmland. Enjoy panoramic views of Lake Windermere and the central Lake District fells. Descend through fields and pause at the commemorative stone bench marking the official end of the Dales Way. Continue into Bowness for numerous lakeside cafés, pubs, and restaurants.",
     },
