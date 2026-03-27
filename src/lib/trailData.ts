@@ -178,7 +178,7 @@ export function getAccommodationNodes(nodes: TrailNode[] = getTrailConfig().node
 }
 
 // Get nodes in the correct order based on direction
-export function getDirectionalNodes(direction: TrailDirection, nodes: TrailNode[] = trailNodes): TrailNode[] {
+export function getDirectionalNodes(direction: TrailDirection, nodes: TrailNode[] = getTrailConfig().nodes): TrailNode[] {
   if (direction === "north-to-south") {
     const reversed = [...nodes].reverse();
     const totalDistance = nodes[nodes.length - 1].distanceFromStart;
