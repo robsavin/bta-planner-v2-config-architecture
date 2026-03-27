@@ -10,10 +10,13 @@ export type TrailDirection = "south-to-north" | "north-to-south";
 export type SpeedProfile = SpeedProfileConfig;
 export type TrailNode = TrailNodeConfig;
 
-// Convenience re-exports from the active config (keeps existing call-sites working)
-const config = getTrailConfig();
-export const speedProfiles: SpeedProfile[] = config.speedProfiles;
-export const trailNodes: TrailNode[] = config.nodes;
+// Lazy convenience accessors — resolved at call-time, not import-time
+export function speedProfiles(): SpeedProfile[] {
+  return getTrailConfig().speedProfiles;
+}
+export function trailNodes(): TrailNode[] {
+  return getTrailConfig().nodes;
+}
 
 export interface TrailSegment {
   fromNode: TrailNode;
