@@ -30,12 +30,6 @@ interface MapDisplayProps {
   units?: UnitSystem;
 }
 
-// Build nodeCoordinates from trail config
-const trailConfig = getTrailConfig();
-const trailNodes = trailConfig.nodes;
-const nodeCoordinates: Record<string, [number, number]> = Object.fromEntries(
-  trailConfig.nodes.map((n) => [n.id, n.coordinates])
-);
 
 import { dayColours } from "@/lib/dayColours";
 
