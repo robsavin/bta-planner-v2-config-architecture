@@ -89,5 +89,5 @@ export function buildShareUrl(config: {
 
 export function resolveSpeedFromUrl(paceId: string | undefined): SpeedProfile | undefined {
   if (!paceId) return undefined;
-  return speedProfiles.find((s) => s.id === paceId);
+  return getSpeedProfiles().find((s) => s.id === paceId);
 }

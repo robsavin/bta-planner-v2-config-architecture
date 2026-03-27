@@ -225,7 +225,7 @@ export function generateItineraryWithDirection(
   speedProfile: SpeedProfile,
   startDate: Date,
   direction: TrailDirection,
-  nodes: TrailNode[] = trailNodes
+  nodes: TrailNode[] = getTrailConfig().nodes
 ): DayPlan[] {
   const dirNodes = getDirectionalNodes(direction, nodes);
   const totalTime = calculateTotalTimeWithDirection(speedProfile, direction, nodes);

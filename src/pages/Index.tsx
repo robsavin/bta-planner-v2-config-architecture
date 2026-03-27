@@ -243,7 +243,7 @@ const Index = () => {
   const handleDepartureNightChange = useCallback((v: boolean) => { setDepartureNight(v); triggerPricePulse(); }, [triggerPricePulse]);
 
   const handleTripSelect = useCallback((speedProfileId: string, party: number, date: Date) => {
-    const profile = speedProfiles.find(p => p.id === speedProfileId);
+    const profile = getSpeedProfiles().find(p => p.id === speedProfileId);
     if (profile) handleSpeedChange(profile);
     handlePartySizeChange(party);
     setStartDate(date);
