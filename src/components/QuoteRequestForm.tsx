@@ -246,7 +246,7 @@ const QuoteRequestForm = ({
     doc.text(`Total distance: ${totalDistance.toFixed(1)} km`, 14, y); y += 5;
     doc.text(`Total ascent: ${totalAscent.toLocaleString()} m`, 14, y); y += 5;
     doc.text(`Walking days: ${activeDays}`, 14, y); y += 5;
-    doc.text(`Total days: ${itinerary.length}`, 14, y); y += 10;
+    doc.text(`Total days: ${itinerary.length + addonNights}`, 14, y); y += 10;
 
     // Pricing
     doc.setFontSize(13);
