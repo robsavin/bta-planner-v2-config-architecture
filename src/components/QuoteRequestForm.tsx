@@ -162,7 +162,8 @@ const QuoteRequestForm = ({
 
     doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
-    const cols = [14, 28, 62, 100, 130, 152, 172];
+    const cols = [14, 28, 62, 104, 134, 156, 176];
+    const colWidths = [14, 32, 40, 28, 20, 18, 20]; // max width for each column's text
     const headers = ["Day", "From", "To", "Distance", "Time", "Ascent", "Descent"];
     headers.forEach((h, i) => doc.text(h, cols[i], y));
     y += 2;
@@ -172,65 +173,65 @@ const QuoteRequestForm = ({
 
     doc.setFont("helvetica", "normal");
 
+    // Helper to render a row with text wrapping in From/To columns
+    const renderRow = (texts: string[], fontStyle: string = "normal") => {
+      doc.setFont("helvetica", fontStyle);
+      // Split From (col 1) and To (col 2) text to fit column widths
+      const fromLines = doc.splitTextToSize(texts[1], colWidths[1]);
+      const toLines = doc.splitTextToSize(texts[2], colWidths[2]);
+      const maxLines = Math.max(fromLines.length, toLines.length, 1);
+      const rowHeight = maxLines * 4 + 1;
+
+      if (y + rowHeight > 275) { doc.addPage(); y = 20; }
+
+      // Day number
+      doc.text(texts[0], cols[0], y);
+      // From lines
+      fromLines.forEach((line: string, li: number) => doc.text(line, cols[1], y + li * 4));
+      // To lines
+      toLines.forEach((line: string, li: number) => doc.text(line, cols[2], y + li * 4));
+      // Remaining single-line cols
+      for (let c = 3; c < texts.length; c++) {
+        doc.text(texts[c], cols[c], y);
+      }
+      y += rowHeight;
+      doc.setFont("helvetica", "normal");
+    };
+
     // Track day numbering offset for arrival night
     let dayNum = 0;
 
     // Arrival night row
     if (arrivalNight && itinerary.length > 0) {
-      if (y > 270) { doc.addPage(); y = 20; }
       dayNum += 1;
       const arrivalLocation = itinerary[0].startNode.name;
-      doc.setFont("helvetica", "italic");
-      doc.text(`${dayNum}`, cols[0], y);
-      doc.text("Arrive", cols[1], y);
-      doc.text(arrivalLocation.substring(0, 20), cols[2], y);
-      doc.text("—", cols[3], y);
-      doc.text("—", cols[4], y);
-      doc.text("—", cols[5], y);
-      doc.text("—", cols[6], y);
-      doc.setFont("helvetica", "normal");
-      y += 5;
+      renderRow([`${dayNum}`, "Arrive", arrivalLocation, "—", "—", "—", "—"], "italic");
     }
 
     itinerary.forEach((day) => {
-      if (y > 270) {
-        doc.addPage();
-        y = 20;
-      }
       dayNum += 1;
       if (day.isRestDay) {
-        doc.text(`${dayNum}`, cols[0], y);
-        doc.text("Rest Day", cols[1], y);
-        doc.text(`at ${day.startNode.name}`, cols[2], y);
+        renderRow([`${dayNum}`, "Rest Day", `at ${day.startNode.name}`, "", "", "", ""]);
       } else {
-        doc.text(`${dayNum}`, cols[0], y);
-        doc.text(day.startNode.name.substring(0, 18), cols[1], y);
-        doc.text(day.endNode.name.substring(0, 20), cols[2], y);
-        doc.text(`${day.distance.toFixed(1)} km`, cols[3], y);
         const hrs = Math.floor(day.walkingTime);
         const mins = Math.round((day.walkingTime - hrs) * 60);
-        doc.text(`${hrs}h ${mins}m`, cols[4], y);
-        doc.text(`${day.ascent} m`, cols[5], y);
-        doc.text(`${day.descent} m`, cols[6], y);
+        renderRow([
+          `${dayNum}`,
+          day.startNode.name,
+          day.endNode.name,
+          `${day.distance.toFixed(1)} km`,
+          `${hrs}h ${mins}m`,
+          `${day.ascent} m`,
+          `${day.descent} m`,
+        ]);
       }
-      y += 5;
     });
 
     // Departure night row
     if (departureNight && itinerary.length > 0) {
-      if (y > 270) { doc.addPage(); y = 20; }
       dayNum += 1;
       const departureLocation = itinerary[itinerary.length - 1].endNode.name;
-      doc.setFont("helvetica", "italic");
-      doc.text(`${dayNum}`, cols[0], y);
-      doc.text("Depart", cols[1], y);
-      doc.text(departureLocation.substring(0, 20), cols[2], y);
-      doc.text("—", cols[3], y);
-      doc.text("—", cols[4], y);
-      doc.text("—", cols[5], y);
-      doc.text("—", cols[6], y);
-      doc.setFont("helvetica", "normal");
-      y += 5;
+      renderRow([`${dayNum}`, "Depart", departureLocation, "—", "—", "—", "—"], "italic");
     }
 
     y += 5;
