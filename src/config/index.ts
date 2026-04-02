@@ -2,12 +2,14 @@ import type { TrailConfig } from "./types";
 import westHighlandWay from "./trails/west-highland-way";
 import dalesWay from "./trails/dales-way";
 import hadriansWallPath from "./trails/hadrians-wall-path";
+import robRoyWay from "./trails/rob-roy-way";
 
 
 const trailConfigs: Record<string, TrailConfig> = {
   "west-highland-way": westHighlandWay,
   "dales-way": dalesWay,
   "hadrians-wall-path": hadriansWallPath,
+  "rob-roy-way": robRoyWay,
 };
 
 /**
