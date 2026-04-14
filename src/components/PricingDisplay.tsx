@@ -9,6 +9,8 @@ interface PricingDisplayProps {
    * data-deposit attribute passed in from the liquid template.
    */
   depositPerPerson: number;
+  /** Optional start date used to apply a year multiplier for future-year trips. */
+  startDate?: Date | null;
 }
 
 const MULTIPLIER: Record<number, number> = {
