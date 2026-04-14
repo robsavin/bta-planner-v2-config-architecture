@@ -20,10 +20,11 @@ const MULTIPLIER: Record<number, number> = {
 const formatGBP = (amount: number) =>
   new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
 
-const PricingDisplay = ({ partySize, activeDays, depositPerPerson }: PricingDisplayProps) => {
+const PricingDisplay = ({ partySize, activeDays, depositPerPerson, startDate = null }: PricingDisplayProps) => {
   const nights = Math.max(0, activeDays - 1);
   const multiplier = MULTIPLIER[partySize] ?? partySize;
-  const totalPrice = (49 * partySize) + (140 * nights * multiplier);
+  const yearMultiplier = startDate && startDate.getFullYear() > new Date().getFullYear() ? 1.05 : 1.0;
+  const totalPrice = ((49 * partySize) + (140 * nights * multiplier)) * yearMultiplier;
   const pricePerPerson = Math.round(totalPrice / partySize);
   const deposit = depositPerPerson * partySize;
 
