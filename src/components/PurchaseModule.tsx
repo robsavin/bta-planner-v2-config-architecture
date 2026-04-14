@@ -67,7 +67,8 @@ const PurchaseModule = ({
   const nights = Math.max(0, totalDays - 1) + addonNights;
 
   const multiplier = MULTIPLIER[partySize] ?? partySize;
-  const liveTotalPrice = (49 * partySize) + (140 * nights * multiplier);
+  const yearMultiplier = startDate.getFullYear() > new Date().getFullYear() ? 1.05 : 1.0;
+  const liveTotalPrice = ((49 * partySize) + (140 * nights * multiplier)) * yearMultiplier;
   const totalPrice = overridePricing?.totalPrice ?? liveTotalPrice;
   const pricePerPerson = overridePricing?.pricePerPerson ?? Math.round(liveTotalPrice / partySize);
   const variantDeposit = getVariantPriceForPace(speedProfileName) ?? getVariantPriceForPace(speedProfileId);
