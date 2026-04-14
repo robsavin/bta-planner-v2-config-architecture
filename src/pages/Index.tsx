@@ -259,13 +259,14 @@ const Index = () => {
     const baseNights = Math.max(0, totalDays - 1);
     const nights = baseNights + addonNights;
     const multiplier = MULTIPLIER[partySize] ?? partySize;
-    const totalPrice = (49 * partySize) + (140 * nights * multiplier);
+    const yearMultiplier = startDate.getFullYear() > new Date().getFullYear() ? 1.05 : 1.0;
+    const totalPrice = ((49 * partySize) + (140 * nights * multiplier)) * yearMultiplier;
     const pricePerPerson = Math.round(totalPrice / partySize);
     const variantDeposit = getVariantPriceForPace(selectedSpeed.name) ?? getVariantPriceForPace(selectedSpeed.id);
     const depPerPerson = variantDeposit ?? trailConfig.depositPerPerson;
     const deposit = depPerPerson * partySize;
     return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson, nights };
-  }, [itinerary, partySize, trailConfig.depositPerPerson, selectedSpeed.id, selectedSpeed.name, addonNights]);
+  }, [itinerary, partySize, trailConfig.depositPerPerson, selectedSpeed.id, selectedSpeed.name, addonNights, startDate]);
 
   const pricing = savedQuote
     ? { totalPrice: savedQuote.pricing.total_price, pricePerPerson: savedQuote.pricing.per_person, deposit: savedQuote.pricing.deposit, depositPerPerson: savedQuote.pricing.deposit_per_person, nights: livePricing.nights }
