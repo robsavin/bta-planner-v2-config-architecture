@@ -266,7 +266,7 @@ const Index = () => {
     const depPerPerson = variantDeposit ?? trailConfig.depositPerPerson;
     const deposit = depPerPerson * partySize;
     return { totalPrice, pricePerPerson, deposit, depositPerPerson: depPerPerson, nights };
-  }, [itinerary, partySize, trailConfig.depositPerPerson, selectedSpeed.id, selectedSpeed.name, addonNights]);
+  }, [itinerary, partySize, trailConfig.depositPerPerson, selectedSpeed.id, selectedSpeed.name, addonNights, startDate]);
 
   const pricing = savedQuote
     ? { totalPrice: savedQuote.pricing.total_price, pricePerPerson: savedQuote.pricing.per_person, deposit: savedQuote.pricing.deposit, depositPerPerson: savedQuote.pricing.deposit_per_person, nights: livePricing.nights }
