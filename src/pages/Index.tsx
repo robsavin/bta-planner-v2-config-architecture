@@ -259,7 +259,8 @@ const Index = () => {
     const baseNights = Math.max(0, totalDays - 1);
     const nights = baseNights + addonNights;
     const multiplier = MULTIPLIER[partySize] ?? partySize;
-    const totalPrice = (49 * partySize) + (140 * nights * multiplier);
+    const yearMultiplier = startDate.getFullYear() > new Date().getFullYear() ? 1.05 : 1.0;
+    const totalPrice = ((49 * partySize) + (140 * nights * multiplier)) * yearMultiplier;
     const pricePerPerson = Math.round(totalPrice / partySize);
     const variantDeposit = getVariantPriceForPace(selectedSpeed.name) ?? getVariantPriceForPace(selectedSpeed.id);
     const depPerPerson = variantDeposit ?? trailConfig.depositPerPerson;
