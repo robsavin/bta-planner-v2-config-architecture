@@ -3,6 +3,7 @@ import westHighlandWay from "./trails/west-highland-way";
 import dalesWay from "./trails/dales-way";
 import hadriansWallPath from "./trails/hadrians-wall-path";
 import robRoyWay from "./trails/rob-roy-way";
+import cotswoldWay from "./trails/cotswold-way";
 
 
 const trailConfigs: Record<string, TrailConfig> = {
@@ -10,6 +11,7 @@ const trailConfigs: Record<string, TrailConfig> = {
   "dales-way": dalesWay,
   "hadrians-wall-path": hadriansWallPath,
   "rob-roy-way": robRoyWay,
+  "cotswold-way": cotswoldWay,
 };
 
 /**
