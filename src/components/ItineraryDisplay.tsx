@@ -38,6 +38,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 
 interface ItineraryDisplayProps {
@@ -250,7 +251,6 @@ interface DestinationDropdownProps {
   options: TrailNode[];
   onValueChange: (value: string) => void;
   className?: string;
-  children: React.ReactNode;
 }
 
 const DestinationDropdown = ({
@@ -258,14 +258,18 @@ const DestinationDropdown = ({
   options,
   onValueChange,
   className,
-  children,
 }: DestinationDropdownProps) => {
+  const selectedNode = options.find((n) => n.id === value);
+  const displayName = selectedNode
+    ? `${selectedNode.name}${selectedNode.hasServices ? " (services)" : ""}`
+    : value;
+
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger aria-label="Select destination" className={className}>
-        <div className="flex-1 min-w-0">{children}</div>
+      <SelectTrigger className={cn("w-full", className)}>
+        <SelectValue>{displayName}</SelectValue>
       </SelectTrigger>
-      <SelectContent className="z-50 bg-popover">
+      <SelectContent className="bg-popover z-[9999]">
         {options.map((node) => (
           <SelectItem key={node.id} value={node.id}>
             {node.name}
@@ -449,14 +453,9 @@ const DayCard = ({
                 }}
                 className={cn(
                   "h-auto py-2 border-2 hover:border-primary/50 transition-all bg-primary/5",
-                  isFirstWalkingDay && "animate-pulse ring-2 ring-primary/40 ring-offset-2"
+                  isFirstWalkingDay && "ring-2 ring-primary/40 ring-offset-2"
                 )}
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-base md:text-lg font-semibold">{day.endNode.name}</span>
-                  <Pencil className="h-3.5 w-3.5 text-muted-foreground ml-auto" />
-                </div>
-              </DestinationDropdown>
+              />
             </div>
           </div>
         </div>
