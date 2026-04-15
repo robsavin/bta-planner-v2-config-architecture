@@ -330,7 +330,7 @@ const DestinationDropdown = ({
                 backgroundColor: "hsl(var(--popover))",
               }}
             >
-              <div className="max-h-96 overflow-y-auto p-1">
+              <div className="flex flex-col max-h-96 overflow-y-auto p-1">
                 {options.map((node) => (
                   <button
                     key={node.id}
