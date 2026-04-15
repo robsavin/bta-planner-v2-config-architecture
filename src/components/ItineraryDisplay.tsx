@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 import { format } from "date-fns";
-import { 
-  MapPin, 
-  Clock, 
-  ArrowUp, 
-  ArrowDown, 
-  Mountain, 
+import {
+  MapPin,
+  Clock,
+  ArrowUp,
+  ArrowDown,
+  Mountain,
   Coffee,
   Bed,
   Plus,
@@ -17,15 +16,14 @@ import {
   ChevronUp,
   ChevronsDown,
   ChevronsUp,
-  Check,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getDayColour } from "@/lib/dayColours";
-import { 
-  type DayPlan, 
-  type TrailNode, 
+import {
+  type DayPlan,
+  type TrailNode,
   type TrailDirection,
-  getDirectionalNodes
+  getDirectionalNodes,
 } from "@/lib/trailData";
 import { formatTime, formatDistance, formatElevation, type UnitSystem } from "@/lib/formatUtils";
 import { Button } from "@/components/ui/button";
@@ -35,6 +33,12 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import AccommodationAddonCard from "@/components/AccommodationAddonCard";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
 
 interface ItineraryDisplayProps {
   itinerary: DayPlan[];
@@ -256,110 +260,20 @@ const DestinationDropdown = ({
   className,
   children,
 }: DestinationDropdownProps) => {
-  const [open, setOpen] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open || !triggerRef.current) return;
-
-    const rect = triggerRef.current.getBoundingClientRect();
-    setPosition({
-      top: rect.bottom + 4,
-      left: rect.left,
-      width: rect.width,
-    });
-
-    const closeDropdown = () => setOpen(false);
-    const handlePointerDown = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (triggerRef.current?.contains(target) || contentRef.current?.contains(target)) return;
-      setOpen(false);
-    };
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-      }
-    };
-
-    window.addEventListener("resize", closeDropdown);
-    window.addEventListener("scroll", closeDropdown, true);
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("resize", closeDropdown);
-      window.removeEventListener("scroll", closeDropdown, true);
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open]);
-
   return (
-    <>
-      <button
-        ref={triggerRef}
-        type="button"
-        aria-expanded={open}
-        aria-haspopup="listbox"
-        onClick={() => setOpen((prev) => !prev)}
-        className={cn(
-          "flex h-10 w-full items-center justify-between rounded-none border border-input/55 bg-background px-3 py-2 text-sm shadow-none ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className,
-        )}
-      >
-        <span className="flex-1 min-w-0">{children}</span>
-        <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
-      </button>
-
-      {open && typeof document !== "undefined"
-        ? createPortal(
-            <div
-              ref={contentRef}
-              data-side="bottom"
-              data-state="open"
-              className="relative max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2"
-              style={{
-                position: "fixed",
-                top: position.top,
-                left: position.left,
-                width: position.width,
-                zIndex: 9999,
-                isolation: "isolate",
-                backgroundColor: "hsl(var(--popover))",
-              }}
-            >
-              <div className="flex flex-col max-h-96 overflow-y-auto p-1">
-                {options.map((node) => (
-                  <button
-                    key={node.id}
-                    type="button"
-                    role="option"
-                    aria-selected={value === node.id}
-                    onClick={() => {
-                      onValueChange(node.id);
-                      setOpen(false);
-                    }}
-                    className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground"
-                  >
-                    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-                      {value === node.id ? <Check className="h-4 w-4" /> : null}
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <span>{node.name}</span>
-                      {node.hasServices && (
-                        <span className="text-xs text-muted-foreground">(services)</span>
-                      )}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>,
-            document.body,
-          )
-        : null}
-    </>
+    <Select value={value} onValueChange={onValueChange}>
+      <SelectTrigger aria-label="Select destination" className={className}>
+        <div className="flex-1 min-w-0">{children}</div>
+      </SelectTrigger>
+      <SelectContent className="z-50 bg-popover">
+        {options.map((node) => (
+          <SelectItem key={node.id} value={node.id}>
+            {node.name}
+            {node.hasServices ? " (services)" : ""}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 };
 
