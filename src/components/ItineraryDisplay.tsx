@@ -319,14 +319,13 @@ const DestinationDropdown = ({
               ref={contentRef}
               data-side="bottom"
               data-state="open"
-              className="relative max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2"
+              className="max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2"
               style={{
                 position: "fixed",
                 top: position.top,
                 left: position.left,
                 width: position.width,
                 zIndex: 9999,
-                isolation: "auto",
               }}
             >
               <div className="max-h-96 overflow-y-auto p-1">
@@ -340,7 +339,7 @@ const DestinationDropdown = ({
                       onValueChange(node.id);
                       setOpen(false);
                     }}
-                    className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground"
+                    className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                   >
                     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
                       {value === node.id ? <Check className="h-4 w-4" /> : null}
@@ -355,7 +354,7 @@ const DestinationDropdown = ({
                 ))}
               </div>
             </div>,
-            document.body,
+            document.getElementById("root") ?? document.body,
           )
         : null}
     </>
