@@ -326,7 +326,8 @@ const DestinationDropdown = ({
                 left: position.left,
                 width: position.width,
                 zIndex: 9999,
-                isolation: "auto",
+                isolation: "isolate",
+                backgroundColor: "hsl(var(--popover))",
               }}
             >
               <div className="max-h-96 overflow-y-auto p-1">
