@@ -453,14 +453,9 @@ const DayCard = ({
                 }}
                 className={cn(
                   "h-auto py-2 border-2 hover:border-primary/50 transition-all bg-primary/5",
-                  isFirstWalkingDay && "animate-pulse ring-2 ring-primary/40 ring-offset-2"
+                  isFirstWalkingDay && "ring-2 ring-primary/40 ring-offset-2"
                 )}
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-base md:text-lg font-semibold">{day.endNode.name}</span>
-                  <Pencil className="h-3.5 w-3.5 text-muted-foreground ml-auto" />
-                </div>
-              </DestinationDropdown>
+              />
             </div>
           </div>
         </div>
