@@ -251,7 +251,6 @@ interface DestinationDropdownProps {
   options: TrailNode[];
   onValueChange: (value: string) => void;
   className?: string;
-  children: React.ReactNode;
 }
 
 const DestinationDropdown = ({
@@ -259,14 +258,18 @@ const DestinationDropdown = ({
   options,
   onValueChange,
   className,
-  children,
 }: DestinationDropdownProps) => {
+  const selectedNode = options.find((n) => n.id === value);
+  const displayName = selectedNode
+    ? `${selectedNode.name}${selectedNode.hasServices ? " (services)" : ""}`
+    : value;
+
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger aria-label="Select destination" className={className}>
-        <div className="flex-1 min-w-0">{children}</div>
+      <SelectTrigger className={cn("w-full", className)}>
+        <SelectValue>{displayName}</SelectValue>
       </SelectTrigger>
-      <SelectContent className="z-50 bg-popover">
+      <SelectContent className="bg-popover z-[9999]">
         {options.map((node) => (
           <SelectItem key={node.id} value={node.id}>
             {node.name}
