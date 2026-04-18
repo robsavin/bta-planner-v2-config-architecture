@@ -134,7 +134,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
           marginBottom: 4,
         }}
       >
-        {trailConfig.name} — {trailConfig.totalDistanceKm}km, Scotland
+        {trailConfig.name} — {trailConfig.totalDistanceKm}km
       </p>
 
       {/* Heading */}
