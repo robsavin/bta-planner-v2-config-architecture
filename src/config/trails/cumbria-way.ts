@@ -21,7 +21,7 @@ import cumbriaWayGpxZipUrl from "@/data/cumbria-way.gpx.zip?url";
 
 const cumbriaWay: TrailConfig = {
   id: "cumbria-way",
-  name: "The Cumbria Way",
+  name: "Cumbria Way",
   shortName: "Cumbria Way",
   startLocation: "Ulverston",
   endLocation: "Carlisle",
