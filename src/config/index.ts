@@ -6,6 +6,7 @@ import robRoyWay from "./trails/rob-roy-way";
 import cotswoldWay from "./trails/cotswold-way";
 import stCuthbertsWay from "./trails/st-cuthberts-way"
 import cumbriaWay from "./trails/cumbria-way";
+import greatGlenWay from "./trails/great-glen-way";
 
 
 const trailConfigs: Record<string, TrailConfig> = {
@@ -15,7 +16,8 @@ const trailConfigs: Record<string, TrailConfig> = {
   "rob-roy-way": robRoyWay,
   "cotswold-way": cotswoldWay,
   "st-cuthberts-way": stCuthbertsWay,
-  "cumbria-way": cumbriaWay
+  "cumbria-way": cumbriaWay,
+  "great-glen-way": greatGlenWay
 };
 
 /**
