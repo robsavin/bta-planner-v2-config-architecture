@@ -66,12 +66,15 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className, units 
 
     const map = L.map(mapRef.current, {
       scrollWheelZoom: false,
-      dragging: !L.Browser.mobile,
+      dragging: true,
       touchZoom: 'center',
     }).setView([56.4, -4.7], 9);
 
-    // Touch gesture overlay for mobile
+    // Touch gesture: require two fingers to pan on mobile
     if (L.Browser.mobile) {
+      // Start with dragging disabled; enable only when 2+ fingers are down
+      map.dragging.disable();
+
       const gestureOverlay = document.createElement('div');
       gestureOverlay.className = 'leaflet-gesture-overlay';
       gestureOverlay.innerHTML = '<p>Use two fingers to move the map</p>';
@@ -86,14 +89,29 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className, units 
       map.getContainer().appendChild(gestureOverlay);
 
       let gestureTimeout: ReturnType<typeof setTimeout>;
-      map.getContainer().addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) {
+      const container = map.getContainer();
+
+      container.addEventListener('touchstart', (e) => {
+        if (e.touches.length >= 2) {
+          gestureOverlay.style.display = 'none';
+          clearTimeout(gestureTimeout);
+          map.dragging.enable();
+        } else {
+          map.dragging.disable();
           gestureOverlay.style.display = 'flex';
           clearTimeout(gestureTimeout);
           gestureTimeout = setTimeout(() => { gestureOverlay.style.display = 'none'; }, 1500);
-        } else {
-          gestureOverlay.style.display = 'none';
         }
+      }, { passive: true });
+
+      container.addEventListener('touchend', (e) => {
+        if (e.touches.length < 2) {
+          map.dragging.disable();
+        }
+      }, { passive: true });
+
+      container.addEventListener('touchcancel', () => {
+        map.dragging.disable();
       }, { passive: true });
     }
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
