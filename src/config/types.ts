@@ -44,7 +44,13 @@ export interface TrailConfig {
 
   /** Default direction labels */
   directions: {
-    default: "south-to-north" | "north-to-south" | "east-to-west" | "west-to-east";
+    default:
+      | "south-to-north"
+      | "north-to-south"
+      | "east-to-west"
+      | "west-to-east"
+      | "southwest-to-northeast"
+      | "northeast-to-southwest";
     labels: {
       [key: string]: { name: string; description: string };
     };
