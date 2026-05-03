@@ -69,7 +69,7 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className, units 
       dragging: !L.Browser.mobile,
       touchZoom: true,
       tap: false,
-    }).setView([56.4, -4.7], 9);
+    } as L.MapOptions).setView([56.4, -4.7], 9);
 
     // Touch gesture: require two fingers to pan on mobile
     if (L.Browser.mobile) {
