@@ -66,15 +66,13 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className, units 
 
     const map = L.map(mapRef.current, {
       scrollWheelZoom: false,
-      dragging: true,
-      touchZoom: 'center',
+      dragging: !L.Browser.mobile,
+      touchZoom: true,
+      tap: false,
     }).setView([56.4, -4.7], 9);
 
     // Touch gesture: require two fingers to pan on mobile
     if (L.Browser.mobile) {
-      // Start with dragging disabled; enable only when 2+ fingers are down
-      map.dragging.disable();
-
       const gestureOverlay = document.createElement('div');
       gestureOverlay.className = 'leaflet-gesture-overlay';
       gestureOverlay.innerHTML = '<p>Use two fingers to move the map</p>';
@@ -90,29 +88,41 @@ const MapDisplay = ({ itinerary, direction = "south-to-north", className, units 
 
       let gestureTimeout: ReturnType<typeof setTimeout>;
       const container = map.getContainer();
+      let lastMid: { x: number; y: number } | null = null;
+
+      const midpoint = (e: TouchEvent) => ({
+        x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+        y: (e.touches[0].clientY + e.touches[1].clientY) / 2,
+      });
 
       container.addEventListener('touchstart', (e) => {
         if (e.touches.length >= 2) {
           gestureOverlay.style.display = 'none';
           clearTimeout(gestureTimeout);
-          map.dragging.enable();
+          lastMid = midpoint(e);
         } else {
-          map.dragging.disable();
+          lastMid = null;
           gestureOverlay.style.display = 'flex';
           clearTimeout(gestureTimeout);
           gestureTimeout = setTimeout(() => { gestureOverlay.style.display = 'none'; }, 1500);
         }
       }, { passive: true });
 
-      container.addEventListener('touchend', (e) => {
-        if (e.touches.length < 2) {
-          map.dragging.disable();
+      container.addEventListener('touchmove', (e) => {
+        if (e.touches.length >= 2 && lastMid) {
+          const mid = midpoint(e);
+          const dx = mid.x - lastMid.x;
+          const dy = mid.y - lastMid.y;
+          if (dx || dy) map.panBy([-dx, -dy], { animate: false });
+          lastMid = mid;
         }
       }, { passive: true });
 
-      container.addEventListener('touchcancel', () => {
-        map.dragging.disable();
-      }, { passive: true });
+      const endTouch = (e: TouchEvent) => {
+        if (e.touches.length < 2) lastMid = null;
+      };
+      container.addEventListener('touchend', endTouch, { passive: true });
+      container.addEventListener('touchcancel', endTouch, { passive: true });
     }
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
