@@ -283,7 +283,6 @@ const Index = () => {
   }, [handleSpeedChange, handlePartySizeChange]);
 
   // Pricing — nights = totalDays - 1 (includes rest days)
-  const { formatPrice, convertAmount, currency } = useCurrency();
 
   const addonNights = (arrivalNight ? 1 : 0) + (departureNight ? 1 : 0);
 
