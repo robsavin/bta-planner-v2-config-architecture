@@ -287,8 +287,13 @@ const Index = () => {
     const handler = (e: MessageEvent) => {
       if (!e.data || e.data.type !== 'BTA_SELECT_PACE') return;
       const paceId = e.data.paceId;
+      const profiles = getSpeedProfiles();
+      const profile = profiles.find(p => p.id === paceId);
+      // Temporary diagnostic — remove once teaser → planner click works end-to-end.
+      console.log('[BTA] SELECT_PACE received', e.data,
+        'available ids:', profiles.map(p => p.id),
+        'profile resolved:', profile);
       if (paceId !== 'explorer' && paceId !== 'hiker' && paceId !== 'fastpacker') return;
-      const profile = getSpeedProfiles().find(p => p.id === paceId);
       if (profile) handleSpeedChange(profile);
     };
     window.addEventListener('message', handler);
