@@ -99,7 +99,7 @@ const Index = () => {
       { type: 'BTA_PACE_FROM_PRICES', explorer, hiker, fastpacker },
       '*'
     );
-  }, [trailConfig, formatPrice]);
+  }, [trailConfig, currency]);
 
   // Price pulse state
   const [pricePulse, setPricePulse] = useState(false);
