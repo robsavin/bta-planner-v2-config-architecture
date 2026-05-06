@@ -35,7 +35,7 @@ const getDefaultStartDate = () => {
   return d;
 };
 
-const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
+const TripSelector = ({ onSelectTrip, selectedPaceId }: TripSelectorProps) => {
   const trailConfig = getTrailConfig();
   const { formatPrice, currency } = useCurrency();
 
