@@ -172,12 +172,15 @@ const TripSelector = ({ onSelectTrip, selectedPaceId }: TripSelectorProps) => {
       <div className="bta-cards-grid">
         {cards.map((card) => {
           const isHiker = card.profile.id === "hiker";
+          const isSelected = selectedPaceId
+            ? card.profile.id === selectedPaceId
+            : isHiker;
           return (
             <div
               key={card.profile.id}
               style={{
                 background: "#ffffff",
-                border: isHiker ? "2px solid #FF961B" : "1px solid #e0e0e0",
+                border: isSelected ? "2px solid #FF961B" : "1px solid #e0e0e0",
                 borderRadius: 12,
                 padding: "1.25rem",
                 display: "flex",
