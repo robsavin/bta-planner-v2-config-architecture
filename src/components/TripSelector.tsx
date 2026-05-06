@@ -6,6 +6,8 @@ import {
   calculateDays,
   type SpeedProfile,
 } from "@/lib/trailData";
+import { calculateTripPrice } from "@/utils/pricing";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface TripSelectorProps {
   onSelectTrip: (speedProfileId: string, partySize: number, startDate: Date) => void;
@@ -34,6 +36,7 @@ const getDefaultStartDate = () => {
 
 const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
   const trailConfig = getTrailConfig();
+  const { formatPrice, currency } = useCurrency();
 
   const cards = useMemo(() => {
     const eligible = getSpeedProfiles().filter(
@@ -47,10 +50,16 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
       const nights = days - 1;
       const avgKmPerDay = Math.round(trailConfig.totalDistanceKm / days);
       const dailyAscent = Math.round(trailConfig.totalAscentM / days);
-      const pricePerPerson = Math.round(((49 * 2) + (140 * nights * 2.0)) / 2);
+      const total = calculateTripPrice({
+        partySize: 2,
+        nights,
+        partyMultiplier: 2.0,
+        yearMultiplier: 1,
+      });
+      const pricePerPerson = formatPrice(Math.round(total / 2));
       return { profile, days, nights, avgKmPerDay, dailyAscent, pricePerPerson };
     });
-  }, [trailConfig]);
+  }, [trailConfig, formatPrice, currency]);
 
   const hikerCard = cards.find((c) => c.profile.id === "hiker");
   const hikerDays = hikerCard?.days ?? 7;
@@ -327,7 +336,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
                     color: "#2d4a54",
                   }}
                 >
-                  £{card.pricePerPerson}
+                  {card.pricePerPerson}
                 </div>
                 <div style={{ fontSize: 12, color: "#999" }}>per person (2 sharing)</div>
               </div>
