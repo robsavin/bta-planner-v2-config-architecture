@@ -61,7 +61,7 @@ const PurchaseModule = ({
   const bookButtonRef = useRef<HTMLDivElement>(null);
   const [addedToCart, setAddedToCart] = useState(false);
   const trailConfig = getTrailConfig();
-  const { formatPrice } = useCurrency();
+  const { formatPrice, convertAmount } = useCurrency();
   const walkingDays = itinerary.filter(d => !d.isRestDay);
   const activeDays = walkingDays.length;
   const totalDays = itinerary.length;
@@ -95,6 +95,8 @@ const PurchaseModule = ({
         party: partySize,
         totalPrice,
         priceFormatted: formatPrice(totalPrice),
+        perPersonPrice: convertAmount(pricePerPerson),
+        perPersonFormatted: formatPrice(pricePerPerson),
         deposit,
         depositFormatted: formatPrice(deposit),
       },
