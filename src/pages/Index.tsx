@@ -72,12 +72,11 @@ const Index = () => {
     console.log('Admin mode:', isAdmin);
   }, []);
 
-  // One-shot broadcast of canonical "from" prices for the trail-page teaser cards.
+  // Broadcast canonical "from" prices for the trail-page teaser cards.
   // Pinned anchor: party=2, current year (yearMultiplier=1), 0 addon nights,
   // standard day count per pace (hoursPerDay=8, default direction).
-  const fromPricesEmitted = useRef(false);
+  // Re-fires when currency changes so teaser follows formatPrice.
   useEffect(() => {
-    if (fromPricesEmitted.current) return;
     const profiles = getSpeedProfiles();
     const defaultDirection = trailConfig.directions.default as TrailDirection;
     const computeFrom = (id: string) => {
@@ -100,7 +99,6 @@ const Index = () => {
       { type: 'BTA_PACE_FROM_PRICES', explorer, hiker, fastpacker },
       '*'
     );
-    fromPricesEmitted.current = true;
   }, [trailConfig, formatPrice]);
 
   // Price pulse state
