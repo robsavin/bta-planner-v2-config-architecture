@@ -10,6 +10,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import BookTripButton from "@/components/BookTripButton";
 
 import { getVariantPriceForPace } from "@/lib/shopifyVariantData";
+import { calculateTripPrice } from "@/utils/pricing";
 
 const MULTIPLIER: Record<number, number> = {
   1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0,
@@ -68,7 +69,7 @@ const PurchaseModule = ({
 
   const multiplier = MULTIPLIER[partySize] ?? partySize;
   const yearMultiplier = startDate.getFullYear() > new Date().getFullYear() ? 1.05 : 1.0;
-  const liveTotalPrice = ((49 * partySize) + (140 * nights * multiplier)) * yearMultiplier;
+  const liveTotalPrice = calculateTripPrice({ partySize, nights, partyMultiplier: multiplier, yearMultiplier });
   const totalPrice = overridePricing?.totalPrice ?? liveTotalPrice;
   const pricePerPerson = overridePricing?.pricePerPerson ?? Math.round(liveTotalPrice / partySize);
   const variantDeposit = getVariantPriceForPace(speedProfileName) ?? getVariantPriceForPace(speedProfileId);
