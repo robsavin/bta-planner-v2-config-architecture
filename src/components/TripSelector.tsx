@@ -6,6 +6,8 @@ import {
   calculateDays,
   type SpeedProfile,
 } from "@/lib/trailData";
+import { calculateTripPrice } from "@/utils/pricing";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface TripSelectorProps {
   onSelectTrip: (speedProfileId: string, partySize: number, startDate: Date) => void;
