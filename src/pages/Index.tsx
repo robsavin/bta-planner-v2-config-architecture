@@ -63,6 +63,8 @@ const Index = () => {
   // Deposit is read from data-deposit on #root (per person)
 
   // Price pulse state
+  const { formatPrice, convertAmount, currency } = useCurrency();
+
   // Admin mode detection
   useEffect(() => {
     const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
