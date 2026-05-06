@@ -281,6 +281,20 @@ const Index = () => {
     setStartDate(date);
   }, [handleSpeedChange, handlePartySizeChange]);
 
+  // Inbound BTA_SELECT_PACE listener — lets sibling sections (e.g. teaser
+  // cards above the planner) request a pace change.
+  useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      if (!e.data || e.data.type !== 'BTA_SELECT_PACE') return;
+      const paceId = e.data.paceId;
+      if (paceId !== 'explorer' && paceId !== 'hiker' && paceId !== 'fastpacker') return;
+      const profile = getSpeedProfiles().find(p => p.id === paceId);
+      if (profile) handleSpeedChange(profile);
+    };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, [handleSpeedChange]);
+
   // Pricing — nights = totalDays - 1 (includes rest days)
 
   const addonNights = (arrivalNight ? 1 : 0) + (departureNight ? 1 : 0);
