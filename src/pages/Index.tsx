@@ -32,6 +32,7 @@ import { useTripUrlParams, resolveSpeedFromUrl } from "@/hooks/useUrlParams";
 import { loadQuote, type SavedQuote } from "@/lib/quoteStorage";
 import { useCurrency } from "@/hooks/useCurrency";
 import { getVariantPriceForPace } from "@/lib/shopifyVariantData";
+import { calculateTripPrice } from "@/utils/pricing";
 
 const MULTIPLIER: Record<number, number> = { 1: 1.65, 2: 2.0, 3: 3.6, 4: 4.0, 5: 5.55, 6: 6.0, 7: 7.49, 8: 8.0 };
 
@@ -71,12 +72,11 @@ const Index = () => {
     console.log('Admin mode:', isAdmin);
   }, []);
 
-  // One-shot broadcast of canonical "from" prices for the trail-page teaser cards.
+  // Broadcast canonical "from" prices for the trail-page teaser cards.
   // Pinned anchor: party=2, current year (yearMultiplier=1), 0 addon nights,
   // standard day count per pace (hoursPerDay=8, default direction).
-  const fromPricesEmitted = useRef(false);
+  // Re-fires when currency changes so teaser follows formatPrice.
   useEffect(() => {
-    if (fromPricesEmitted.current) return;
     const profiles = getSpeedProfiles();
     const defaultDirection = trailConfig.directions.default as TrailDirection;
     const computeFrom = (id: string) => {
@@ -87,7 +87,7 @@ const Index = () => {
       const nights = Math.max(0, days - 1);
       const party = 2;
       const multiplier = MULTIPLIER[party];
-      const total = ((49 * party) + (140 * nights * multiplier)) * 1;
+      const total = calculateTripPrice({ partySize: party, nights, partyMultiplier: multiplier, yearMultiplier: 1 });
       const perPerson = Math.round(total / party);
       return { value: perPerson, formatted: formatPrice(perPerson) };
     };
@@ -99,8 +99,7 @@ const Index = () => {
       { type: 'BTA_PACE_FROM_PRICES', explorer, hiker, fastpacker },
       '*'
     );
-    fromPricesEmitted.current = true;
-  }, [trailConfig, formatPrice]);
+  }, [trailConfig, currency]);
 
   // Price pulse state
   const [pricePulse, setPricePulse] = useState(false);
@@ -292,7 +291,7 @@ const Index = () => {
     const nights = baseNights + addonNights;
     const multiplier = MULTIPLIER[partySize] ?? partySize;
     const yearMultiplier = startDate.getFullYear() > new Date().getFullYear() ? 1.05 : 1.0;
-    const totalPrice = ((49 * partySize) + (140 * nights * multiplier)) * yearMultiplier;
+    const totalPrice = calculateTripPrice({ partySize, nights, partyMultiplier: multiplier, yearMultiplier });
     const pricePerPerson = Math.round(totalPrice / partySize);
     const variantDeposit = getVariantPriceForPace(selectedSpeed.name) ?? getVariantPriceForPace(selectedSpeed.id);
     const depPerPerson = variantDeposit ?? trailConfig.depositPerPerson;
