@@ -63,11 +63,44 @@ const Index = () => {
   // Deposit is read from data-deposit on #root (per person)
 
   // Price pulse state
+  const { formatPrice, convertAmount, currency } = useCurrency();
+
   // Admin mode detection
   useEffect(() => {
     const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
     console.log('Admin mode:', isAdmin);
   }, []);
+
+  // One-shot broadcast of canonical "from" prices for the trail-page teaser cards.
+  // Pinned anchor: party=2, current year (yearMultiplier=1), 0 addon nights,
+  // standard day count per pace (hoursPerDay=8, default direction).
+  const fromPricesEmitted = useRef(false);
+  useEffect(() => {
+    if (fromPricesEmitted.current) return;
+    const profiles = getSpeedProfiles();
+    const defaultDirection = trailConfig.directions.default as TrailDirection;
+    const computeFrom = (id: string) => {
+      const profile = profiles.find(p => p.id === id);
+      if (!profile) return null;
+      const totalHours = calculateTotalTimeWithDirection(profile, defaultDirection);
+      const days = calculateDays(totalHours, 8);
+      const nights = Math.max(0, days - 1);
+      const party = 2;
+      const multiplier = MULTIPLIER[party];
+      const total = ((49 * party) + (140 * nights * multiplier)) * 1;
+      const perPerson = Math.round(total / party);
+      return { value: perPerson, formatted: formatPrice(perPerson) };
+    };
+    const explorer = computeFrom("explorer");
+    const hiker = computeFrom("hiker");
+    const fastpacker = computeFrom("fastpacker");
+    if (!explorer || !hiker || !fastpacker) return;
+    window.parent.postMessage(
+      { type: 'BTA_PACE_FROM_PRICES', explorer, hiker, fastpacker },
+      '*'
+    );
+    fromPricesEmitted.current = true;
+  }, [trailConfig, formatPrice]);
 
   // Price pulse state
   const [pricePulse, setPricePulse] = useState(false);
@@ -250,7 +283,6 @@ const Index = () => {
   }, [handleSpeedChange, handlePartySizeChange]);
 
   // Pricing — nights = totalDays - 1 (includes rest days)
-  const { formatPrice, convertAmount, currency } = useCurrency();
 
   const addonNights = (arrivalNight ? 1 : 0) + (departureNight ? 1 : 0);
 
