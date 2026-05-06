@@ -36,6 +36,7 @@ const getDefaultStartDate = () => {
 
 const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
   const trailConfig = getTrailConfig();
+  const { formatPrice, currency } = useCurrency();
 
   const cards = useMemo(() => {
     const eligible = getSpeedProfiles().filter(
@@ -49,10 +50,16 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
       const nights = days - 1;
       const avgKmPerDay = Math.round(trailConfig.totalDistanceKm / days);
       const dailyAscent = Math.round(trailConfig.totalAscentM / days);
-      const pricePerPerson = Math.round(((49 * 2) + (140 * nights * 2.0)) / 2);
+      const total = calculateTripPrice({
+        partySize: 2,
+        nights,
+        partyMultiplier: 2.0,
+        yearMultiplier: 1,
+      });
+      const pricePerPerson = formatPrice(Math.round(total / 2));
       return { profile, days, nights, avgKmPerDay, dailyAscent, pricePerPerson };
     });
-  }, [trailConfig]);
+  }, [trailConfig, formatPrice, currency]);
 
   const hikerCard = cards.find((c) => c.profile.id === "hiker");
   const hikerDays = hikerCard?.days ?? 7;
