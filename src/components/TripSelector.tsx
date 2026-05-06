@@ -11,6 +11,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 
 interface TripSelectorProps {
   onSelectTrip: (speedProfileId: string, partySize: number, startDate: Date) => void;
+  selectedPaceId?: string;
 }
 
 const CARD_NAMES: Record<string, string> = {
