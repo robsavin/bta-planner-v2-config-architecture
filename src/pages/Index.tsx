@@ -334,7 +334,7 @@ const Index = () => {
 
   return (
     <>
-    <TripSelector onSelectTrip={handleTripSelect} />
+    <TripSelector onSelectTrip={handleTripSelect} selectedPaceId={selectedSpeed.id} />
     <div className="min-h-screen bg-card" id="bta-planner">
       <div style={{ maxWidth: 1200, margin: '0 auto', paddingTop: '2.5rem' }}>
       {/* Admin quote view */}
