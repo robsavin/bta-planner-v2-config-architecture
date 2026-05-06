@@ -336,7 +336,7 @@ const TripSelector = ({ onSelectTrip }: TripSelectorProps) => {
                     color: "#2d4a54",
                   }}
                 >
-                  £{card.pricePerPerson}
+                  {card.pricePerPerson}
                 </div>
                 <div style={{ fontSize: 12, color: "#999" }}>per person (2 sharing)</div>
               </div>
