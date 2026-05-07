@@ -9,6 +9,7 @@ import cumbriaWay from "./trails/cumbria-way";
 import greatGlenWay from "./trails/great-glen-way";
 import fifeCoastalPath from "./trails/fife-coastal-path";
 import weeWestHighlandWay from "./trails/wee-west-highland-way";
+import angleseyCoastalPath from "./trails/anglesey-coastal-path";
 
 
 const trailConfigs: Record<string, TrailConfig> = {
@@ -21,7 +22,8 @@ const trailConfigs: Record<string, TrailConfig> = {
   "cumbria-way": cumbriaWay,
   "great-glen-way": greatGlenWay,
   "fife-coastal-path": fifeCoastalPath,
-  "wee-west-highland-way": weeWestHighlandWay
+  "wee-west-highland-way": weeWestHighlandWay,
+  "anglesey-coastal-path": angleseyCoastalPath
 };
 
 /**
