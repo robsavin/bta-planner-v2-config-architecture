@@ -11,6 +11,7 @@ import fifeCoastalPath from "./trails/fife-coastal-path";
 import weeWestHighlandWay from "./trails/wee-west-highland-way";
 import angleseyCoastalPath from "./trails/anglesey-coastal-path";
 import gr221 from "./trails/gr221";
+import coastToCoast from "./trails/coast-to-coast";
 
 
 const trailConfigs: Record<string, TrailConfig> = {
@@ -25,7 +26,8 @@ const trailConfigs: Record<string, TrailConfig> = {
   "fife-coastal-path": fifeCoastalPath,
   "wee-west-highland-way": weeWestHighlandWay,
   "anglesey-coastal-path": angleseyCoastalPath,
-  "gr221": gr221
+  "gr221": gr221,
+  "coast-to-coast": coastToCoast
 };
 
 /**
