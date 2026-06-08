@@ -13,6 +13,7 @@ import angleseyCoastalPath from "./trails/anglesey-coastal-path";
 import gr221 from "./trails/gr221";
 import coastToCoast from "./trails/coast-to-coast";
 import ridgeway from "./trails/ridgeway";
+import coastToCoast from "./trails/coast-to-coast";
 
 
 
@@ -30,7 +31,8 @@ const trailConfigs: Record<string, TrailConfig> = {
   "anglesey-coastal-path": angleseyCoastalPath,
   "gr221": gr221,
   "coast-to-coast": coastToCoast,
-  "ridgeway": ridgeway
+  "ridgeway": ridgeway,
+  "coast-to-coast": coastToCoast
 };
 
 /**
