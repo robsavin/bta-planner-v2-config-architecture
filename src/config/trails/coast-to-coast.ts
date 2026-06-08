@@ -6,12 +6,13 @@ import type { TrailConfig } from "@/config/types";
 import coastToCoastGpxZipUrl from "@/data/coast-to-coast.gpx.zip?url";
 
 // ---------------------------------------------------------------------------
-// Node data sourced from standalone planner trailData.ts.
-// Coordinates snapped to actual GPX track (scale factor 0.995, GPX 293.4 km).
-// GPX direction: ran St Bees -> Robin Hood's Bay (correct) — no reversal needed.
+// Node data sourced from standalone planner trailData.ts (trailData-2.ts).
+// Coordinates snapped to actual GPX track (coast-to-coast.gpx, 11,716 points).
+// GPX direction: runs St Bees → Robin Hood's Bay (west-to-east) — matches the
+// trail data default, no reversal needed.
 //
 // Before go-live:
-//   - Replace heroImage with a Coast to Coast hero image
+//   - Replace heroImage with a trail-specific hero image
 //   - Update branding.bookingUrl once the Shopify product is published
 // ---------------------------------------------------------------------------
 
@@ -51,7 +52,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.490760, -3.606470],
       description:
-        "The walk starts on the beach at St Bees, where tradition has you pick up a pebble and dip your boots in the Irish Sea before setting off. The village sits below the red sandstone cliffs of St Bees Head, with a railway station on the Cumbrian Coast line, a shop, pubs and a good spread of accommodation. The first few kilometres climb onto the head itself, past the lighthouse and an RSPB seabird reserve, before the trail turns inland. It is worth doing the boot-dipping properly — there is a matching ritual waiting at the far coast.",
+        "The walk starts at the slipway in St Bees, where the tradition is to wet your boots in the Irish Sea and pick up a pebble to carry across the country and throw into the sea at the far end. The first few miles climb onto St Bees Head, the highest sea cliffs on the north-west coast, past the lighthouse and the seabird colonies at Fleswick Bay before the route turns inland. The village has a train station, pubs, shops and accommodation, and is the obvious place to spend the night before setting off.",
     },
     {
       id: "cleator",
@@ -63,7 +64,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.507160, -3.524220],
       description:
-        "After the cliff path and the quiet lanes through Sandwith and Moor Row, the route reaches Cleator, on the edge of old west Cumbrian iron-mining country. There is a village shop and a pub, and accommodation is available in and around Cleator Moor a short way on. This is the last easy ground before Dent Hill, the first proper climb of the walk, rises directly ahead. Stock up here if you need to.",
+        "Cleator and the larger Cleator Moor are former iron-ore mining settlements, the last proper services before the Lakeland fells. There is a Co-op, takeaways and a couple of pubs here, worth noting because the next stretch over Dent Hill and into Ennerdale has little. Stock up before you leave — the character of the walk changes completely from here.",
     },
     {
       id: "ennerdale-bridge",
@@ -75,7 +76,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.525140, -3.448100],
       description:
-        "The climb over Dent Hill at 352m and the steep drop through the Nannycatch valley bring you to Ennerdale Bridge, the first village inside the Lake District. There are two pubs here, the Shepherd's Arms and the Fox and Hounds, both offering food and beds. This is the gateway to Ennerdale, one of the few Lakeland valleys with no through road. From here the next stretch is genuinely remote, so it is a sensible place to plan resupply and accommodation carefully.",
+        "Ennerdale Bridge sits at the threshold of the Lake District, reached after the first real climb of the walk over Dent Hill. The village has two pubs, the Shepherd's Arms and the Fox & Hounds, both used to feeding Coast to Coast walkers. Beyond here the route follows the shore of Ennerdale Water into one of the quietest valleys in the National Park.",
     },
     {
       id: "yha-ennerdale",
@@ -87,7 +88,7 @@ const coastToCoast: TrailConfig = {
       hasServices: false,
       coordinates: [54.515220, -3.328320],
       description:
-        "The trail follows the southern shore of Ennerdale Water and then the forest track up the valley floor, with Pillar and Steeple rising on the far side. YHA Ennerdale, at Gillerthwaite, is the only accommodation in this part of the valley and there are no other services. It is well off any road, so luggage transfer is not possible to this stop — you will need to carry what you need for this section. Book directly with the hostel well ahead, as it is small and popular with Coast to Coast walkers.",
+        "This is a remote forest hostel deep in the upper Ennerdale valley, surrounded by the regenerating woodland of the Wild Ennerdale project. There are no shops or other services here and no road for luggage transfer to reach, so anything staying here is carried in. It is a useful staging point for breaking the long pull up the valley towards Black Sail.",
     },
     {
       id: "yha-black-sail",
@@ -99,7 +100,7 @@ const coastToCoast: TrailConfig = {
       hasServices: false,
       coordinates: [54.500760, -3.246940],
       description:
-        "Black Sail Hut is a former shepherd's bothy at the head of Ennerdale, under Haystacks and Great Gable, and is one of the most remote hostels in England. There is no road, no shop and no luggage transfer — supplies come in on foot or by Land Rover track. Meals are provided when the hostel is staffed, but booking ahead is essential and the season is short. Staying here is one of the genuine highlights of the route for many walkers, precisely because of how little there is.",
+        "Black Sail is a former shepherd's bothy at the very head of Ennerdale, ringed by Great Gable, Pillar and Haystacks, and one of the most remote hostels in England. There is no road in — luggage cannot be transferred here — and beds are limited, so booking well ahead is essential. Seasonal refreshments are sometimes available, but this is back-country walking and you should arrive self-sufficient.",
     },
     {
       id: "rosthwaite",
@@ -111,7 +112,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.518990, -3.150640],
       description:
-        "From Black Sail the path climbs Loft Beck on rough, often wet ground, then drops through Honister and down into Borrowdale. Rosthwaite is a working Borrowdale village of slate cottages, with the Scafell Hotel, guest houses and the Flock-In tearoom at nearby Yew Tree Farm. There is a village shop for resupply. After two days of remote valley walking this feels like a return to comfortable country.",
+        "Rosthwaite is a Borrowdale village reached after the steep, often boggy climb over Loft Beck and the descent past Honister. It has hotels, B&Bs, a village shop and the Scafell Hotel, and sits in some of the most enclosed and dramatic valley scenery in the Lakes. A natural overnight stop with everything a walker needs.",
     },
     {
       id: "stonethwaite",
@@ -123,7 +124,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.518330, -3.142590],
       description:
-        "A short way up the valley from Rosthwaite, Stonethwaite is a smaller cluster of houses beside Stonethwaite Beck, with the Langstrath Country Inn for food and a bed. It sits right on the trail where the route turns to follow Greenup Gill upstream. Many walkers use it as a quieter alternative to staying in Rosthwaite itself. There is no shop here, so buy supplies before you arrive.",
+        "A short way up the valley from Rosthwaite, Stonethwaite is a tiny cluster of farms and the Langstrath Country Inn, popular with walkers for its food. The route follows the beck up towards Greenup Edge from here. Quieter than Rosthwaite, and a good choice if you want an early, peaceful start on the climb to Grasmere.",
     },
     {
       id: "grasmere",
@@ -135,7 +136,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.467580, -3.039730],
       description:
-        "The climb over Greenup Edge and the long descent through Far Easedale bring you down into Grasmere, the busiest village on the route. William Wordsworth lived at Dove Cottage and is buried in St Oswald's churchyard, and the gingerbread shop by the church gate is a fixture. There is a full range of shops, cafés, pubs and accommodation, though it books up in season. This is a good place to resupply before the high crossing to Patterdale.",
+        "Grasmere is the largest and busiest place since the start, the Wordsworth village, with plenty of cafés, shops, accommodation and the famous gingerbread shop by the churchyard. It is reached over Greenup Edge and the descent past Helm Crag. The crowds are a contrast to the empty valleys behind you, but the services are welcome and the climb out over Grisedale is one of the highlights to come.",
     },
     {
       id: "patterdale",
@@ -147,7 +148,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.532050, -2.942260],
       description:
-        "The route climbs Little Tongue Gill to Grisedale Hause, passes Grisedale Tarn and descends the length of Grisedale to Patterdale, at the head of Ullswater. The high-level Helvellyn and Striding Edge alternative rejoins the main route here for those who took it. There is a village shop, the White Lion and the Patterdale Hotel, and a spread of bed and breakfasts. This is the last full Lakeland village before the long crossing to Shap.",
+        "Patterdale lies at the head of Ullswater, reached over Grisedale Hause and past Grisedale Tarn, with the option of taking in Helvellyn or St Sunday Crag on the way for those with the legs. The village has the White Lion pub, the Patterdale Hotel, a shop and a campsite. This is the last village before the long, high crossing to Shap, so it is a sensible place to rest.",
     },
     {
       id: "burnbanks",
@@ -159,7 +160,7 @@ const coastToCoast: TrailConfig = {
       hasServices: false,
       coordinates: [54.538110, -2.766930],
       description:
-        "From Patterdale the path climbs past Angle Tarn to Kidsty Pike at 780m, the highest point of the entire walk, then drops steeply to Haweswater and follows the reservoir shore. Burnbanks is a small settlement originally built to house the workers who raised the dam in the 1930s. There is some accommodation but no shop or other services. It is a quiet, slightly unusual place to end a day after the biggest climb on the route.",
+        "Burnbanks is a small hamlet of cottages built for the workers who created Haweswater reservoir, sitting at the eastern end of the lake. The route reaches it after the highest point of the entire walk at Kidsty Pike (780m) and the long descent along Haweswater. There are no services here beyond the odd B&B, but it marks the end of the high fells — limestone country begins from here.",
     },
     {
       id: "shap",
@@ -171,7 +172,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.533030, -2.682860],
       description:
-        "The trail passes the ruins of Shap Abbey, set low by the River Lowther, before reaching the long village of Shap strung out along the old A6. There is a Co-op, a chip shop, pubs including the Greyhound and the Kings Arms, and plenty of accommodation. The landscape now shifts from Lakeland fell to open limestone country. Shap is a natural resupply and rest point roughly a third of the way along.",
+        "Shap is a long village strung out along the old A6, with the ruins of Shap Abbey just off the route before you arrive. It has a Co-op, a chippy, pubs and a good range of accommodation, and is the obvious overnight after the demanding Lakeland crossing. The walking eases here into the gentler limestone uplands of the eastern Lakes.",
     },
     {
       id: "orton-junction",
@@ -183,7 +184,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.485880, -2.574930],
       description:
-        "The route crosses Crosby Ravensworth Fell, with its limestone pavements and the marker known as Robin Hood's Grave, then comes close to the village of Orton. Orton has the George Hotel, a tearoom and Kennedys chocolate factory and shop, which is worth the short detour off the trail. Accommodation is available in and around the village. This is gentle, open walking between the Lakeland fells and the Pennine watershed.",
+        "The route crosses the limestone pavements of Crosby Ravensworth Fell to reach Orton, a village known for Kennedy's chocolate factory and café. The George Hotel offers food and beds, and there is a shop. A pleasant, low-key stretch of walking between the Lakeland fells behind and the Pennine moors ahead.",
     },
     {
       id: "kirkby-stephen",
@@ -195,7 +196,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.466160, -2.356500],
       description:
-        "Across Smardale and more limestone country the trail reaches Kirkby Stephen, a small market town and the best resupply point in the middle of the walk. There are pubs, cafés, a Co-op, an outdoor shop and a railway station on the Settle to Carlisle line. The town sits just before the climb to Nine Standards Rigg, which marks the watershed of England. Most walkers treat this as a place to restock properly and rest.",
+        "Kirkby Stephen is a proper market town and roughly the midpoint of the walk, with the fullest range of services since Grasmere — several pubs, cafés, a Co-op, outdoor shops and plenty of accommodation. It is the last town before the crossing of Nine Standards Rigg and the watershed of England. A good place to take a rest day or resupply.",
     },
     {
       id: "keld",
@@ -207,7 +208,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.409380, -2.172570],
       description:
-        "The climb to Nine Standards Rigg at 662m crosses high peat moorland with seasonal route variants in place to limit erosion, and the ground here can be very wet. Keld is a tiny stone hamlet at the head of Swaledale, where the Coast to Coast crosses the Pennine Way. Keld Lodge offers food and rooms, and there is limited bed and breakfast and bunkhouse accommodation, but no shop. It is a remote, well-loved staging point between two of the wilder sections of the route.",
+        "Keld is a small, stone-built hamlet at the head of Swaledale, reached over Nine Standards Rigg and its line of ancient cairns on the high watershed. This is where the Coast to Coast crosses the Pennine Way. Keld Lodge provides food and beds, but services are limited, so plan ahead. The waterfalls around the village are worth the short detour.",
     },
     {
       id: "reeth",
@@ -219,7 +220,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.392780, -1.954760],
       description:
-        "From Keld there is a choice: the high route through the abandoned lead mines past Crackpot Hall and the Old Gang smelt mills, or the gentler riverside path down Swaledale. Both arrive at Reeth, a large village built around a sloping green, with pubs including the Buck and the Black Bull, a bakery and shops. There is a good range of accommodation here. The lead-mining landscape above the village is some of the most distinctive walking on the whole route.",
+        "Reeth is a large Swaledale village set around a broad sloping green, with several pubs, cafés, a bakery and shops. Either of the two routes from Keld brings you here — the high route through the abandoned lead mines past Crackpot Hall and the Old Gang smelt mills, or the gentler valley route by the river. A welcoming place with a good choice of accommodation.",
     },
     {
       id: "richmond",
@@ -231,7 +232,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.408910, -1.756090],
       description:
-        "The path follows the Swale through Marrick and Marske into Richmond, the largest town on the route. The Norman castle keep stands over a cobbled market place, and there is a Georgian theatre, a full range of shops, banks and accommodation. This is the best place to deal with anything that needs fixing or replacing before the long, flat middle section. After Richmond the country opens out into the Vale of Mowbray.",
+        "Richmond is the only sizeable town actually on the route, a handsome Georgian market town built below a great Norman castle keep that dominates the skyline. It has the full range of shops, cafés, pubs, restaurants and accommodation, and is a natural place for a rest day. Ahead lies the flat farmland of the Vale of Mowbray, the least dramatic but quietly pleasant section of the whole walk.",
     },
     {
       id: "danby-wiske",
@@ -243,7 +244,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.381660, -1.484210],
       description:
-        "This section crosses the flat farmland of the Vale of Mowbray, the least dramatic walking on the route but a genuine rest for tired legs after the Dales. Danby Wiske is a small village with the White Swan pub for food and a bed. The route crosses the A19 and the East Coast main railway line in this stretch, so take care at both. The Cleveland Hills are visible ahead as a low wall on the eastern skyline.",
+        "Danby Wiske is a small village in the middle of the flat agricultural crossing between the Dales and the Moors, with the White Swan pub at its heart, long a fixture for Coast to Coast walkers. Accommodation is limited, so book early. The walking here is easy and low — a gentle interlude before the Cleveland Hills.",
     },
     {
       id: "ingleby-cross",
@@ -255,7 +256,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.397460, -1.305740],
       description:
-        "Ingleby Cross and the neighbouring Ingleby Arncliffe sit right at the foot of the Cleveland Hills, where the flat farmland ends. The Blue Bell Inn provides food and accommodation, and there is a shop nearby. This is the last reliable resupply before the climb onto the North York Moors. From here the trail joins the line of the Cleveland Way for a long, exposed stretch.",
+        "Ingleby Cross sits at the foot of the Cleveland Hills, where the flat farmland ends and the North York Moors begin. The Blue Bell Inn provides food and accommodation. From here the route climbs into the moors and joins the Cleveland Way for the switchback ridge walking ahead.",
     },
     {
       id: "arncliffe-wood",
@@ -267,7 +268,7 @@ const coastToCoast: TrailConfig = {
       hasServices: false,
       coordinates: [54.382700, -1.299710],
       description:
-        "Here the Coast to Coast climbs into woodland and enters the North York Moors National Park, joining the Cleveland Way as it goes. There are no services at the junction itself — this is a waymark on the route rather than a place to stop. Walkers needing a bed can detour roughly 1.7 km to the village of Osmotherley, which has pubs and accommodation. From this point the route follows the high northern edge of the moors.",
+        "This is the path junction where the Coast to Coast enters the North York Moors National Park and shares its line with the Cleveland Way. There are no services at the junction itself. Osmotherley, with pubs and accommodation, lies about 1.7km off-route to the south for anyone needing to break the day here.",
     },
     {
       id: "broughton-bank",
@@ -279,7 +280,7 @@ const coastToCoast: TrailConfig = {
       hasServices: false,
       coordinates: [54.423990, -1.143660],
       description:
-        "This is hard, switchback moorland walking over Carlton Bank and Cringle Moor, with steep climbs and descents in quick succession. There is no accommodation at the junction, but Lord Stones Café sits on the route below Carlton Bank and is a useful refreshment stop. The views north over the Tees lowlands and Roseberry Topping open up along this edge. The Wainstones, a tumble of gritstone, lie just ahead.",
+        "A junction on the open moor along the switchback of the Cleveland Hills, on the climb-and-drop section past Carlton Bank and the Wainstones. There is no accommodation here, but Lord Stones Café nearby is a reliable place for food and water on this otherwise exposed stretch. The views north over the Tees lowlands open up on a clear day.",
     },
     {
       id: "blakey-ridge",
@@ -291,7 +292,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.389780, -0.970670],
       description:
-        "Past the Wainstones and over Urra Moor, the highest ground on the North York Moors, the route follows the bed of an old ironstone railway across open heather. The Lion Inn at Blakey is an isolated 16th-century pub and hotel at around 404m, and it is the only food, drink and accommodation for a long way in either direction. Book ahead, as it is heavily used by Coast to Coast walkers and there is nothing else nearby. In bad weather this exposed ridge is a serious place.",
+        "Blakey Ridge is the high, heather-covered spine of the moors, and the Lion Inn that sits here at around 400m is the only supply point for miles in either direction. It offers food and accommodation in genuine isolation, which makes booking essential. After the Wainstones and the long moor crossing, arriving at the Lion Inn is one of the small landmarks of the walk.",
     },
     {
       id: "glaisdale",
@@ -303,7 +304,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.440510, -0.809110],
       description:
-        "The route crosses Glaisdale Rigg with wide moorland views before dropping down into the wooded valley of the Esk. Glaisdale has a post office store for supplies, the Arncliffe Arms and other accommodation, and a station on the Esk Valley railway line. This is the start of the gentler, greener final stretch through Eskdale. After the high moors it feels sheltered and settled.",
+        "Glaisdale drops off the high moor into the wooded Esk valley, a working village with a railway station on the Esk Valley line, a post office store and pubs. The 17th-century Beggar's Bridge sits at the foot of the village. From here the route follows the river through old oak woodland — a gentler, greener contrast to the open moors behind.",
     },
     {
       id: "grosmont",
@@ -315,7 +316,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.436850, -0.728780],
       description:
-        "From Glaisdale the path crosses the medieval Beggar's Bridge and follows the Esk through East Arnecliff Wood to Grosmont. The village is the northern terminus of the North Yorkshire Moors Railway, so steam trains are often in the station, and there is a café, the Station Tavern and a shop. There is accommodation in and around the village. It is a popular and lively stop with the railway running through the middle of it.",
+        "Grosmont is the terminus of the North Yorkshire Moors Railway, and steam trains and the engine sheds are part of the scene here. The village has cafés, a shop, pubs and accommodation. It is a popular stop, and the climb out of the village towards Sleights Moor is one of the steepest short pulls of the final day.",
     },
     {
       id: "littlebeck",
@@ -327,7 +328,7 @@ const coastToCoast: TrailConfig = {
       hasServices: false,
       coordinates: [54.431620, -0.644890],
       description:
-        "A steep climb out of Grosmont over the moor, with the railway sheds and steam below, leads down into the small wooded valley at Littlebeck. This is a tiny hamlet with no shop or pub — somewhere the trail passes through rather than a place to base a day. Just beyond it the path enters the woods past the carved rock shelter known as the Hermitage and the Falling Foss waterfall. Carry what you need; there is nothing to buy here.",
+        "Littlebeck is a tiny hamlet tucked in a wooded valley, with no services. The route passes through the woods here past The Hermitage, a hollowed-out boulder, and the 30m Falling Foss waterfall, with the Falling Foss tea garden nearby in season. A quiet, shaded stretch on the run-in to the coast.",
     },
     {
       id: "hawsker",
@@ -339,7 +340,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.448680, -0.584100],
       description:
-        "The route works through the woods around May Beck and Falling Foss and across farmland to Hawsker, close to the coast at last. The Hare and Hounds pub provides meals and accommodation, and there are caravan parks nearby. Here the trail meets the Cleveland Way cliff path for the final run south. The North Sea is in sight and the end is close.",
+        "Hawsker is the last village before the finish, with the Hare & Hounds pub, caravan parks and accommodation. Just beyond, the route joins the Cleveland Way again and meets the coast — the first sight of the North Sea since St Bees. The final few miles of cliff-top walking to Robin Hood's Bay start here.",
     },
     {
       id: "robin-hoods-bay",
@@ -351,7 +352,7 @@ const coastToCoast: TrailConfig = {
       hasServices: true,
       coordinates: [54.430240, -0.532070],
       description:
-        "The walk finishes along the cliff top and down through the steep, tightly packed streets of Robin Hood's Bay, a former fishing and smuggling village of red-roofed cottages dropping to the slipway. Tradition has you walk to the water, dip your boots in the North Sea and throw in the pebble you carried from St Bees. The Bay Hotel at the bottom of the bank is the recognised end point and keeps the Coast to Coast register. There are pubs, cafés and accommodation, and buses run to Whitby and Scarborough for onward travel.",
+        "Robin Hood's Bay is an old smuggling village of steep, narrow lanes tumbling down to the sea, and the end of the walk. The tradition is to walk down the slipway, throw in the pebble you carried from St Bees, and wet your boots in the North Sea, before signing the book and raising a drink in the Bay Hotel. The village has plenty of pubs, cafés and accommodation, and a bus link back to Whitby for onward travel.",
     },
   ],
 
@@ -365,7 +366,7 @@ const coastToCoast: TrailConfig = {
       ascentSpeed: 300,
       descentSpeed: 400,
       socialProof:
-        "Walkers who want to climb Helvellyn or linger in the Swaledale mining country usually take sixteen days or more at this pace.",
+        "Most walkers who choose this pace want the Lakeland section in particular to breathe — time for the high-level options, the pubs and a rest day or two across a fortnight.",
     },
     {
       id: "hiker",
@@ -376,7 +377,7 @@ const coastToCoast: TrailConfig = {
       ascentSpeed: 400,
       descentSpeed: 600,
       socialProof:
-        "Most people walk the Coast to Coast in twelve to fourteen days, and this is the pace the majority choose.",
+        "This is the pace most people walk the Coast to Coast at, settling into a steady rhythm over the classic two-week itinerary.",
     },
     {
       id: "fastpacker",
@@ -387,7 +388,7 @@ const coastToCoast: TrailConfig = {
       ascentSpeed: 600,
       descentSpeed: 1000,
       socialProof:
-        "Experienced hill walkers compress the route into eight or nine days, with several long days over the high passes.",
+        "Chosen by fit, experienced walkers happy to put in long days and compress the route, including the big Lakeland climbs, into ten or eleven days.",
     },
     {
       id: "trailrunner",
@@ -411,7 +412,7 @@ const coastToCoast: TrailConfig = {
 
   hero: {
     description:
-      "{distance} of walking clean across northern England — from the Irish Sea cliffs at St Bees, over the Lakeland fells, the Pennine watershed and the North York Moors, to the North Sea at Robin Hood's Bay. Build your perfect Coast to Coast itinerary with downloadable GPX files for every stage.",
+      "{distance} coast to coast across northern England — from the Irish Sea cliffs at St Bees, over the Lake District, the Yorkshire Dales and the North York Moors, to the North Sea at Robin Hood's Bay. Build your perfect Coast to Coast itinerary with downloadable GPX files for every stage.",
     imagePath: heroImage,
   },
 
