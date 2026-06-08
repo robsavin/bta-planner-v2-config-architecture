@@ -283,6 +283,18 @@ const coastToCoast: TrailConfig = {
         "A junction on the open moor along the switchback of the Cleveland Hills, on the climb-and-drop section past Carlton Bank and the Wainstones. There is no accommodation here, but Lord Stones Café nearby is a reliable place for food and water on this otherwise exposed stretch. The views north over the Tees lowlands open up on a clear day.",
     },
     {
+      id: "clay-bank-top",
+      name: "Clay Bank Top",
+      distanceFromStart: 236.8,
+      cumulativeAscent: 5970,
+      cumulativeDescent: 5650,
+      hasAccommodation: true,
+      hasServices: false,
+      coordinates: [54.417740, -1.106970],
+      description:
+        "Clay Bank Top is where the route drops off Hasty Bank to the B1257 road crossing, the only break in the high Cleveland ridge between Ingleby Cross and Blakey Ridge. There are no services at the crossing itself, but it is the standard place to end a day on this section — accommodation in Great Broughton and Ingleby Greenhow is a short taxi ride away, and most B&Bs there will collect and return walkers to the same spot. Splitting the day here turns the long switchback over Carlton Bank and the Wainstones into a manageable stage rather than a march. The climb back up onto Urra Moor the next morning leads to the highest moorland of the walk.",
+    },
+    {
       id: "blakey-ridge",
       name: "Blakey Ridge",
       distanceFromStart: 248.6,
