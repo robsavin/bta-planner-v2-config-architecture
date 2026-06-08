@@ -57,7 +57,7 @@ export function calculateSegmentTime(
   distance: number,
   ascent: number,
   descent: number,
-  speedProfile: SpeedProfile
+  speedProfile: SpeedProfile,
 ): number {
   const flatTime = distance / speedProfile.flatSpeed;
   const ascentTime = ascent / speedProfile.ascentSpeed;
@@ -101,7 +101,7 @@ export function generateItinerary(
   numberOfDays: number,
   speedProfile: SpeedProfile,
   startDate: Date,
-  nodes: TrailNode[] = getTrailConfig().nodes
+  nodes: TrailNode[] = getTrailConfig().nodes,
 ): DayPlan[] {
   const segments = calculateSegments(nodes);
   const totalTime = calculateTotalTime(speedProfile, nodes);
@@ -178,7 +178,10 @@ export function getAccommodationNodes(nodes: TrailNode[] = getTrailConfig().node
 }
 
 // Get nodes in the correct order based on direction
-export function getDirectionalNodes(direction: TrailDirection, nodes: TrailNode[] = getTrailConfig().nodes): TrailNode[] {
+export function getDirectionalNodes(
+  direction: TrailDirection,
+  nodes: TrailNode[] = getTrailConfig().nodes,
+): TrailNode[] {
   if (direction === "north-to-south") {
     const reversed = [...nodes].reverse();
     const totalDistance = nodes[nodes.length - 1].distanceFromStart;
@@ -202,7 +205,7 @@ export function getDirectionalNodes(direction: TrailDirection, nodes: TrailNode[
 export function calculateTotalTimeWithDirection(
   speedProfile: SpeedProfile,
   direction: TrailDirection,
-  nodes: TrailNode[] = getTrailConfig().nodes
+  nodes: TrailNode[] = getTrailConfig().nodes,
 ): number {
   const dirNodes = getDirectionalNodes(direction, nodes);
   let totalTime = 0;
@@ -219,68 +222,79 @@ export function calculateTotalTimeWithDirection(
   return totalTime;
 }
 
-// Generate itinerary with direction support
+// Generate itinerary with direction support — distributes walking time evenly
+// across the available days, preferring to end each day at an accommodation node.
+// (Even-time distribution, matching the standalone planner. Replaces the earlier
+// greedy accumulate-and-dump logic, which back-loaded the entire remaining route
+// onto the final day on long trails such as the Coast to Coast.)
 export function generateItineraryWithDirection(
   numberOfDays: number,
   speedProfile: SpeedProfile,
   startDate: Date,
   direction: TrailDirection,
-  nodes: TrailNode[] = getTrailConfig().nodes
+  nodes: TrailNode[] = getTrailConfig().nodes,
 ): DayPlan[] {
   const dirNodes = getDirectionalNodes(direction, nodes);
   const totalTime = calculateTotalTimeWithDirection(speedProfile, direction, nodes);
   const targetTimePerDay = totalTime / numberOfDays;
 
+  // Pre-calculate cumulative walking time to each node.
+  const cumulativeTimes: number[] = [0];
+  for (let i = 0; i < dirNodes.length - 1; i++) {
+    const from = dirNodes[i];
+    const to = dirNodes[i + 1];
+    const distance = to.distanceFromStart - from.distanceFromStart;
+    const ascent = to.cumulativeAscent - from.cumulativeAscent;
+    const descent = to.cumulativeDescent - from.cumulativeDescent;
+    const segTime = calculateSegmentTime(distance, ascent, descent, speedProfile);
+    cumulativeTimes.push(cumulativeTimes[i] + segTime);
+  }
+
   const plans: DayPlan[] = [];
   let currentNodeIndex = 0;
-  let dayNumber = 1;
 
-  while (currentNodeIndex < dirNodes.length - 1 && dayNumber <= numberOfDays) {
+  for (let dayNumber = 1; dayNumber <= numberOfDays; dayNumber++) {
     const startNode = dirNodes[currentNodeIndex];
-    let dayTime = 0;
-    let dayDistance = 0;
-    let dayAscent = 0;
-    let dayDescent = 0;
-    let endNodeIndex = currentNodeIndex;
+    const startTime = cumulativeTimes[currentNodeIndex];
 
-    while (endNodeIndex < dirNodes.length - 1) {
-      const from = dirNodes[endNodeIndex];
-      const to = dirNodes[endNodeIndex + 1];
-      const segDistance = to.distanceFromStart - from.distanceFromStart;
-      const segAscent = to.cumulativeAscent - from.cumulativeAscent;
-      const segDescent = to.cumulativeDescent - from.cumulativeDescent;
-      const segmentTime = calculateSegmentTime(segDistance, segAscent, segDescent, speedProfile);
+    // Target cumulative time by the end of this day (evenly distributed).
+    const targetEndTime = (dayNumber / numberOfDays) * totalTime;
 
-      if (dayTime + segmentTime > targetTimePerDay * 1.3 && endNodeIndex > currentNodeIndex) {
-        break;
-      }
-
-      dayTime += segmentTime;
-      dayDistance += segDistance;
-      dayAscent += segAscent;
-      dayDescent += segDescent;
-      endNodeIndex++;
-
-      if (dirNodes[endNodeIndex].hasAccommodation && dayTime >= targetTimePerDay * 0.8) {
-        break;
-      }
-    }
+    // Find the node closest to the target end time. Must advance at least one node.
+    let bestNodeIndex = currentNodeIndex + 1;
+    let bestTimeDiff = Infinity;
 
     if (dayNumber === numberOfDays) {
-      while (endNodeIndex < dirNodes.length - 1) {
-        const from = dirNodes[endNodeIndex];
-        const to = dirNodes[endNodeIndex + 1];
-        const segDistance = to.distanceFromStart - from.distanceFromStart;
-        const segAscent = to.cumulativeAscent - from.cumulativeAscent;
-        const segDescent = to.cumulativeDescent - from.cumulativeDescent;
-        const segmentTime = calculateSegmentTime(segDistance, segAscent, segDescent, speedProfile);
-        dayTime += segmentTime;
-        dayDistance += segDistance;
-        dayAscent += segAscent;
-        dayDescent += segDescent;
-        endNodeIndex++;
+      // Final day always finishes at the end of the trail.
+      bestNodeIndex = dirNodes.length - 1;
+    } else {
+      for (let i = currentNodeIndex + 1; i < dirNodes.length; i++) {
+        const nodeTime = cumulativeTimes[i];
+        const timeDiff = Math.abs(nodeTime - targetEndTime);
+
+        // Prefer an accommodation node when the times are close.
+        if (
+          timeDiff < bestTimeDiff ||
+          (timeDiff < bestTimeDiff + targetTimePerDay * 0.15 &&
+            dirNodes[i].hasAccommodation &&
+            !dirNodes[bestNodeIndex].hasAccommodation)
+        ) {
+          bestTimeDiff = timeDiff;
+          bestNodeIndex = i;
+        }
+
+        // Stop searching once we are well past the target.
+        if (nodeTime > targetEndTime + targetTimePerDay * 0.5) {
+          break;
+        }
       }
     }
+
+    const endNode = dirNodes[bestNodeIndex];
+    const dayTime = cumulativeTimes[bestNodeIndex] - startTime;
+    const dayDistance = endNode.distanceFromStart - startNode.distanceFromStart;
+    const dayAscent = endNode.cumulativeAscent - startNode.cumulativeAscent;
+    const dayDescent = endNode.cumulativeDescent - startNode.cumulativeDescent;
 
     const dayDate = new Date(startDate);
     dayDate.setDate(dayDate.getDate() + dayNumber - 1);
@@ -288,7 +302,7 @@ export function generateItineraryWithDirection(
     plans.push({
       day: dayNumber,
       startNode,
-      endNode: dirNodes[endNodeIndex],
+      endNode,
       distance: Number(dayDistance.toFixed(1)),
       ascent: Math.round(dayAscent),
       descent: Math.round(dayDescent),
@@ -297,8 +311,7 @@ export function generateItineraryWithDirection(
       date: dayDate,
     });
 
-    currentNodeIndex = endNodeIndex;
-    dayNumber++;
+    currentNodeIndex = bestNodeIndex;
   }
 
   return plans;
